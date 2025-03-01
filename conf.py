@@ -673,6 +673,7 @@ REDIRECTIONS = []
 DEPLOY_COMMANDS = {
     "default": [
         "rsync -rav --delete output/ berkeleyjuggling@nubati.net:test.berkeleyjuggling.org/",
+        "rsync -rav output/.htaccess berkeleyjuggling@nubati.net:test.berkeleyjuggling.org/",
     ]
 }
 
