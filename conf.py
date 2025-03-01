@@ -675,6 +675,12 @@ REDIRECTIONS = []
 #         "rsync -rav --delete --delete-after output/ joe@my.site:/srv/www/site",
 #     ]
 # }
+DEPLOY_COMMANDS = {
+    "default": [
+        "rsync -rav --delete output/ berkeleyjuggling@nubati.net:test.berkeleyjuggling.org/",
+    ]
+}
+
 
 # github_deploy configuration
 # For more details, read the manual:
