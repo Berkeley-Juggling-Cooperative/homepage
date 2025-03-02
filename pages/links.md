@@ -9,9 +9,16 @@
 .. type: text
 -->
 
-# Juggling Clubs
+# Juggling clubs
+
+- [Castro Valley](https://www.qsl.net/a/ab6br/cvjugglers/cvjinfo.html)
+- [East Oakland](https://www.facebook.com/groups/135767516457147)
+- [Stanford](http://web.stanford.edu/group/dwg/index.html)
+- [Stanford Court Jugglers](https://cs.stanford.edu/people/me/juggle/)
 
 # Festivals
+
+- Game of Throws (normally around February)
 
 # Patterns & Videos
 
