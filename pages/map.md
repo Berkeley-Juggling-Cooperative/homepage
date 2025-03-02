@@ -9,6 +9,6 @@
 .. type: text
 -->
 
-We currently meet in the breezeway at Hildebrand Hall. This is an outdoor location, so it might be a bit cold  ;).
+We currently meet in the breezeway at Hildebrand Hall. This is an outdoor location, so it might be a bit cold depending on the time of the year ;).
 
 <div id="map"></div>
