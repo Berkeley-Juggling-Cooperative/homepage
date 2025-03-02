@@ -81,6 +81,8 @@ lang="${lang}">
             <script src="/assets/js/baguetteBox.min.js"></script>
         %endif
     %endif
+            <script src="/assets/js/leaflet.js"></script>
+            <script src="/assets/js/leaflet-custom.js"></script>
     %if date_fanciness != 0:
         %if use_cdn:
             <script src="https://cdn.jsdelivr.net/npm/luxon@3.3.0/build/global/luxon.min.js" integrity="sha256-Nn+JGDrq3PuTxcDfJmmI0Srj5LpfOFlKqEiPwQK7y40=" crossorigin="anonymous"></script>
@@ -117,6 +119,7 @@ lang="${lang}">
             <link href="/assets/css/custom.css" rel="stylesheet" type="text/css">
         %endif
     %endif
+            <link href="/assets/css/leaflet.css" rel="stylesheet" type="text/css">
     % if needs_ipython_css:
         <link href="/assets/css/ipython.min.css" rel="stylesheet" type="text/css">
         <link href="/assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">

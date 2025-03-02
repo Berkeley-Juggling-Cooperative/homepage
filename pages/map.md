@@ -10,3 +10,5 @@
 -->
 
 We currently meet in the breezeway at Hildebrand Hall. This is an outdoor location, so it might be a bit cold  ;).
+
+<div id="map"></div>
