@@ -1,0 +1,15 @@
+# This is the homepage for the Berkeley Juggling club.
+
+It includes all files to create the static webpage using (Nikola)[https://getnikola.com].
+
+## How to build the static webpage
+
+## TODO
+
+- add juggling patterns and organize them
+- see if we can add automated diagrams from ascii descriptions, use either
+   https://github.com/helbling/passist/ or https://www.jugglingedge.com/help/causaldiagrams.php
+- use the browser built-in error checker (F12 in firefox) and fix any issues
+- only import js for leaflet on the map page
+- reorganize webpage
+- import all images and videos and host them locally
