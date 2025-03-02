@@ -9,4 +9,8 @@
 .. type: text
 -->
 
-Write your page here.
+We plan to have a list of patterns we like or made up ourselves listed here.
+
+{{% causal_diagram %}}
+This is a test
+{{% /causal_diagram %}}

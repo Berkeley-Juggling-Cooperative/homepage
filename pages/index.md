@@ -9,27 +9,34 @@ description: The Berkeley Juggling Club Home Page.
 type: text
 ---
 
+# Welcome to Berkeley Juggling Club!
 
-# Weekly meetings
+Welcome to our juggling club! Whether you're an experienced juggler or
+a complete beginner, we welcome everyone. Our group meets once a week
+to practice, learn, and share the joy of juggling. If
+you’re curious or want to join us, you’re in the right place.
 
-Feel free to join us at our weekly meetings for juggling and other circus arts! (mostly club passing, but also unicycling, acrobalance, whip cracking, slack lining, etc.)
+## What We Do
+Our weekly gatherings are open to anyone who is interested in learning how to juggle or improving their skills. We offer a relaxed and supportive environment for all levels.
 
-# Where & When:
+- Weekly practice sessions
+- Juggling pattern tutorials
+- A fun and welcoming community
 
-Every Wednesday: from at least 6pm-8pm:
+## Join Our Community!
+We have two email lists for different purposes:
 
-    Hildebrand Hall, hall way/tunnel on the ground floor (map).
+- **[Yearly Announcements](signup-newsletter)** – Sign up for annual club updates and major events.
+- **[Weekly Discussions](signup-weekly)** – For regular club updates and practice discussions.
 
-We are also trying out alternative meeting days, so check out the mailing list for more details (link at the end of this paragraph).
+Both lists have low traffic, and you can unsubscribe at any time.
 
-Have a look at our map to see where we meet.
+## Where & When We Meet
+We meet every Wednesday aroung 6pm at Hildebrand Hall on the UC Berkeley campus.
 
-If the weather is nice we sometimes meet outside on weekends (usually Sunday afternoon) at Willard Park in Berkeley, 1 block east of Telegraph Ave @ Derby. Read the unmoderated mailing list for announcements.
+For more details, visit our [Meetup Page](meetup) or contact us at info@berkeleyjuggling.org.
 
-# Need some juggling props…
+## Partner Group: Berkeley Unicycling
+If you're interested in unicycling, check out their [website here](https://berkeleyunicycling.org).
 
-No problem, the club owns some clubs, a unicycle, balls and a diabolo. If you want to use any of these for while (e.g. before deciding to buy your own), come to one of the club meetings and try them out and perhaps even borrow them for a short while…
-
-We don’t have all the club props with us at every meeting, so you might want to give us an email to make sure we bring it with us 😉
-
-For more unicycle action, visit our co-op sibling: berkeleyunicycling.org
+We can’t wait to meet you at our next session!

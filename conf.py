@@ -143,12 +143,13 @@ TRANSLATIONS_PATTERN = "{path}.{lang}.{ext}"
 NAVIGATION_LINKS = {
     DEFAULT_LANG: (
         ("/", "Home"),
-        ("/map", "Maps"),
-        ("/contact", "Hire a Juggler/Contact us"),
+        ("/meetup", "Weekly Meeting"),
         ("/news", "News and Events"),
-        ("/media", "Media"),
+        ("/media", "Fotos & Videos"),
         ("/patterns", "Juggling Patterns"),
         ("https://berkeleyunicycling.org", "Unicycling"),
+        ("/links", "Links"),
+        ("/contact", "Hire a Juggler/Contact us"),
     ),
 }
 
@@ -1367,7 +1368,7 @@ SHOW_SOURCELINK = False
 # Add the absolute paths to directories containing plugins to use them.
 # For example, the `plugins` directory of your clone of the Nikola plugins
 # repository.
-# EXTRA_PLUGINS_DIRS = []
+EXTRA_PLUGINS_DIRS = ["plugins"]
 
 # Add the absolute paths to directories containing themes to use them.
 # For example, the `v7` directory of your clone of the Nikola themes
