@@ -13,3 +13,4 @@ It includes all files to create the static webpage using (Nikola)[https://getnik
 - only import js for leaflet on the map page
 - reorganize webpage
 - import all images and videos and host them locally
+- change deployment commands to be able to store images/videos directly on dreamhost
