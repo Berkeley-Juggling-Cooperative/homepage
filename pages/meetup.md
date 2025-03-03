@@ -3,7 +3,7 @@
 .. slug: meetup
 .. date: 2024-02-19 18:42:32 UTC-08:00
 .. tags: 
-.. category: 
+.. category: map
 .. link: 
 .. description: 
 .. type: text

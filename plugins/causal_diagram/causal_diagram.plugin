@@ -1,0 +1,13 @@
+[Core]
+name = causal_diagram
+module = causal_diagram
+
+[Nikola]
+PluginCategory = ShortcodePlugin
+
+[Documentation]
+author = Arun Persaud
+version = 0.1
+website = https://github.com/Berkeley-Juggling-Cooperative/homepage
+description = Creating SVG causal diagrams
+

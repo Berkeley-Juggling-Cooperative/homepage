@@ -7,6 +7,9 @@
 
 <%block name="content">
 <article class="post-${post.meta('type')} storypage" itemscope="itemscope" itemtype="http://schema.org/Article">
+    %if post and post.meta('category')=='patterns':
+    <header><h1>${post.title()}</h1></header>
+    %endif
     <div class="e-content entry-content" itemprop="articleBody text">
     ${post.text()}
     </div>

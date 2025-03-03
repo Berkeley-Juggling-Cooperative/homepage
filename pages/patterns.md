@@ -11,6 +11,10 @@
 
 We plan to have a list of patterns we like or made up ourselves listed here.
 
-{{% causal_diagram %}}
-This is a test
-{{% /causal_diagram %}}
+# By number of people
+
+- [2 People](link://tag/2-person)
+
+# All tags
+
+[The tag index](link://tag_index)
