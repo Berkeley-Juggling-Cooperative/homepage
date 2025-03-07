@@ -1,0 +1,9 @@
+[project]
+name = "juggling-homepage"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "nikola>=8.3.1",
+    "ruamel-yaml>=0.18.10",
+    "svgwrite>=1.4.3",
+]
