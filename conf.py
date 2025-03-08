@@ -16,7 +16,7 @@ import time
 
 
 # Data about this site
-BLOG_AUTHOR = "Berkeley Juggling Club"  # (translatable)
+BLOG_AUTHOR = "Berkeley Juggling Cooperative"  # (translatable)
 BLOG_TITLE = "The Berkeley Juggling Club"  # (translatable)
 # This is the main URL for your site. It will be used
 # in a prominent link. Don't forget the protocol (http/https)!
@@ -238,7 +238,7 @@ THEME_CONFIG = {
 #         ("pages/*.md", {"en": "pages", "de": "seiten"}, "page.tmpl"),
 #     )
 
-POSTS = (("pages/patterns/*.md", "", "post.tmpl"),)
+POSTS = (("pages/patterns/*.md", "patterns", "post.tmpl"),)
 PAGES = (
     ("pages/*.rst", "", "page.tmpl"),
     ("pages/*.md", "", "page.tmpl"),
@@ -420,6 +420,7 @@ TAG_PATH = "tag"
 #    },
 # }
 
+
 # If you do not want to display a tag publicly, you can mark it as hidden.
 # The tag will not be displayed on the tag list page and posts.
 # Tag pages will still be generated.
@@ -543,7 +544,7 @@ HIDDEN_CATEGORIES = ["patterns", "map"]
 
 # If ENABLE_AUTHOR_PAGES is set to True and there is more than one
 # author, author pages are generated.
-# ENABLE_AUTHOR_PAGES = True
+ENABLE_AUTHOR_PAGES = False
 
 # Path to author pages. Final locations are:
 # output / TRANSLATION[lang] / AUTHOR_PATH / index.html (list of authors)
