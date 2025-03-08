@@ -238,9 +238,7 @@ THEME_CONFIG = {
 #         ("pages/*.md", {"en": "pages", "de": "seiten"}, "page.tmpl"),
 #     )
 
-POSTS = (
-    ("pages/patterns/*.md", "", "post.tmpl"),
-)
+POSTS = (("pages/patterns/*.md", "", "post.tmpl"),)
 PAGES = (
     ("pages/*.rst", "", "page.tmpl"),
     ("pages/*.md", "", "page.tmpl"),
@@ -500,7 +498,7 @@ CATEGORY_OUTPUT_FLAT_HIERARCHY = False
 # If you do not want to display a category publicly, you can mark it as hidden.
 # The category will not be displayed on the category list page.
 # Category pages will still be generated.
-HIDDEN_CATEGORIES = []
+HIDDEN_CATEGORIES = ["patterns", "map"]
 
 # A list of dictionaries specifying categories which translate to each other.
 # Format: a list of dicts {language: translation, language2: translation2, …}
