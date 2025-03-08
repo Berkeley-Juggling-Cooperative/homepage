@@ -3,7 +3,7 @@
 .. slug: patterns
 .. date: 2025-03-01 17:26:28 UTC-08:00
 .. tags: 
-.. category: 
+.. category: patterns
 .. link: 
 .. description: 
 .. type: text
@@ -11,9 +11,17 @@
 
 We plan to have a list of patterns we like or made up ourselves listed here.
 
+If you want to submit your own, have a look at [the syntax we use](causal-diagrams).
+
 # By number of people
 
 - [2 People](link://tag/2-person)
+
+# By count
+
+- [2 count](link://tag/2-count)
+- [3 count](link://tag/3-count)
+- [4 count](link://tag/4-count)
 
 # All tags
 
