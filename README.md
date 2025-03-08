@@ -13,9 +13,26 @@ This will update a uv-managed virtual environment (and create it if needed) insi
 
 After this you can eiher run `nikola` by using `uv run nikola` or by activating the venv and running `nikola` directly.
 
-## Developing
+## How to add a new pattern
 
-### Adding new packages
+Create a new page using, say for a 3-count pattern
+
+	uv run nikola new_page pages/patterns/3-count.md
+
+Nikola will ask you for a page name, for this example, you would add "3 Count".
+
+Then open the new file in an editor and add tags, e.g. "2-person, 3-count" and for the category add "patterns", add a short description "A simple 3 count pattern".
+
+Delete the "Write your page here" text and add the pattern. See existing patterns on what should be on a pattern page.
+
+Save the file and run
+
+    uv run nikola build
+	uv run nikola serve
+
+Which will open a web server on your computer, so that you can look at the results.
+
+## Adding new python packages
 
 To add a new package, use `uv add <package name>' and after it comit the `uv.lock` file and pyproject.toml to git.
 
