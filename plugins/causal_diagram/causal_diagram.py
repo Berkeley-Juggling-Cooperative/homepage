@@ -33,13 +33,19 @@ class CausalDiagramSVG(ShortcodePlugin):
         self.duration = 0
 
     def handler(self, site=None, data=None, lang=None, post=None):
-        # Call your program that converts text input to SVG
+        """This gets executed for the shortcode. """
         self.clear()
         self.parse_pattern(data)
         svg_output = self.to_svg()
         return svg_output, []
 
     def parse_pattern(self, text):
+        """Take the text in the shortcode and parse it.
+
+        Empty lines are skipped. There should be N lines for the
+        pattern. We also allow extra lines for title, bars and positions.
+        The positions can also be a list of positions which wil be animated.
+        """
         n = 0
         for line in text.split("\n"):
             line = line.strip()
@@ -60,12 +66,16 @@ class CausalDiagramSVG(ShortcodePlugin):
                     if not v:
                         continue
                     t = v.split(",")
+                    # these should be 3 numbers: time, x, y
+                    # time should be in beats
                     t = [float(x) for x in t]
                     tmp.append(t)
                 self.juggler[name]["position"] = tmp
             else:
+                # this is the pattern
                 juggler_name = self.juggler_names[n]
                 tmp = {}
+                # parse extra information in () at the start
                 if line.startswith("("):
                     names, pattern = line[1:].split(")")
                     if " " in names:
@@ -80,15 +90,20 @@ class CausalDiagramSVG(ShortcodePlugin):
 
                 tmp["letters"] = names
                 tmp["wait"] = wait
+                # 'p' for passes are only allowed in 2 person patterns
+                # otherwise it should be letters. Replace 'p' with 'a' and 'b'
+                # here so that it is easier later in the program
                 if "p" in pattern:
                     if juggler_name == "A":
                         pattern = pattern.replace("p", "b")
                     else:
                         pattern = pattern.replace("p", "a")
                 tmp["pattern"] = pattern.split()
+                # the y-coordinate the juggler line should be drawn in the diagram
                 tmp["height"] = self.margin + int(self.step_Y * (n + 0.8))
                 self.juggler[juggler_name] = tmp
                 n += 1
+        # for the animation we need to rescale beats to the [0,1] interval
         for j in self.juggler:
             N = len(self.juggler[j]["pattern"])
             if "position" in self.juggler[j]:
@@ -96,14 +111,13 @@ class CausalDiagramSVG(ShortcodePlugin):
                     pos[0] = pos[0] / N
             self.duration = max(self.duration, (N + self.juggler[j]["wait"]))
 
-
-
-    def draw_circle(self, dwg, x, y, r, hand):
+    def draw_circle(self, dwg, x, y, r, label):
+        """Draw a circel with a letter in it."""
         group = dwg.g()
         group.add(dwg.circle(center=(x, y), r=r, stroke="black", fill="none"))
         group.add(
             dwg.text(
-                hand,
+                label,
                 insert=(x, y),
                 fill="black",
                 text_anchor="middle",
@@ -115,7 +129,13 @@ class CausalDiagramSVG(ShortcodePlugin):
     def draw_arrow(
         self, dwg, arrow_marker, start_x, start_y, end_x, end_y, stroke="black"
     ):
-        # Add the line part of the arrow and reference the marker
+        """Draw an arrow in the diagram.
+
+        These start and stop at the circle.
+
+        If doubles and other longer throughs that are selves, are drawn
+        using an arc.
+        """
 
         dx = end_x - start_x
         dy = end_y - start_y
@@ -159,7 +179,7 @@ class CausalDiagramSVG(ShortcodePlugin):
     def draw_animated_arrow(
         self, dwg, arrow_marker, start_x, start_y, end_x, end_y, start_time, end_time
     ):
-        # Add the line part of the arrow and reference the marker
+        """These are animated arrows for the position diagram. """
 
         dx = end_x - start_x
         dy = end_y - start_y
@@ -201,6 +221,7 @@ class CausalDiagramSVG(ShortcodePlugin):
         return line
 
     def get_juggler_position(self, name, time):
+        """The X,Y position of a juggler for the position diagram at a given time. """
         time = time/self.duration
         print(name, time)
         if 'position' not in self.juggler[name]:
@@ -224,6 +245,7 @@ class CausalDiagramSVG(ShortcodePlugin):
         return 0, 0
 
     def to_svg(self):
+        """Create the SVG. """
         N = len(self.juggler)
 
         length = self.step_X * (self.duration + 1.5)
@@ -243,12 +265,13 @@ class CausalDiagramSVG(ShortcodePlugin):
         self.pos_center_y = height - self.pos_height / 2
         self.pos_center_x = length / 2
 
-        # Create an SVG drawing
+        # Create an SVG drawing and add a box to frame it
         dwg = svgwrite.Drawing(size=(length, height))
         dwg.add(
             dwg.rect(insert=(0, 0), size=(length, height), fill="none", stroke="black")
         )
 
+        # the arrow head as a marker in SVG
         arrow_marker = dwg.marker(
             id="arrowhead", insert=(5, 2.5), size=(5, 5), orient="auto"
         )
@@ -282,6 +305,7 @@ class CausalDiagramSVG(ShortcodePlugin):
                 )
             )
 
+        # draw the causal diagram
         for i, (name, juggler) in enumerate(self.juggler.items()):
             H = juggler["height"]
 
@@ -296,6 +320,7 @@ class CausalDiagramSVG(ShortcodePlugin):
             )
             X = 2 * self.margin + self.step_X * (1 + juggler["wait"])
 
+            # the arrows
             for p, hand in zip(juggler["pattern"], cycle(juggler["letters"])):
                 group = self.draw_circle(dwg, X, H, self.radius, hand)
                 dwg.add(group)
@@ -323,7 +348,7 @@ class CausalDiagramSVG(ShortcodePlugin):
                 X += self.step_X
                 X_max = X
 
-        # animate bar across the pattern
+        # animate the red bar across the pattern
         bar = dwg.line(
             start=(X_min, y_min),
             end=(X_min, y_max),
@@ -343,6 +368,9 @@ class CausalDiagramSVG(ShortcodePlugin):
         )
         dwg.add(bar)
 
+        # the position diagram
+
+        # the positions
         for i, (name, juggler) in enumerate(self.juggler.items()):
             if "position" not in juggler:
                 continue
@@ -352,7 +380,7 @@ class CausalDiagramSVG(ShortcodePlugin):
             values = ";".join([f"{x[1]},{x[2]}" for x in juggler["position"]])
 
             pos = self.draw_circle(
-                dwg, self.pos_center_x, self.pos_center_y, self.radius, hand=name
+                dwg, self.pos_center_x, self.pos_center_y, self.radius, label=name
             )
             pos.add(
                 svgwrite.animate.AnimateTransform(
@@ -368,6 +396,7 @@ class CausalDiagramSVG(ShortcodePlugin):
             )
             dwg.add(pos)
 
+        # the arrows in the position diagram
         for j in self.juggler:
             if 'position' not in self.juggler[j]:
                 continue
