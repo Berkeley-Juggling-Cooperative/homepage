@@ -24,6 +24,16 @@ If you want to submit your own, have a look at [the syntax we use](causal-diagra
 - [4 count](link://tag/4-count)
 - [6 count](link://tag/6-count)
 
+# Clubs per juggler
+
+- [3 clubs/each ](link://tag/3-clubs-each)
+- [3.5 clubs each](link://tag/3.5-clubs-each)
+
+# Total clubs
+
+- [6 clubs](link://tag/6-clubs)
+- [7 clubs](link://tag/7-clubs)
+
 # All tags
 
 [The tag index](link://tag_index)

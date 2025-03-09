@@ -59,16 +59,20 @@ the `uv.lock` file and pyproject.toml to git.
 - remove categories from tag overview and don't generate the category
   pages (or delete them before deploying?)
 - add 3d animation of patterns (see https://github.com/helbling/passist/)
-- add option to add position of jugglers
+- add option to add position of jugglers:
+  * at the moment the causal diagram needs to have the same length at
+    the positions, this should be changed, so that the diagram just repeats if needed
+  * positions circle should have an angle and a marker in the
+    direction the person is looking, this should be animated too if
+    needed
 - add option to plot passes at a certain time in position diagram
-  (think the different beat in torture chamber)
+  (think the different beat in torture chamber), instead or additional to animation
 - can we do 3d animation of moving patterns?
 - use the browser built-in error checker (F12 in firefox) and fix any issues
-- reorganize webpage
 - handle images and videos: Figure out how to do this using git
-  without committing all the images to git. Probably an rsync command
-  to download them into a different folder, a script that
-  creates very small previews of them that can be committed into git, and a
-  modified deploy script that upload the original ones back (in case
-  new ones got added) and also making sure that we don't delete images
-  on the server during deployment.
+  without committing all the images to git. Probably:
+  * an rsync command  to download them into a different folder
+  * a script that creates very small previews of them that can be committed into git, 
+  * a modified deploy script that upload the original ones back (in case
+  new ones got added)
+  * making sure that we don't delete images on the server during deployment.

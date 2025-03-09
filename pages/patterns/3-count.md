@@ -2,7 +2,7 @@
 .. title: 3 Count
 .. slug: 3-count
 .. date: 2025-03-08 07:54:18 UTC-08:00
-.. tags: 2-person, 3-count
+.. tags: 2-person, 3-count, 6-clubs, 3-clubs-each
 .. category: patterns
 .. link:
 .. description: A simple 3 count pattern
