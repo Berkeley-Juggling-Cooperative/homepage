@@ -5,7 +5,7 @@
 .. tags: 
 .. category: 
 .. link: 
-.. description: 
+.. description: Links to interesting juggling web pages
 .. type: text
 -->
 
@@ -22,4 +22,5 @@
 
 # Patterns & Videos
 
+- [Passing Patterns Compendium](https://jugglingedge.com/pdf/passingpatternscompendium.pdf)
 - [Juggling TV](https://juggling.tv)
