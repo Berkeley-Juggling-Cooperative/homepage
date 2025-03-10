@@ -5,10 +5,12 @@ from itertools import cycle
 
 
 class CausalDiagramSVG(ShortcodePlugin):
-    """A simple script to display causal diagrams.
+    """A simple script/shortcode to display causal diagrams.
 
     The syntax of the diagrams was adapted from:
     https://www.jugglingedge.com/help/causaldiagrams.php
+
+    and then modified to allow for SVG animations.
     """
 
     name = "causal_diagram"
@@ -33,13 +35,40 @@ class CausalDiagramSVG(ShortcodePlugin):
         self.duration = 0
 
     def handler(self, site=None, data=None, lang=None, post=None):
-        """This gets executed for the shortcode. """
+        """This gets executed for the shortcode."""
         self.clear()
         self.parse_pattern(data)
         svg_output = self.to_svg()
         return svg_output, []
 
-    def parse_pattern(self, text):
+    def parse_hands_and_delay(self, line: str):
+        """Parse () in front of a pattern line.
+
+        This should be the letters that will be shown in the circles.
+        The default is "RL", but it could be "RRLL" for some patterns.
+
+        If there is a number at the end, this will be the delay.
+        """
+        if line.startswith("("):
+            values, pattern = line[1:].split(")")
+            values = values.strip()
+            if " " in values:
+                hands, wait = values.split()
+                wait = float(wait)
+            else:
+                try:
+                    hands = "RL"
+                    wait = float(values)
+                except ValueError:
+                    hands = values
+                    wait = 0
+        else:
+            hands = "RL"
+            wait = 0
+            pattern = line
+        return pattern, hands, wait
+
+    def parse_pattern(self, text: str):
         """Take the text in the shortcode and parse it.
 
         Empty lines are skipped. There should be N lines for the
@@ -76,19 +105,8 @@ class CausalDiagramSVG(ShortcodePlugin):
                 juggler_name = self.juggler_names[n]
                 tmp = {}
                 # parse extra information in () at the start
-                if line.startswith("("):
-                    names, pattern = line[1:].split(")")
-                    if " " in names:
-                        names, wait = names.split()
-                        wait = float(wait)
-                    else:
-                        wait = 0
-                else:
-                    names = "RL"
-                    wait = 0
-                    pattern = line
-
-                tmp["letters"] = names
+                pattern, hands, wait = self.parse_hands_and_delay(line)
+                tmp["letters"] = hands
                 tmp["wait"] = wait
                 # 'p' for passes are only allowed in 2 person patterns
                 # otherwise it should be letters. Replace 'p' with 'a' and 'b'
@@ -104,6 +122,7 @@ class CausalDiagramSVG(ShortcodePlugin):
                 self.juggler[juggler_name] = tmp
                 n += 1
         # for the animation we need to rescale beats to the [0,1] interval
+        # we do this already here
         for j in self.juggler:
             N = len(self.juggler[j]["pattern"])
             if "position" in self.juggler[j]:
@@ -179,7 +198,7 @@ class CausalDiagramSVG(ShortcodePlugin):
     def draw_animated_arrow(
         self, dwg, arrow_marker, start_x, start_y, end_x, end_y, start_time, end_time
     ):
-        """These are animated arrows for the position diagram. """
+        """These are animated arrows for the position diagram."""
 
         dx = end_x - start_x
         dy = end_y - start_y
@@ -220,32 +239,36 @@ class CausalDiagramSVG(ShortcodePlugin):
         )
         return line
 
-    def get_juggler_position(self, name, time):
-        """The X,Y position of a juggler for the position diagram at a given time. """
-        time = time/self.duration
-        print(name, time)
-        if 'position' not in self.juggler[name]:
+    def get_juggler_position(self, name: str, time: int | float):
+        """The X,Y position of a juggler for the position diagram at a given time.
+
+        Just doing a linear interpolation.
+        """
+        # rescale time to [0, 1] interval
+        time = time / self.duration
+        if "position" not in self.juggler[name]:
             return
         pos = self.juggler[name]["position"]
         t_0, x_0, y_0 = pos[0]
         if len(pos) == 1:
             return x_0, y_0
         for t, x, y in pos[1:]:
-            print(t, x, y, name, time)
             if time <= t:
-                print('yes')
                 X = (x - x_0) * (time - t_0) / (t - t_0) + x_0
                 Y = (y - y_0) * (time - t_0) / (t - t_0) + y_0
                 return X, Y
             else:
-                print('no')
                 t_0 = t
                 x_0 = x
                 y_0 = y
         return 0, 0
 
     def to_svg(self):
-        """Create the SVG. """
+        """Create the SVG.
+
+        This create the causal diagram and if positions are defined also
+        a position diagram. Possible with animation.
+        """
         N = len(self.juggler)
 
         length = self.step_X * (self.duration + 1.5)
@@ -398,7 +421,7 @@ class CausalDiagramSVG(ShortcodePlugin):
 
         # the arrows in the position diagram
         for j in self.juggler:
-            if 'position' not in self.juggler[j]:
+            if "position" not in self.juggler[j]:
                 continue
             for i, pat in enumerate(self.juggler[j]["pattern"]):
                 pat = pat.strip()
@@ -413,9 +436,6 @@ class CausalDiagramSVG(ShortcodePlugin):
                     start_x, start_y = self.get_juggler_position(j, i)
                     end_x, end_y = self.get_juggler_position(target, i + (p - 2))
 
-                    print(i, i+(p-2))
-                    print(j, start_x, start_y,)
-                    print(target,  end_x, end_y)
                     tmp = self.draw_animated_arrow(
                         dwg,
                         arrow_marker,
@@ -426,7 +446,6 @@ class CausalDiagramSVG(ShortcodePlugin):
                         i,
                         i + p - 2,
                     )
-                    print(tmp)
                     dwg.add(tmp)
 
         svg_string_io = io.StringIO()
