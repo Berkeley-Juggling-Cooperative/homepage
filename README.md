@@ -1,6 +1,8 @@
-# This is the homepage for the Berkeley Juggling club.
+# The repo for the homepage of the Berkeley Juggling club.
 
 It includes all files to create the static webpage using (Nikola)[https://getnikola.com].
+
+The homepage can be found at https://test.berkeleyjuggling,org.
 
 ## How to build the static webpage
 
@@ -45,6 +47,19 @@ the results.
 
 Also make sure that if you add a new tag, that the new tag is listed
 on the `page/patterns.md` page.
+
+If you like the results, add it to git and push it to github.
+
+## Updating the homepage
+
+To update the homepage at berkeleyjuggling.org you can use
+
+    uv run nikola deploy
+
+However, you need to have ssh access to the server. Contact Arun, if
+you need to have access or ask him to deploy the changes.
+
+Eventually we should set up an automatic deploy from github.
 
 ## Adding new python packages
 
