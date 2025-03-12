@@ -16,6 +16,6 @@ club back that you just caught from the other juggler.
 {{% causal_diagram %}}
 3p 3 3 3p 3 3
 3p 3 3 3p 3 3
-position A: 0,-100,0;
-position B: 0,+100,0
+position A: -100,0,0;
+position B: +100,0,180
 {{% /causal_diagram %}}

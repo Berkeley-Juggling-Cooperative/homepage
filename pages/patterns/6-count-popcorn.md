@@ -12,8 +12,8 @@
 This is a 6-count popcorn variation. Each person does single selves with their left hand and the right hand does: self triple, double (pass), self single.
 
 {{% causal_diagram %}}
-4p 3 3 3  5 3 4p 3 3  3 5
-3  5 3 4p 3 3  3 5 3 4p 3
-position A: 0,-100,0;
-position B: 0,+100,0
+     4p 3 3 3  5 3 4p 3 3  3 5
+(LR) 3  5 3 4p 3 3  3 5 3 4p 3
+position A: -100,0,0;
+position B: +100,0,180;
 {{% /causal_diagram %}}

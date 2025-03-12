@@ -1,5 +1,6 @@
 from nikola.plugin_categories import ShortcodePlugin
 import io
+import math
 import svgwrite
 from itertools import cycle
 
@@ -95,9 +96,17 @@ class CausalDiagramSVG(ShortcodePlugin):
                     if not v:
                         continue
                     t = v.split(",")
-                    # these should be 3 numbers: time, x, y
+                    # these should be 2-4 numbers: time, x, y, angle
                     # time should be in beats
+                    # if there are only 2, we assume: x,y
+                    # for 3 we assume, x,y,angle
+                    # if there are less numbers than 4
+                    #   we add 0 for time and 0 for angle
                     t = [float(x) for x in t]
+                    if len(t) == 2:
+                        t = [0, t[0], t[1], 0]
+                    elif len(t) == 3:
+                        t = [0, t[0], t[1], t[2]]
                     tmp.append(t)
                 self.juggler[name]["position"] = tmp
             else:
@@ -130,8 +139,14 @@ class CausalDiagramSVG(ShortcodePlugin):
                     pos[0] = pos[0] / N
             self.duration = max(self.duration, (N + self.juggler[j]["wait"]))
 
-    def draw_circle(self, dwg, x, y, r, label):
-        """Draw a circel with a letter in it."""
+    def draw_circle(self, dwg, x, y, r, label, angle=None):
+        """Draw a circel with a letter in it.
+
+        x,y are the position
+        r is the radius
+        label the letter (centered in the circle)
+        angle the direction the juggler is looking, will be skipped if None
+        """
         group = dwg.g()
         group.add(dwg.circle(center=(x, y), r=r, stroke="black", fill="none"))
         group.add(
@@ -143,6 +158,24 @@ class CausalDiagramSVG(ShortcodePlugin):
                 dominant_baseline="middle",
             )
         )
+        if angle is not None:
+            angle = math.radians(angle)
+            delta = math.radians(15)
+
+            x1 = x + r * math.cos(angle + delta)
+            y1 = y + r * math.sin(angle + delta)
+            x2 = x + 1.5 * r * math.cos(angle)
+            y2 = y + 1.5 * r * math.sin(angle)
+            x3 = x + r * math.cos(angle - delta)
+            y3 = y + r * math.sin(angle - delta)
+
+            group.add(
+                dwg.polygon(
+                    points=[(x1, y1), (x2, y2), (x3, y3), (x1, y1)],
+                    fill="black",
+                )
+            )
+
         return group
 
     def draw_arrow(
@@ -202,7 +235,6 @@ class CausalDiagramSVG(ShortcodePlugin):
 
         dx = end_x - start_x
         dy = end_y - start_y
-        length = (dx**2 + dy**2) ** 0.5
 
         if dx == 0 and dy == 0:
             return
@@ -211,12 +243,6 @@ class CausalDiagramSVG(ShortcodePlugin):
         start_y += self.pos_center_y
         end_x += self.pos_center_x
         end_y += self.pos_center_y
-
-        arrow_offset = self.radius
-        start_x += arrow_offset * (dx / length)
-        start_y += arrow_offset * (dy / length)
-        end_x -= arrow_offset * (dx / length)
-        end_y -= arrow_offset * (dy / length)
 
         line = dwg.line(
             start=(start_x, start_y),
@@ -231,7 +257,7 @@ class CausalDiagramSVG(ShortcodePlugin):
                 attributeName_="opacity",
                 values="0;0;1;0;0",
                 keyTimes=f"0;{start_time/self.duration};{end_time/self.duration};{end_time/self.duration};1",
-                begin=f"0s",
+                begin="0s",
                 dur=f"{self.duration}s",
                 repeatCount="indefinite",
                 fill="remove",
@@ -249,19 +275,46 @@ class CausalDiagramSVG(ShortcodePlugin):
         if "position" not in self.juggler[name]:
             return
         pos = self.juggler[name]["position"]
-        t_0, x_0, y_0 = pos[0]
+        t_0, x_0, y_0, angle_0 = pos[0]
         if len(pos) == 1:
-            return x_0, y_0
-        for t, x, y in pos[1:]:
-            if time <= t:
+            return x_0, y_0, angle_0
+        for t, x, y, angle in pos[1:]:
+            if time < t:
                 X = (x - x_0) * (time - t_0) / (t - t_0) + x_0
                 Y = (y - y_0) * (time - t_0) / (t - t_0) + y_0
-                return X, Y
+                alpha = (angle - angle_0) * (time - t_0) / (t - t_0) + angle_0
+                return X, Y, alpha
             else:
                 t_0 = t
                 x_0 = x
                 y_0 = y
-        return 0, 0
+                angle_0 = angle
+        return 0, 0, 0
+
+    def get_juggler_hand_position(self, name: str, time: int | float):
+        """Get position of the hand, so slightly offset from the jugglers position.
+
+        Coordinates are relative to the position diagram center.
+        """
+        x, y, angle = self.get_juggler_position(name, time)
+        hands = self.juggler[name]["letters"]
+        N = len(hands)
+
+        time = round(time)
+        idx = time % N
+
+        hand = hands[idx]
+
+        angle = math.radians(angle)
+        delta = math.radians(15)
+        if hand == "L":
+            X = x + self.radius * 1.6 * math.cos(angle - delta)
+            Y = y + self.radius * 1.6 * math.sin(angle - delta)
+        else:
+            X = x + self.radius * 1.6 * math.cos(angle + delta)
+            Y = y + self.radius * 1.6 * math.sin(angle + delta)
+
+        return X, Y
 
     def to_svg(self):
         """Create the SVG.
@@ -397,26 +450,61 @@ class CausalDiagramSVG(ShortcodePlugin):
         for i, (name, juggler) in enumerate(self.juggler.items()):
             if "position" not in juggler:
                 continue
-            X = self.pos_center_x + juggler["position"][0][1]
-            Y = self.pos_center_y + juggler["position"][0][2]
+            x, y, angle = self.get_juggler_position(name, 0)
+            X = self.pos_center_x + x
+            Y = self.pos_center_y + y
             keyTimes = ";".join([str(x[0]) for x in juggler["position"]])
             values = ";".join([f"{x[1]},{x[2]}" for x in juggler["position"]])
+            values_rot = ";".join(
+                [
+                    f"{x[3]-angle} {x[1]+self.pos_center_x} {x[2]+self.pos_center_y}"
+                    for x in juggler["position"]
+                ]
+            )
 
-            pos = self.draw_circle(
-                dwg, self.pos_center_x, self.pos_center_y, self.radius, label=name
-            )
-            pos.add(
-                svgwrite.animate.AnimateTransform(
-                    transform="translate",
-                    attributeName_="transform",
-                    values=values,
-                    keyTimes_=keyTimes,
-                    dur=f"{self.duration}s",
-                    begin="0s",
-                    repeatCount="indefinite",
-                    additive="sum",
+            if len(juggler["position"]) > 1:
+                pos = self.draw_circle(
+                    dwg,
+                    self.pos_center_x,
+                    self.pos_center_y,
+                    self.radius,
+                    label=name,
+                    angle=angle,
                 )
-            )
+                pos.add(
+                    svgwrite.animate.AnimateTransform(
+                        attributeName_="transform",
+                        transform="rotate",
+                        values=values_rot,
+                        keyTimes_=keyTimes,
+                        dur=f"{self.duration}s",
+                        begin="0s",
+                        repeatCount="indefinite",
+                        additive="sum",
+                    )
+                )
+                pos.add(
+                    svgwrite.animate.AnimateTransform(
+                        attributeName_="transform",
+                        transform="translate",
+                        values=values,
+                        keyTimes_=keyTimes,
+                        dur=f"{self.duration}s",
+                        begin="0s",
+                        repeatCount="indefinite",
+                        additive="sum",
+                    )
+                )
+            else:
+                pos = self.draw_circle(
+                    dwg,
+                    X,
+                    Y,
+                    self.radius,
+                    label=name,
+                    angle=angle,
+                )
+
             dwg.add(pos)
 
         # the arrows in the position diagram
@@ -433,8 +521,8 @@ class CausalDiagramSVG(ShortcodePlugin):
                     # this is a pass
                     p = int(pat[:-1])
                     target = pat[-1].upper()
-                    start_x, start_y = self.get_juggler_position(j, i)
-                    end_x, end_y = self.get_juggler_position(target, i + (p - 2))
+                    start_x, start_y = self.get_juggler_hand_position(j, i)
+                    end_x, end_y = self.get_juggler_hand_position(target, i + (p - 2))
 
                     tmp = self.draw_animated_arrow(
                         dwg,
