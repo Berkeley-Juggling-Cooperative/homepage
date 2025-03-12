@@ -309,12 +309,14 @@ class CausalDiagramSVG(ShortcodePlugin):
 
         angle = math.radians(angle)
         delta = math.radians(15)
+        # y-values have a minus, since the coordinate system is mirrored
+        # e.g. y=0 is on top
         if hand == "L":
             X = x + self.radius * 1.6 * math.cos(angle + delta)
-            Y = y + self.radius * 1.6 * math.sin(angle + delta)
+            Y = y - self.radius * 1.6 * math.sin(angle + delta)
         else:
             X = x + self.radius * 1.6 * math.cos(angle - delta)
-            Y = y + self.radius * 1.6 * math.sin(angle - delta)
+            Y = y - self.radius * 1.6 * math.sin(angle - delta)
 
         return X, Y
 
@@ -465,6 +467,8 @@ class CausalDiagramSVG(ShortcodePlugin):
             )
 
             if len(juggler["position"]) > 1:
+                # start in center, so that all motion is given in relative
+                # coordinates (inlcuding the step at t=0
                 pos = self.draw_circle(
                     dwg,
                     self.pos_center_x,
@@ -525,7 +529,6 @@ class CausalDiagramSVG(ShortcodePlugin):
                     target = pat[-1].upper()
                     start_x, start_y = self.get_juggler_hand_position(j, i, 0)
                     end_x, end_y = self.get_juggler_hand_position(target, i, p - 2)
-
                     tmp = self.draw_animated_arrow(
                         dwg,
                         arrow_marker,
@@ -537,7 +540,6 @@ class CausalDiagramSVG(ShortcodePlugin):
                         i + p - 2,
                     )
                     dwg.add(tmp)
-
 
         svg_string_io = io.StringIO()
         dwg.write(svg_string_io)
