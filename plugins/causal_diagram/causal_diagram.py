@@ -291,7 +291,9 @@ class CausalDiagramSVG(ShortcodePlugin):
                 angle_0 = angle
         return 0, 0, 0
 
-    def get_juggler_hand_position(self, name: str, time: int | float):
+    def get_juggler_hand_position(
+        self, name: str, time: int | float, hand_delay: int | float
+    ):
         """Get position of the hand, so slightly offset from the jugglers position.
 
         Coordinates are relative to the position diagram center.
@@ -300,7 +302,7 @@ class CausalDiagramSVG(ShortcodePlugin):
         hands = self.juggler[name]["letters"]
         N = len(hands)
 
-        time = round(time)
+        time = round(time + hand_delay)
         idx = time % N
 
         hand = hands[idx]
@@ -308,11 +310,11 @@ class CausalDiagramSVG(ShortcodePlugin):
         angle = math.radians(angle)
         delta = math.radians(15)
         if hand == "L":
-            X = x + self.radius * 1.6 * math.cos(angle - delta)
-            Y = y + self.radius * 1.6 * math.sin(angle - delta)
-        else:
             X = x + self.radius * 1.6 * math.cos(angle + delta)
             Y = y + self.radius * 1.6 * math.sin(angle + delta)
+        else:
+            X = x + self.radius * 1.6 * math.cos(angle - delta)
+            Y = y + self.radius * 1.6 * math.sin(angle - delta)
 
         return X, Y
 
@@ -521,8 +523,8 @@ class CausalDiagramSVG(ShortcodePlugin):
                     # this is a pass
                     p = int(pat[:-1])
                     target = pat[-1].upper()
-                    start_x, start_y = self.get_juggler_hand_position(j, i)
-                    end_x, end_y = self.get_juggler_hand_position(target, i + (p - 2))
+                    start_x, start_y = self.get_juggler_hand_position(j, i, 0)
+                    end_x, end_y = self.get_juggler_hand_position(target, i, p - 2)
 
                     tmp = self.draw_animated_arrow(
                         dwg,
@@ -535,6 +537,7 @@ class CausalDiagramSVG(ShortcodePlugin):
                         i + p - 2,
                     )
                     dwg.add(tmp)
+
 
         svg_string_io = io.StringIO()
         dwg.write(svg_string_io)
