@@ -69,20 +69,24 @@ the `uv.lock` file and pyproject.toml to git.
 ## TODO
 
 - add juggling patterns and organize them using tags
-- modify tag page to not say "Posts about 3-count", but "Patterns
-  involving 3-count"
-- remove categories from tag overview and don't generate the category
-  pages (or delete them before deploying?)
-- add 3d animation of patterns (see https://github.com/helbling/passist/)
-- add option to add position of jugglers:
-  * at the moment the causal diagram needs to have the same length at
-    the positions, this should be changed, so that the diagram just repeats if needed
-  * positions circle should have an angle and a marker in the
-    direction the person is looking, this should be animated too if
-    needed
-- add option to plot passes at a certain time in position diagram
-  (think the different beat in torture chamber), instead or additional to animation
-- can we do 3d animation of moving patterns?
+- Causal diagrams:
+  - add an easy way to add default positions, something like:
+	"positions default: ciricle" where everyone is looking at the
+	center or "position default: line" for feeds where people look
+	either left or right.
+  - Try adding Havanna and Scrambled Ivy to test new system
+  - at the moment the causal diagram needs to have the same length at
+    the positions, this should be changed, so that the input diagram just repeats if needed
+  - add option to plot passes at a certain time in position diagram
+    (think the different beat in torture chamber), instead or additional to animation
+- page layout:
+  - modify tag page to not say "Posts about 3-count", but "Patterns
+	involving 3-count"
+  - remove categories from tag overview and don't generate the category
+	pages (or delete them before deploying?)
+- 3d Animations:
+  - add 3d animation of patterns (see https://github.com/helbling/passist/blob/main/src/lib/animation.mjs)
+  - can we do 3d animation of moving patterns?
 - use the browser built-in error checker (F12 in firefox) and fix any issues
 - handle images and videos: Figure out how to do this using git
   without committing all the images to git. Probably:
