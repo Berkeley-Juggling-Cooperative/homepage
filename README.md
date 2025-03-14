@@ -2,7 +2,7 @@
 
 It includes all files to create the static webpage using (Nikola)[https://getnikola.com].
 
-The homepage can be found at https://test.berkeleyjuggling,org.
+The homepage can be found at https://test.berkeleyjuggling.org.
 
 ## How to build the static webpage
 
