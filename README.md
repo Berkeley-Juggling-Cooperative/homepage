@@ -69,6 +69,7 @@ the `uv.lock` file and pyproject.toml to git.
 ## TODO
 
 - add juggling patterns and organize them using tags
+- add old patterns from original web page
 - Causal diagrams:
   - add an easy way to add default positions, something like:
 	"positions default: ciricle" where everyone is looking at the
@@ -90,8 +91,8 @@ the `uv.lock` file and pyproject.toml to git.
 - use the browser built-in error checker (F12 in firefox) and fix any issues
 - handle images and videos: Figure out how to do this using git
   without committing all the images to git. Probably:
-  * an rsync command  to download them into a different folder
-  * a script that creates very small previews of them that can be committed into git, 
-  * a modified deploy script that upload the original ones back (in case
-  new ones got added)
-  * making sure that we don't delete images on the server during deployment.
+  * an rsync command to download the originals from a different folder from the server
+  * these should go into /images and /galleries, which are in .gitignore to not commit them
+  * we might commit certain files there though, e.g. subtitles or other yaml files that nikola uses
+  * normal build and deploy to upload (not overwriting the original images)
+  * sync images back to the server
