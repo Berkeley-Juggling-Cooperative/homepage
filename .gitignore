@@ -6,3 +6,7 @@ cache
 .#*
 \#*#
 state_data.json
+
+# we don't want to commit large images to git
+galleries
+images
