@@ -33,6 +33,8 @@ class CausalDiagramSVG(ShortcodePlugin):
     margin = 10
     radius = 12
 
+    title_height = 50
+
     # values for position
     pos_height = 300
 
@@ -138,7 +140,7 @@ class CausalDiagramSVG(ShortcodePlugin):
                         pattern = pattern.replace("p", "a")
                 tmp["pattern"] = pattern.split()
                 # the y-coordinate the juggler line should be drawn in the diagram
-                tmp["height"] = self.margin + int(self.step_Y * (n + 0.8))
+                tmp["height"] = self.margin + int(self.step_Y * (n + 0.5))
                 self.juggler[juggler_name] = tmp
                 n += 1
         # for the animation we need to rescale beats to the [0,1] interval
@@ -236,7 +238,7 @@ class CausalDiagramSVG(ShortcodePlugin):
             )
 
     def draw_animated_arrow(
-        self, dwg, arrow_marker, start_x, start_y, end_x, end_y, start_time, end_time
+            self, dwg, arrow_marker, start_x, start_y, end_x, end_y, start_time, end_time, style
     ):
         """These are animated arrows for the position diagram."""
 
@@ -254,9 +256,8 @@ class CausalDiagramSVG(ShortcodePlugin):
         line = dwg.line(
             start=(start_x, start_y),
             end=(end_x, end_y),
-            stroke="black",
             opacity=0,
-            stroke_width=2,
+            style=style,
             marker_end=arrow_marker.get_funciri(),
         )
         line.add(
@@ -333,11 +334,20 @@ class CausalDiagramSVG(ShortcodePlugin):
         else:
             return [value, "stroke: black"]
 
-    def convert_to_svg(self, dwg) -> str:
+    def drawing_to_str(self, dwg) -> str:
+        """svgwrite can only write to file, so this converts to a str"""
         svg_string_io = io.StringIO()
         dwg.write(svg_string_io)
         svg_content = svg_string_io.getvalue()
         return svg_content
+
+    def has_position(self):
+        """Check, if all jugglers have position information."""
+        has_position = True
+        for juggler in self.juggler.values():
+            if "position" not in juggler:
+                has_position = False
+        return has_position
 
     def to_svg(self):
         """Create the SVG.
@@ -349,20 +359,20 @@ class CausalDiagramSVG(ShortcodePlugin):
 
         length = self.step_X * (self.duration + 1.5)
 
-        height = 100 * N
+        height = self.step_Y * N
 
         height += 2 * self.margin
         length += 2 * self.margin
 
-        title_height = 30 if self.title else 0
-
-        height += title_height
+        if self.title:
+            height += self.title_height
 
         # positions
-        height += self.pos_height
-        self.pos_length = length
-        self.pos_center_y = height - self.pos_height / 2
-        self.pos_center_x = length / 2
+        if self.has_position():
+            height += self.pos_height
+            self.pos_length = length
+            self.pos_center_y = height - self.pos_height / 2
+            self.pos_center_x = length / 2
 
         # Create an SVG drawing and add a box to frame it
         dwg = svgwrite.Drawing(size=(length, height))
@@ -382,7 +392,7 @@ class CausalDiagramSVG(ShortcodePlugin):
             dwg.add(
                 dwg.text(
                     self.title,
-                    insert=(length // 2, 10 + title_height // 2),
+                    insert=(length // 2, self.title_height // 2 - 5),
                     fill="black",
                     text_anchor="middle",
                     dominant_baseline="middle",
@@ -441,6 +451,11 @@ class CausalDiagramSVG(ShortcodePlugin):
                 X += self.step_X
                 X_max = X
 
+        if not self.has_position():
+            return self.drawing_to_str(dwg)
+
+        # the position diagram
+
         # animate the red bar across the pattern
         bar = dwg.line(
             start=(X_min, y_min),
@@ -460,8 +475,6 @@ class CausalDiagramSVG(ShortcodePlugin):
             )
         )
         dwg.add(bar)
-
-        # the position diagram
 
         # the positions
         for i, (name, juggler) in enumerate(self.juggler.items()):
@@ -554,4 +567,4 @@ class CausalDiagramSVG(ShortcodePlugin):
                     )
                     dwg.add(tmp)
 
-        return self.convert_to_svg(dwg)
+        return self.drawing_to_str(dwg)

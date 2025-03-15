@@ -75,7 +75,7 @@ Offsets can be defined and a title for the whole diagram can be set:
 title: how to do offsets
 {{% /causal_diagram %}}
 
-# multi-person passes
+# Multi-person passes
 
 	{{% raw %}}
 	{{% causal_diagram %}}
@@ -124,9 +124,79 @@ Allowed symbols are ",#><^*".
 	3p> 3 3 3p^ 4, 2 3p
 	3p< 3 3 3p# 3 3 3p*
 	{{% /causal_diagram %}}
+
     {{% /raw %}}
 
 {{% causal_diagram %}}
 3p> 3 3 3p^ 4, 2 3p
 3p< 3 3 3p# 3 3 3p*
 {{% /causal_diagram %}}
+
+
+# Positions (static)
+
+You can also define positions to get a diagram of where people shoudl stand.
+
+    {{% raw %}}
+    {{% causal_diagram %}}
+    3p 3 3 3p 3 3
+    3p 3 3 3p 3 3
+    position A: -100,0,0;
+    position B: +100,0,180
+    {{% /causal_diagram %}}
+    {{% /raw %}}
+
+{{% causal_diagram %}}
+3p 3 3 3p 3 3
+3p 3 3 3p 3 3
+position A: -100,0,0;
+position B: +100,0,180
+{{% /causal_diagram %}}
+
+Positions need to be defined for each juggler for a position diagram to show up.
+
+Once positions are defined, all passes will be animated in the diagram.
+
+Positions are relative to a center position in the diagram. You can
+either specify 2 numbers as ΔX and ΔY or 3 numbers. In which case the
+last number is the orientation of the juggler (0=looking to the right,
+180 looking to the left).
+
+# Positions (walking)
+
+You can also define walking patterns.
+
+
+    {{% raw %}}
+    {{% causal_diagram %}}
+    3d 3 3 3 3 3 3d 3 3 3 3 3 3d 3 3 3 3 3 3d 3 3 3 3 3
+    3c 3 3 3 3 3 3c 3 3 3 3 3 3c 3 3 3 3 3 3c 3 3 3 3 3
+    3a 3 3 3 3 3 3a 3 3 3 3 3 3a 3 3 3 3 3 3a 3 3 3 3 3
+    3b 3 3 3 3 3 3b 3 3 3 3 3 3b 3 3 3 3 3 3b 3 3 3 3 3
+    title: Y (walking, 6 count)
+    position A: 0,-100,0,0;      6,-200,+100,0;   12,-300,0,0;     18,-200,-100,0;   24,-100,0,0;
+    position B: 0,-300,0,0;      6,-200,-100,0;   12,-100,0,0;     18,-200,+100,0;   24,-300,0,0;
+    position C: 0,+200,100,180;  6,+100,0,180;    12,200,-100,180; 18,+300,0,180;    24,200,100,180;
+    position D: 0,+200,-100,180; 6,+300,0,180;    12,200,+100,180; 18,+100,0,180;    24,200,-100,180;
+    {{% /causal_diagram %}}
+    {{% /raw %}}
+
+{{% causal_diagram %}}
+3d 3 3 3 3 3 3d 3 3 3 3 3 3d 3 3 3 3 3 3d 3 3 3 3 3
+3c 3 3 3 3 3 3c 3 3 3 3 3 3c 3 3 3 3 3 3c 3 3 3 3 3
+3a 3 3 3 3 3 3a 3 3 3 3 3 3a 3 3 3 3 3 3a 3 3 3 3 3
+3b 3 3 3 3 3 3b 3 3 3 3 3 3b 3 3 3 3 3 3b 3 3 3 3 3
+title: Y (walking, 6 count)
+position A: 0,-100,0,0;      6,-200,+100,0;   12,-300,0,0;     18,-200,-100,0;   24,-100,0,0;
+position B: 0,-300,0,0;      6,-200,-100,0;   12,-100,0,0;     18,-200,+100,0;   24,-300,0,0;
+position C: 0,+200,100,180;  6,+100,0,180;    12,200,-100,180; 18,+300,0,180;    24,200,100,180;
+position D: 0,+200,-100,180; 6,+300,0,180;    12,200,+100,180; 18,+100,0,180;    24,200,-100,180;
+{{% /causal_diagram %}}
+
+In this case you need to always specify 4 values and specify multiple positions that are separated by ";".
+
+The first number now specifies a time step. The last time step needs to be the same for every juggler and be the same as the length of the causal diagram pattern.
+
+Note that the number of positions for each juggler can vary.
+
+Currently, the last position should be the same as the first to achieve a smooth pattern.
