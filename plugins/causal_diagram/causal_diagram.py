@@ -596,8 +596,8 @@ class CausalDiagramSVG(ShortcodePlugin):
                             start_y,
                             end_x,
                             end_y,
-                            r * self.duration_bar+ i,
-                            r * self.duration_bar + p - 2,
+                            r * self.duration_bar + i,
+                            r * self.duration_bar + i + p - 2,
                             style=style,
                         )
                         dwg.add(tmp)
