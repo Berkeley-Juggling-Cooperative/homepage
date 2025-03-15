@@ -76,8 +76,6 @@ the `uv.lock` file and pyproject.toml to git.
 	center or "position default: line" for feeds where people look
 	either left or right.
   - Try adding Havanna and Scrambled Ivy to test new system
-  - at the moment the causal diagram needs to have the same length at
-    the positions, this should be changed, so that the input diagram just repeats if needed
   - add option to plot passes at a certain time in position diagram
     (think the different beat in torture chamber), instead or additional to animation
 - page layout:
