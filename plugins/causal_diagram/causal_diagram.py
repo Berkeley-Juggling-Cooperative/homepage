@@ -5,6 +5,17 @@ import svgwrite
 from itertools import cycle
 
 
+# set of styles
+COLORS = {
+    ",": "stroke: #d12229; stroke-width: 4",
+    "#": "stroke: #f68a1e; stroke-dasharray: 6 3; stroke-width: 2",
+    ">": "stroke: #fde01a; stroke-dasharray: 9 2 9; stroke-width: 2",
+    "<": "stroke: #007940; stroke-dasharray: 6 6; stroke-width: 3",
+    "^": "stroke: #24408e; stroke-dasharray: 12 6; stroke-width: 3",
+    "*": "stroke: #732982; stroke-dasharray: 8 2 8 2 8; stroke-width: 3",
+}
+
+
 class CausalDiagramSVG(ShortcodePlugin):
     """A simple script/shortcode to display causal diagrams.
 
@@ -178,9 +189,7 @@ class CausalDiagramSVG(ShortcodePlugin):
 
         return group
 
-    def draw_arrow(
-        self, dwg, arrow_marker, start_x, start_y, end_x, end_y, stroke="black"
-    ):
+    def draw_arrow(self, dwg, arrow_marker, start_x, start_y, end_x, end_y, style):
         """Draw an arrow in the diagram.
 
         These start and stop at the circle.
@@ -213,9 +222,8 @@ class CausalDiagramSVG(ShortcodePlugin):
             )
             return dwg.path(
                 d=path_data,
-                stroke=stroke,
-                stroke_width=2,
                 fill="none",
+                style=style,
                 marker_end=arrow_marker.get_funciri(),
             )
 
@@ -223,8 +231,7 @@ class CausalDiagramSVG(ShortcodePlugin):
             return dwg.line(
                 start=(start_x, start_y),
                 end=(end_x, end_y),
-                stroke=stroke,
-                stroke_width=2,
+                style=style,
                 marker_end=arrow_marker.get_funciri(),
             )
 
@@ -320,6 +327,18 @@ class CausalDiagramSVG(ShortcodePlugin):
 
         return X, Y
 
+    def get_style(self, value: str) -> list[str, str]:
+        if value[-1] in COLORS.keys():
+            return [value[:-1], COLORS[value[-1]]]
+        else:
+            return [value, "stroke: black"]
+
+    def convert_to_svg(self, dwg) -> str:
+        svg_string_io = io.StringIO()
+        dwg.write(svg_string_io)
+        svg_content = svg_string_io.getvalue()
+        return svg_content
+
     def to_svg(self):
         """Create the SVG.
 
@@ -404,11 +423,7 @@ class CausalDiagramSVG(ShortcodePlugin):
             for p, hand in zip(juggler["pattern"], cycle(juggler["letters"])):
                 group = self.draw_circle(dwg, X, H, self.radius, hand)
                 dwg.add(group)
-                highlight = "black"
-                if p.endswith(","):
-                    p = p[:-1]
-                    highlight = "red"
-
+                p, style = self.get_style(p)
                 try:
                     p = int(p) - 2
                     Y = H
@@ -420,9 +435,7 @@ class CausalDiagramSVG(ShortcodePlugin):
 
                     p = int(p[:-1]) - 2
                 end_x = X + self.step_X * p
-                arrow = self.draw_arrow(
-                    dwg, arrow_marker, X, H, end_x, Y, stroke=highlight
-                )
+                arrow = self.draw_arrow(dwg, arrow_marker, X, H, end_x, Y, style=style)
                 if arrow:
                     dwg.add(arrow)
                 X += self.step_X
@@ -519,8 +532,7 @@ class CausalDiagramSVG(ShortcodePlugin):
                 continue
             for i, pat in enumerate(self.juggler[j]["pattern"]):
                 pat = pat.strip()
-                if pat.endswith(","):
-                    pat = pat[:-1]
+                pat, style = self.get_style(pat)
                 try:
                     int(pat)
                 except ValueError:
@@ -538,11 +550,8 @@ class CausalDiagramSVG(ShortcodePlugin):
                         end_y,
                         i,
                         i + p - 2,
+                        style=style,
                     )
                     dwg.add(tmp)
 
-        svg_string_io = io.StringIO()
-        dwg.write(svg_string_io)
-        svg_content = svg_string_io.getvalue()
-
-        return svg_content
+        return self.convert_to_svg(dwg)

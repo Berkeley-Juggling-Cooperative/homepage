@@ -114,18 +114,19 @@ bars:2.5,5.5
 {{% /causal_diagram %}}
 
 
-# Highlights
+# Lines styles
+
+You can change the linestyle by adding certain characters at the end of a value.
+Allowed symbols are ",#><^*".
 
     {{% raw %}}
 	{{% causal_diagram %}}
-	3p 3 3 3p 4, 2 3p
-	3p 3 3 3p 3 3 3p
+	3p> 3 3 3p^ 4, 2 3p
+	3p< 3 3 3p# 3 3 3p*
 	{{% /causal_diagram %}}
     {{% /raw %}}
 
-By adding a ',' behind a number/pass you can highlight this throw.
-
 {{% causal_diagram %}}
-3p 3 3 3p 4, 2 3p
-3p 3 3 3p 3 3 3p
+3p> 3 3 3p^ 4, 2 3p
+3p< 3 3 3p# 3 3 3p*
 {{% /causal_diagram %}}
