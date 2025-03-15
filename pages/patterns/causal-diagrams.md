@@ -12,7 +12,7 @@
 We wrote our own extension for [Nikola](https://getnikola.com), our
 static web page generator, to generate Causal Diagrams.
 
-Most of this is based on [this article](https://jugglingedge.com/help/causaldiagrams.php).
+The basics are taken from [this article](https://jugglingedge.com/help/causaldiagrams.php).
 
 Currently, the generator can handle the following syntax:
 
@@ -135,7 +135,7 @@ Allowed symbols are ",#><^*".
 
 # Positions (static)
 
-You can also define positions to get a diagram of where people shoudl stand.
+You can also define positions to get a diagram of where people should stand.
 
     {{% raw %}}
     {{% causal_diagram %}}
@@ -200,3 +200,43 @@ The first number now specifies a time step. The last time step should be the sam
 Note that the number of positions for each juggler can vary.
 
 Currently, the last position should be the same as the first to achieve a smooth pattern.
+
+
+# Continuation lines
+
+If lines get too long, you can break them up into multiple lines by using the '\' character at the end.
+
+
+    {{% raw %}}
+    {{% causal_diagram %}}
+    3d 3 3 3 3 3
+    3c 3 3 3 3 3
+    3a 3 3 3 3 3
+    3b 3 3 3 3 3
+    title: Y (walking, 6 count)
+    position A: 0,-100,0,0;     \
+                6,-200,+100,0;  \
+                12,-300,0,0;    \
+                18,-200,-100,0; \
+                24,-100,0,0;
+    position B: 0,-300,0,0;      6,-200,-100,0;   12,-100,0,0;     18,-200,+100,0;   24,-300,0,0;
+    position C: 0,+200,100,180;  6,+100,0,180;    12,200,-100,180; 18,+300,0,180;    24,200,100,180;
+    position D: 0,+200,-100,180; 6,+300,0,180;    12,200,+100,180; 18,+100,0,180;    24,200,-100,180;
+    {{% /causal_diagram %}}
+    {{% /raw %}}
+
+{{% causal_diagram %}}
+3d 3 3 3 3 3
+3c 3 3 3 3 3
+3a 3 3 3 3 3
+3b 3 3 3 3 3
+title: Y (walking, 6 count)
+position A: 0,-100,0,0;     \
+            6,-200,+100,0;  \
+			12,-300,0,0;    \
+			18,-200,-100,0; \
+			24,-100,0,0;
+position B: 0,-300,0,0;      6,-200,-100,0;   12,-100,0,0;     18,-200,+100,0;   24,-300,0,0;
+position C: 0,+200,100,180;  6,+100,0,180;    12,200,-100,180; 18,+300,0,180;    24,200,100,180;
+position D: 0,+200,-100,180; 6,+300,0,180;    12,200,+100,180; 18,+100,0,180;    24,200,-100,180;
+{{% /causal_diagram %}}

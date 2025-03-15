@@ -89,10 +89,18 @@ class CausalDiagramSVG(ShortcodePlugin):
         Empty lines are skipped. There should be N lines for the
         pattern. We also allow extra lines for title, bars and positions.
         The positions can also be a list of positions which wil be animated.
+
+        We allow "\" as a marker for continuous lines to be able to break up long lines.
         """
         n = 0
-        for line in text.split("\n"):
-            line = line.strip()
+        # information to be parse in case we have multiple lines
+        line = ""
+        for current_line in text.split("\n"):
+            current_line = current_line.strip()
+            if current_line.endswith("\\"):
+                line += current_line[:-1].strip()
+                continue
+            line += current_line
             if not line:
                 continue
             if line.startswith("title:"):
@@ -144,6 +152,7 @@ class CausalDiagramSVG(ShortcodePlugin):
                 tmp["height"] = self.margin + int(self.step_Y * (n + 0.5))
                 self.juggler[juggler_name] = tmp
                 n += 1
+            line = ""
         # for the animation we need to rescale beats to the [0,1] interval
         # we do this already here
         self.duration_bar = max([len(j["pattern"]) for j in self.juggler.values()])
