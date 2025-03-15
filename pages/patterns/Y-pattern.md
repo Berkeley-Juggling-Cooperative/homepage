@@ -14,10 +14,10 @@
 The normal Y variation, you always pass and receive from the same people.
 
 {{% causal_diagram %}}
-3d 3 3 3 3 3 3d 3 3 3 3 3 3d 3 3 3 3 3 3d 3 3 3 3 3
-3c 3 3 3 3 3 3c 3 3 3 3 3 3c 3 3 3 3 3 3c 3 3 3 3 3
-3a 3 3 3 3 3 3a 3 3 3 3 3 3a 3 3 3 3 3 3a 3 3 3 3 3
-3b 3 3 3 3 3 3b 3 3 3 3 3 3b 3 3 3 3 3 3b 3 3 3 3 3
+3d 3 3 3 3 3
+3c 3 3 3 3 3
+3a 3 3 3 3 3
+3b 3 3 3 3 3
 title: Y (walking, 6 count)
 position A: 0,-100,0,0;      6,-200,+100,0;   12,-300,0,0;     18,-200,-100,0;   24,-100,0,0;
 position B: 0,-300,0,0;      6,-200,-100,0;   12,-100,0,0;     18,-200,+100,0;   24,-300,0,0;

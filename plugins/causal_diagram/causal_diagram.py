@@ -46,7 +46,8 @@ class CausalDiagramSVG(ShortcodePlugin):
         self.juggler = {}
         self.title = ""
         self.bars = []
-        self.duration = 0
+        self.duration_position = 0
+        self.duration_bar = 0
 
     def handler(self, site=None, data=None, lang=None, post=None):
         """This gets executed for the shortcode."""
@@ -145,12 +146,21 @@ class CausalDiagramSVG(ShortcodePlugin):
                 n += 1
         # for the animation we need to rescale beats to the [0,1] interval
         # we do this already here
-        for j in self.juggler:
-            N = len(self.juggler[j]["pattern"])
-            if "position" in self.juggler[j]:
-                for pos in self.juggler[j]["position"]:
+        self.duration_bar = max([len(j["pattern"]) for j in self.juggler.values()])
+        self.duration_position = 0
+        for j in self.juggler.values():
+            if "position" in j:
+                # get last beat
+                N = j["position"][-1][0]
+                if N == 0:
+                    continue
+                # scale to [0, 1]
+                for pos in j["position"]:
                     pos[0] = pos[0] / N
-            self.duration = max(self.duration, (N + self.juggler[j]["wait"]))
+                self.duration_position = max(self.duration_position, N)
+        # not a walking pattern
+        if self.duration_position == 0:
+            self.duration_position = self.duration_bar
 
     def draw_circle(self, dwg, x, y, r, label, angle=None):
         """Draw a circel with a letter in it.
@@ -238,7 +248,16 @@ class CausalDiagramSVG(ShortcodePlugin):
             )
 
     def draw_animated_arrow(
-            self, dwg, arrow_marker, start_x, start_y, end_x, end_y, start_time, end_time, style
+        self,
+        dwg,
+        arrow_marker,
+        start_x,
+        start_y,
+        end_x,
+        end_y,
+        start_time,
+        end_time,
+        style,
     ):
         """These are animated arrows for the position diagram."""
 
@@ -264,9 +283,9 @@ class CausalDiagramSVG(ShortcodePlugin):
             svgwrite.animate.Animate(
                 attributeName_="opacity",
                 values="0;0;1;0;0",
-                keyTimes=f"0;{start_time/self.duration};{end_time/self.duration};{end_time/self.duration};1",
+                keyTimes=f"0;{start_time/self.duration_position};{end_time/self.duration_position};{end_time/self.duration_position};1",
                 begin="0s",
-                dur=f"{self.duration}s",
+                dur=f"{self.duration_position}s",
                 repeatCount="indefinite",
                 fill="remove",
             )
@@ -279,7 +298,7 @@ class CausalDiagramSVG(ShortcodePlugin):
         Just doing a linear interpolation.
         """
         # rescale time to [0, 1] interval
-        time = time / self.duration
+        time = time / self.duration_position
         if "position" not in self.juggler[name]:
             return
         pos = self.juggler[name]["position"]
@@ -357,7 +376,7 @@ class CausalDiagramSVG(ShortcodePlugin):
         """
         N = len(self.juggler)
 
-        length = self.step_X * (self.duration + 1.5)
+        length = self.step_X * (self.duration_bar + 1.5)
 
         height = self.step_Y * N
 
@@ -469,7 +488,7 @@ class CausalDiagramSVG(ShortcodePlugin):
                 attributeName_="transform",
                 from_="0",
                 to=f"{X_max-X_min}",
-                dur=f"{self.duration}s",
+                dur=f"{self.duration_bar}s",
                 begin="0s",
                 repeatCount="indefinite",
             )
@@ -509,7 +528,7 @@ class CausalDiagramSVG(ShortcodePlugin):
                         transform="rotate",
                         values=values_rot,
                         keyTimes_=keyTimes,
-                        dur=f"{self.duration}s",
+                        dur=f"{self.duration_position}s",
                         begin="0s",
                         repeatCount="indefinite",
                         additive="sum",
@@ -521,7 +540,7 @@ class CausalDiagramSVG(ShortcodePlugin):
                         transform="translate",
                         values=values,
                         keyTimes_=keyTimes,
-                        dur=f"{self.duration}s",
+                        dur=f"{self.duration_position}s",
                         begin="0s",
                         repeatCount="indefinite",
                         additive="sum",
@@ -543,28 +562,35 @@ class CausalDiagramSVG(ShortcodePlugin):
         for j in self.juggler:
             if "position" not in self.juggler[j]:
                 continue
-            for i, pat in enumerate(self.juggler[j]["pattern"]):
-                pat = pat.strip()
-                pat, style = self.get_style(pat)
-                try:
-                    int(pat)
-                except ValueError:
-                    # this is a pass
-                    p = int(pat[:-1])
-                    target = pat[-1].upper()
-                    start_x, start_y = self.get_juggler_hand_position(j, i, 0)
-                    end_x, end_y = self.get_juggler_hand_position(target, i, p - 2)
-                    tmp = self.draw_animated_arrow(
-                        dwg,
-                        arrow_marker,
-                        start_x,
-                        start_y,
-                        end_x,
-                        end_y,
-                        i,
-                        i + p - 2,
-                        style=style,
-                    )
-                    dwg.add(tmp)
+            repeats = int(self.duration_position // self.duration_bar)
+
+            for r in range(repeats):
+                for i, pat in enumerate(self.juggler[j]["pattern"]):
+                    pat = pat.strip()
+                    pat, style = self.get_style(pat)
+                    try:
+                        int(pat)
+                    except ValueError:
+                        # this is a pass
+                        p = int(pat[:-1])
+                        target = pat[-1].upper()
+                        start_x, start_y = self.get_juggler_hand_position(
+                            j, r * self.duration_bar + i, 0
+                        )
+                        end_x, end_y = self.get_juggler_hand_position(
+                            target, r * self.duration_bar + i, p - 2
+                        )
+                        tmp = self.draw_animated_arrow(
+                            dwg,
+                            arrow_marker,
+                            start_x,
+                            start_y,
+                            end_x,
+                            end_y,
+                            r * self.duration_bar+ i,
+                            r * self.duration_bar + p - 2,
+                            style=style,
+                        )
+                        dwg.add(tmp)
 
         return self.drawing_to_str(dwg)

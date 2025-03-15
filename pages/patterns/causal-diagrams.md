@@ -169,10 +169,10 @@ You can also define walking patterns.
 
     {{% raw %}}
     {{% causal_diagram %}}
-    3d 3 3 3 3 3 3d 3 3 3 3 3 3d 3 3 3 3 3 3d 3 3 3 3 3
-    3c 3 3 3 3 3 3c 3 3 3 3 3 3c 3 3 3 3 3 3c 3 3 3 3 3
-    3a 3 3 3 3 3 3a 3 3 3 3 3 3a 3 3 3 3 3 3a 3 3 3 3 3
-    3b 3 3 3 3 3 3b 3 3 3 3 3 3b 3 3 3 3 3 3b 3 3 3 3 3
+    3d 3 3 3 3 3
+    3c 3 3 3 3 3
+    3a 3 3 3 3 3
+    3b 3 3 3 3 3
     title: Y (walking, 6 count)
     position A: 0,-100,0,0;      6,-200,+100,0;   12,-300,0,0;     18,-200,-100,0;   24,-100,0,0;
     position B: 0,-300,0,0;      6,-200,-100,0;   12,-100,0,0;     18,-200,+100,0;   24,-300,0,0;
@@ -182,10 +182,10 @@ You can also define walking patterns.
     {{% /raw %}}
 
 {{% causal_diagram %}}
-3d 3 3 3 3 3 3d 3 3 3 3 3 3d 3 3 3 3 3 3d 3 3 3 3 3
-3c 3 3 3 3 3 3c 3 3 3 3 3 3c 3 3 3 3 3 3c 3 3 3 3 3
-3a 3 3 3 3 3 3a 3 3 3 3 3 3a 3 3 3 3 3 3a 3 3 3 3 3
-3b 3 3 3 3 3 3b 3 3 3 3 3 3b 3 3 3 3 3 3b 3 3 3 3 3
+3d 3 3 3 3 3
+3c 3 3 3 3 3
+3a 3 3 3 3 3
+3b 3 3 3 3 3
 title: Y (walking, 6 count)
 position A: 0,-100,0,0;      6,-200,+100,0;   12,-300,0,0;     18,-200,-100,0;   24,-100,0,0;
 position B: 0,-300,0,0;      6,-200,-100,0;   12,-100,0,0;     18,-200,+100,0;   24,-300,0,0;
@@ -195,7 +195,7 @@ position D: 0,+200,-100,180; 6,+300,0,180;    12,200,+100,180; 18,+100,0,180;   
 
 In this case you need to always specify 4 values and specify multiple positions that are separated by ";".
 
-The first number now specifies a time step. The last time step needs to be the same for every juggler and be the same as the length of the causal diagram pattern.
+The first number now specifies a time step. The last time step should be the same for every juggler. If the number of time steps is larger than the number of beats in the diagram. The pattern will just repeat. However the largest time step should be a multiple of the number of beats in the pattern.
 
 Note that the number of positions for each juggler can vary.
 
