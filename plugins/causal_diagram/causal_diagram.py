@@ -120,28 +120,18 @@ class CausalDiagramSVG(ShortcodePlugin):
                         ]
                     ]
             elif line == "line":
-                offset = (N % 2) * 50
-
-                """
-                2 ->  0....0
-                3 ->  0...  -50, 50
-                4 -> -50, 50 .... -50, 50
-                5 -> --50,50 ... -100, 0, 100
-                6 -> -100, 0, 100.....-100,0,100
-                """
-
                 left = N // 2
                 right = N - left
-                start_left = 50 * (left - 1)
-                start_right = 50 * (right - 1)
+                start_left = -50 * (left - 1)
+                start_right = -50 * (right - 1)
                 left_count = 0
                 right_count = 0
                 for i, j in enumerate(self.juggler.values()):
                     if i % 2:
-                        j["position"] = [[0, -100, start_left - 50 * left_count, 0]]
+                        j["position"] = [[0, -100, start_left + 100 * left_count, 0]]
                         left_count += 1
                     else:
-                        j["position"] = [[0, 100, start_right - 50 * right_count, 180]]
+                        j["position"] = [[0, 100, start_right + 100 * right_count, 180]]
                         right_count += 1
             return
 
