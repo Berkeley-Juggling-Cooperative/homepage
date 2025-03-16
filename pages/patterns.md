@@ -17,12 +17,14 @@ If you want to submit your own, have a look at [the syntax we use](causal-diagra
 
 - [2 People](link://tag/2-person)
 - [4 People](link://tag/4-person)
+- [N People](link://tag/N-person)
 
 # By count
 
 - [3 count](link://tag/3-count)
 - [4 count](link://tag/4-count)
 - [6 count](link://tag/6-count)
+- [N count](link://tag/N-count)
 
 # Clubs per juggler
 
