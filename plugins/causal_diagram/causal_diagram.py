@@ -5,12 +5,13 @@ import svgwrite
 from itertools import cycle
 
 
-# set of styles
+# define several styles that can be used for arrow inside the pattern
 COLORS = {
     ",": "stroke: #d12229; stroke-width: 4",
+    "$": "stroke: #d12229; stroke-width: 2",
     "#": "stroke: #f68a1e; stroke-dasharray: 6 3; stroke-width: 2",
-    ">": "stroke: #fde01a; stroke-dasharray: 9 2 9; stroke-width: 2",
-    "<": "stroke: #007940; stroke-dasharray: 6 6; stroke-width: 3",
+    ">": "stroke: #007940; stroke-dasharray: 9 2 9; stroke-width: 2",
+    "<": "stroke: #fde01a; stroke-dasharray: 6 6; stroke-width: 3",
     "^": "stroke: #24408e; stroke-dasharray: 12 6; stroke-width: 3",
     "*": "stroke: #732982; stroke-dasharray: 8 2 8 2 8; stroke-width: 3",
 }
@@ -27,7 +28,7 @@ class CausalDiagramSVG(ShortcodePlugin):
 
     name = "causal_diagram"
 
-    juggler_names = "ABCDEFGHIJ"
+    juggler_names = "ABCDEFGHIJKLNM"
     step_X = 80
     step_Y = 100
     margin = 10
@@ -43,18 +44,18 @@ class CausalDiagramSVG(ShortcodePlugin):
         self.clear()
 
     def clear(self):
+        """Needed in case we have several diagrams on one page."""
         self.juggler = {}
         self.title = ""
         self.bars = []
         self.duration_position = 0
-        self.duration_bar = 0
+        self.duration_pattern = 0
 
     def handler(self, site=None, data=None, lang=None, post=None):
         """This gets executed for the shortcode."""
         self.clear()
-        self.parse_pattern(data)
-        svg_output = self.to_svg()
-        return svg_output, []
+        self.parse(data)
+        return self.to_svg(), []
 
     def parse_hands_and_delay(self, line: str):
         """Parse () in front of a pattern line.
@@ -83,7 +84,115 @@ class CausalDiagramSVG(ShortcodePlugin):
             pattern = line
         return pattern, hands, wait
 
-    def parse_pattern(self, text: str):
+    def parse_title(self, line: str) -> None:
+        self.title = line[6:].strip()
+
+    def parse_bars(self, line: str) -> None:
+        self.bars = [float(x) for x in line[5:].split(",")]
+
+    def parse_position(self, line):
+        """Parses positions.
+
+        This can be static or include multiple locations for walking patterns.
+
+        Especially for static positions, we allow shortcuts that will
+        create positions for all known jugglers (so this should be
+        defined after the pattern).
+
+        Currently we support:
+        * circle (equidistance on a circle, facing the center)
+        * line (two vertical lines, offset for odd numbers, facing across)
+
+        """
+
+        if line.startswith("positions:"):
+            line = line.removeprefix("positions:")
+            line = line.strip()
+            N = len(self.juggler)
+            if line == "circle":
+                for i, j in enumerate(self.juggler.values()):
+                    j["position"] = [
+                        [
+                            0,
+                            100 * math.cos(-2 * math.pi / N * i + math.pi),
+                            -100 * math.sin(-2 * math.pi / N * i + math.pi),
+                            360 / N * i,
+                        ]
+                    ]
+            elif line == "line":
+                offset = (N % 2) * 50
+
+                """
+                2 ->  0....0
+                3 ->  0...  -50, 50
+                4 -> -50, 50 .... -50, 50
+                5 -> --50,50 ... -100, 0, 100
+                6 -> -100, 0, 100.....-100,0,100
+                """
+
+                left = N // 2
+                right = N - left
+                start_left = 50 * (left - 1)
+                start_right = 50 * (right - 1)
+                left_count = 0
+                right_count = 0
+                for i, j in enumerate(self.juggler.values()):
+                    if i % 2:
+                        j["position"] = [[0, -100, start_left - 50 * left_count, 0]]
+                        left_count += 1
+                    else:
+                        j["position"] = [[0, 100, start_right - 50 * right_count, 180]]
+                        right_count += 1
+            return
+
+        line = line.removeprefix("position")
+        name, values = line.split(":")
+        name = name.strip()
+        values = values.split(";")
+        tmp = []
+        for v in values:
+            v = v.strip()
+            if not v:
+                continue
+            t = v.split(",")
+            # these should be 2-4 numbers: time, x, y, angle
+            # time should be in beats
+            # if there are only 2, we assume: x,y
+            # for 3 we assume, x,y,angle
+            # if there are less numbers than 4
+            #   we add 0 for time and 0 for angle
+            t = [float(x) for x in t]
+            if len(t) == 2:
+                t = [0, t[0], t[1], 0]
+            elif len(t) == 3:
+                t = [0, t[0], t[1], t[2]]
+            tmp.append(t)
+        self.juggler[name]["position"] = tmp
+
+    def parse_pattern(self, line: str) -> None:
+        """This is the actual pattern"""
+        # get new name
+        n = len(self.juggler)
+        juggler_name = self.juggler_names[n]
+        tmp = {}
+        # parse extra information in () at the start
+        pattern, hands, wait = self.parse_hands_and_delay(line)
+        tmp["letters"] = hands
+        tmp["wait"] = wait
+        # 'p' for passes are only allowed in 2 person patterns
+        # otherwise it should be letters. Replace 'p' with 'a' and 'b'
+        # here so that it is easier later in the program
+        if "p" in pattern:
+            if juggler_name == "A":
+                pattern = pattern.replace("p", "b")
+            else:
+                pattern = pattern.replace("p", "a")
+        tmp["pattern"] = pattern.split()
+        # the y-coordinate the juggler line should be drawn in the diagram
+        tmp["height"] = self.margin + int(self.step_Y * (n + 0.5))
+        self.juggler[juggler_name] = tmp
+
+    def parse(self, text: str):
         """Take the text in the shortcode and parse it.
 
         Empty lines are skipped. There should be N lines for the
@@ -92,70 +201,34 @@ class CausalDiagramSVG(ShortcodePlugin):
 
         We allow "\" as a marker for continuous lines to be able to break up long lines.
         """
-        n = 0
-        # information to be parse in case we have multiple lines
+
+        # build up the whole input line in case continuous lines are used
         line = ""
         for current_line in text.split("\n"):
             current_line = current_line.strip()
+
+            # handle continuation lines
             if current_line.endswith("\\"):
                 line += current_line[:-1].strip()
                 continue
             line += current_line
             if not line:
                 continue
+
+            # handle the different input options
             if line.startswith("title:"):
-                self.title = line[6:].strip()
+                self.parse_title(line)
             elif line.startswith("bars:"):
-                self.bars = [float(x) for x in line[5:].split(",")]
+                self.parse_bars(line)
             elif line.startswith("position"):
-                line = line.removeprefix("position")
-                name, values = line.split(":")
-                name = name.strip()
-                values = values.split(";")
-                tmp = []
-                for v in values:
-                    v = v.strip()
-                    if not v:
-                        continue
-                    t = v.split(",")
-                    # these should be 2-4 numbers: time, x, y, angle
-                    # time should be in beats
-                    # if there are only 2, we assume: x,y
-                    # for 3 we assume, x,y,angle
-                    # if there are less numbers than 4
-                    #   we add 0 for time and 0 for angle
-                    t = [float(x) for x in t]
-                    if len(t) == 2:
-                        t = [0, t[0], t[1], 0]
-                    elif len(t) == 3:
-                        t = [0, t[0], t[1], t[2]]
-                    tmp.append(t)
-                self.juggler[name]["position"] = tmp
+                self.parse_position(line)
             else:
-                # this is the pattern
-                juggler_name = self.juggler_names[n]
-                tmp = {}
-                # parse extra information in () at the start
-                pattern, hands, wait = self.parse_hands_and_delay(line)
-                tmp["letters"] = hands
-                tmp["wait"] = wait
-                # 'p' for passes are only allowed in 2 person patterns
-                # otherwise it should be letters. Replace 'p' with 'a' and 'b'
-                # here so that it is easier later in the program
-                if "p" in pattern:
-                    if juggler_name == "A":
-                        pattern = pattern.replace("p", "b")
-                    else:
-                        pattern = pattern.replace("p", "a")
-                tmp["pattern"] = pattern.split()
-                # the y-coordinate the juggler line should be drawn in the diagram
-                tmp["height"] = self.margin + int(self.step_Y * (n + 0.5))
-                self.juggler[juggler_name] = tmp
-                n += 1
+                self.parse_pattern(line)
             line = ""
+
         # for the animation we need to rescale beats to the [0,1] interval
         # we do this already here
-        self.duration_bar = max([len(j["pattern"]) for j in self.juggler.values()])
+        self.duration_pattern = max([len(j["pattern"]) for j in self.juggler.values()])
         self.duration_position = 0
         for j in self.juggler.values():
             if "position" in j:
@@ -167,9 +240,10 @@ class CausalDiagramSVG(ShortcodePlugin):
                 for pos in j["position"]:
                     pos[0] = pos[0] / N
                 self.duration_position = max(self.duration_position, N)
-        # not a walking pattern
+
+        # not a walking pattern, just  use the length given in the pattern
         if self.duration_position == 0:
-            self.duration_position = self.duration_bar
+            self.duration_position = self.duration_pattern
 
     def draw_circle(self, dwg, x, y, r, label, angle=None):
         """Draw a circel with a letter in it.
@@ -348,11 +422,11 @@ class CausalDiagramSVG(ShortcodePlugin):
         # y-values have a minus, since the coordinate system is mirrored
         # e.g. y=0 is on top
         if hand == "L":
-            X = x + self.radius * 1.6 * math.cos(angle + delta)
-            Y = y - self.radius * 1.6 * math.sin(angle + delta)
+            X = x + self.radius * 1.6 * math.cos(-(angle + delta))
+            Y = y - self.radius * 1.6 * math.sin(-(angle + delta))
         else:
-            X = x + self.radius * 1.6 * math.cos(angle - delta)
-            Y = y - self.radius * 1.6 * math.sin(angle - delta)
+            X = x + self.radius * 1.6 * math.cos(-(angle - delta))
+            Y = y - self.radius * 1.6 * math.sin(-(angle - delta))
 
         return X, Y
 
@@ -385,7 +459,7 @@ class CausalDiagramSVG(ShortcodePlugin):
         """
         N = len(self.juggler)
 
-        length = self.step_X * (self.duration_bar + 1.5)
+        length = self.step_X * (self.duration_pattern + 1.5)
 
         height = self.step_Y * N
 
@@ -497,7 +571,7 @@ class CausalDiagramSVG(ShortcodePlugin):
                 attributeName_="transform",
                 from_="0",
                 to=f"{X_max-X_min}",
-                dur=f"{self.duration_bar}s",
+                dur=f"{self.duration_pattern}s",
                 begin="0s",
                 repeatCount="indefinite",
             )
@@ -571,7 +645,7 @@ class CausalDiagramSVG(ShortcodePlugin):
         for j in self.juggler:
             if "position" not in self.juggler[j]:
                 continue
-            repeats = int(self.duration_position // self.duration_bar)
+            repeats = int(self.duration_position // self.duration_pattern)
 
             for r in range(repeats):
                 for i, pat in enumerate(self.juggler[j]["pattern"]):
@@ -584,10 +658,10 @@ class CausalDiagramSVG(ShortcodePlugin):
                         p = int(pat[:-1])
                         target = pat[-1].upper()
                         start_x, start_y = self.get_juggler_hand_position(
-                            j, r * self.duration_bar + i, 0
+                            j, r * self.duration_pattern + i, 0
                         )
                         end_x, end_y = self.get_juggler_hand_position(
-                            target, r * self.duration_bar + i, p - 2
+                            target, r * self.duration_pattern + i, p - 2
                         )
                         tmp = self.draw_animated_arrow(
                             dwg,
@@ -596,8 +670,8 @@ class CausalDiagramSVG(ShortcodePlugin):
                             start_y,
                             end_x,
                             end_y,
-                            r * self.duration_bar + i,
-                            r * self.duration_bar + i + p - 2,
+                            r * self.duration_pattern + i,
+                            r * self.duration_pattern + i + p - 2,
                             style=style,
                         )
                         dwg.add(tmp)
