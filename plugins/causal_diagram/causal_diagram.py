@@ -151,13 +151,54 @@ class CausalDiagramSVG(ShortcodePlugin):
             # for 3 we assume, x,y,angle
             # if there are less numbers than 4
             #   we add 0 for time and 0 for angle
-            t = [float(x) for x in t]
             if len(t) == 2:
-                t = [0, t[0], t[1], 0]
+                t = [0, float(t[0]), float(t[1]), 0]
             elif len(t) == 3:
-                t = [0, t[0], t[1], t[2]]
+                t = [0, float(t[0]), float(t[1]), t[2]]
+            elif len(t) == 4:
+                t = [float(t[0]), float(t[1]), float(t[2]), t[3].strip()]
             tmp.append(t)
         self.juggler[name]["position"] = tmp
+
+    def calc_angle(self):
+        """The angle can either be a number or a string.
+
+        If the string starts with "@", then the angle is calculated
+        from the position of the juggler and to either the origin (@0)
+        or to another juggler (e.g., @A). Otherwise, we assume it's a
+        number which will be the orientation direclty in degrees:
+          0 = looking to the right
+        180 = looking to the left
+         90 = ...
+        270 = ...
+
+        Currently there is a bug e.g. when animating from -172 to
+        +188, the animation does a full rotation instead of taking the
+        shorted route.
+
+        """
+        for j in self.juggler:
+            tmp = self.juggler[j]["position"]
+            out = []
+            for t in tmp:
+                if "@" in t[3]:
+                    name = t[3][1]
+                    Ax, Ay = self.get_juggler_position_only(j, t[0])
+                    if name == "0":
+                        Bx, By = 0, 0
+                    else:
+                        Bx, By = self.get_juggler_position_only(name, t[0])
+                    angle = math.atan2(Ay - By, Ax - Bx)
+                    angle = math.degrees(angle) + 180
+                    if angle < -180:
+                        angle += 360
+                    if angle > 180:
+                        angle -= 360
+                    t[3] = float(angle)
+                else:
+                    t[3] = float(t[3])
+                out.append(t)
+            self.juggler[j]["position"] = out
 
     def parse_pattern(self, line: str) -> None:
         """This is the actual pattern"""
@@ -195,6 +236,8 @@ class CausalDiagramSVG(ShortcodePlugin):
         # build up the whole input line in case continuous lines are used
         line = ""
         for current_line in text.split("\n"):
+            if "#" in current_line:
+                current_line = current_line.split("#")[0]
             current_line = current_line.strip()
 
             # handle continuation lines
@@ -229,7 +272,9 @@ class CausalDiagramSVG(ShortcodePlugin):
                 # scale to [0, 1]
                 for pos in j["position"]:
                     pos[0] = pos[0] / N
-                self.duration_position = max(self.duration_position, N)
+                self.duration_position = max(self.duration_position, N + 1)
+
+        self.calc_angle()
 
         # not a walking pattern, just  use the length given in the pattern
         if self.duration_position == 0:
@@ -364,6 +409,32 @@ class CausalDiagramSVG(ShortcodePlugin):
             )
         )
         return line
+
+    def get_juggler_position_only(self, name: str, time: int | float):
+        """The X,Y position of a juggler for the position diagram at a given time.
+
+        Just doing a linear interpolation.
+
+        Skipping the angle
+        """
+        # rescale time to [0, 1] interval
+        time = time / self.duration_position
+        if "position" not in self.juggler[name]:
+            return
+        pos = self.juggler[name]["position"]
+        t_0, x_0, y_0, angle_0 = pos[0]
+        if len(pos) == 1:
+            return x_0, y_0
+        for t, x, y, angle in pos[1:]:
+            if time < t:
+                X = (x - x_0) * (time - t_0) / (t - t_0) + x_0
+                Y = (y - y_0) * (time - t_0) / (t - t_0) + y_0
+                return X, Y
+            else:
+                t_0 = t
+                x_0 = x
+                y_0 = y
+        return 0, 0
 
     def get_juggler_position(self, name: str, time: int | float):
         """The X,Y position of a juggler for the position diagram at a given time.
