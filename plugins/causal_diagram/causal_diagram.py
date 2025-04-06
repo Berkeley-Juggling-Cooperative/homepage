@@ -103,6 +103,23 @@ class CausalDiagramSVG(ShortcodePlugin):
         * circle (equidistance on a circle, facing the center)
         * line (two vertical lines, offset for odd numbers, facing across)
 
+        Otherwise, the position needs to include the name of a juggle (A, B, C, ...) and
+        have either 2 (x and y), 3 (x, y, angle), or 4 value (time, x, y, angle).
+
+        The time should start at 0 and end in the same value for all jugglers.
+        Internally the time is then later scaled to a value between 0 and 1.
+
+        The angle is in degree or can define a location of the center
+        (@0) or of a juggler (@A, @B. ,etc.)
+
+        Valid positions lines:
+
+        position: line
+        position: circle
+
+        position A:  0,-100,   0, @B;\  # feeding
+                     2,-100,   0, @C;
+
         """
 
         if line.startswith("positions:"):
@@ -158,6 +175,7 @@ class CausalDiagramSVG(ShortcodePlugin):
             elif len(t) == 4:
                 t = [float(t[0]), float(t[1]), float(t[2]), t[3].strip()]
             tmp.append(t)
+
         self.juggler[name]["position"] = tmp
 
     def calc_angle(self):
@@ -201,7 +219,18 @@ class CausalDiagramSVG(ShortcodePlugin):
             self.juggler[j]["position"] = out
 
     def parse_pattern(self, line: str) -> None:
-        """This is the actual pattern"""
+        """This is the actual pattern.
+
+        passes are indicated with a lower case letter corresponding to
+        the name of the juggler who will catch the pass.
+
+        If there are only two jugglers in the pattern, the letter 'p'
+        for pass can also be used.
+
+        Furthermore, colors can be indicated for the pass to highlight
+        it (see the global COLORS variable).
+
+        """
         # get new name
         n = len(self.juggler)
         juggler_name = self.juggler_names[n]
@@ -230,7 +259,9 @@ class CausalDiagramSVG(ShortcodePlugin):
         pattern. We also allow extra lines for title, bars and positions.
         The positions can also be a list of positions which wil be animated.
 
-        We allow "\" as a marker for continuous lines to be able to break up long lines.
+        We allow "\" as a marker for continuous lines to be able to
+        break up long lines.
+
         """
 
         # build up the whole input line in case continuous lines are used
@@ -274,6 +305,7 @@ class CausalDiagramSVG(ShortcodePlugin):
                     pos[0] = pos[0] / N
                 self.duration_position = max(self.duration_position, N + 1)
 
+        # replace @A, @B, etc with actual angles
         self.calc_angle()
 
         # not a walking pattern, just  use the length given in the pattern
@@ -283,10 +315,14 @@ class CausalDiagramSVG(ShortcodePlugin):
     def draw_circle(self, dwg, x, y, r, label, angle=None):
         """Draw a circel with a letter in it.
 
+        This is used in the causal diagram for each hand and in the
+        animation for a juggler.
+
         x,y are the position
         r is the radius
         label the letter (centered in the circle)
         angle the direction the juggler is looking, will be skipped if None
+
         """
         group = dwg.g()
         group.add(dwg.circle(center=(x, y), r=r, stroke="black", fill="none"))
@@ -413,16 +449,20 @@ class CausalDiagramSVG(ShortcodePlugin):
     def get_juggler_position_only(self, name: str, time: int | float):
         """The X,Y position of a juggler for the position diagram at a given time.
 
+        This is used when replacing @A, @B, etc. Where we don't have
+        any information for the angle yet.
+
         Just doing a linear interpolation.
 
         Skipping the angle
+
         """
         # rescale time to [0, 1] interval
         time = time / self.duration_position
         if "position" not in self.juggler[name]:
             return
         pos = self.juggler[name]["position"]
-        t_0, x_0, y_0, angle_0 = pos[0]
+        t_0, x_0, y_0, _ = pos[0]
         if len(pos) == 1:
             return x_0, y_0
         for t, x, y, angle in pos[1:]:
