@@ -674,9 +674,15 @@ REDIRECTIONS = []
 # }
 DEPLOY_COMMANDS = {
     "default": [
-        "rsync -rav --delete output/ berkeleyjuggling@nubati.net:test.berkeleyjuggling.org/",
-        "rsync -rav htaccess berkeleyjuggling@nubati.net:test.berkeleyjuggling.org/.htaccess",
-    ]
+        "rsync -av --delete --exclude='galleries' --exclude='images' --exclude='.dh-diag' output/ berkeleyjuggling@nubati.net:berkeleyjuggling.org/",
+        "rsync -av htaccess berkeleyjuggling@nubati.net:berkeleyjuggling.org/.htaccess",
+        "rsync -av output/images/ berkeleyjuggling@nubati.net:berkeleyjuggling.org/images/",
+        "rsync -av output/galleries/ berkeleyjuggling@nubati.net:berkeleyjuggling.org/galleries/",
+    ],
+    "download": [
+        "rsync -av --exclude='*.thumbnail.*' berkeleyjuggling@nubati.net:berkeleyjuggling.org/images/ images/",
+        "rsync -av --exclude='*.thumbnail.*' berkeleyjuggling@nubati.net:berkeleyjuggling.org/galleries/ galleries/",
+    ],
 }
 
 

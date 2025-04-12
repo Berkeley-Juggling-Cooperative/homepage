@@ -52,12 +52,21 @@ If you like the results, add it to git and push it to github.
 
 ## Updating the homepage
 
-To update the homepage at berkeleyjuggling.org you can use
+To update the homepage at berkeleyjuggling.org you need ssh access to
+the server. Contact Arun, if you need to have access or ask him to
+deploy the changes.  If you have access, you can do the following to
+build the web page:
+
+    uv run nikola deploy download
+	uv run nikola build
+
+This will download all the images and videos used on the web page and
+then build the webpage including thumbnails for all these galleries
+and links.
+
+To then upload the web page, you can use
 
     uv run nikola deploy
-
-However, you need to have ssh access to the server. Contact Arun, if
-you need to have access or ask him to deploy the changes.
 
 Eventually we should set up an automatic deploy from github.
 
@@ -71,10 +80,6 @@ the `uv.lock` file and pyproject.toml to git.
 - add juggling patterns and organize them using tags
 - add old patterns from original web page
 - Causal diagrams:
-  - add an easy way to add default positions, something like:
-	"positions default: ciricle" where everyone is looking at the
-	center or "position default: line" for feeds where people look
-	either left or right.
   - Try adding Havanna and Scrambled Ivy to test new system
   - add option to plot passes at a certain time in position diagram
     (think the different beat in torture chamber), instead or additional to animation
@@ -89,8 +94,4 @@ the `uv.lock` file and pyproject.toml to git.
 - use the browser built-in error checker (F12 in firefox) and fix any issues
 - handle images and videos: Figure out how to do this using git
   without committing all the images to git. Probably:
-  * an rsync command to download the originals from a different folder from the server
-  * these should go into /images and /galleries, which are in .gitignore to not commit them
   * we might commit certain files there though, e.g. subtitles or other yaml files that nikola uses
-  * normal build and deploy to upload (not overwriting the original images)
-  * sync images back to the server
