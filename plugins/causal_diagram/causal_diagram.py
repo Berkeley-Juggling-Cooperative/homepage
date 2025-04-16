@@ -196,10 +196,12 @@ class CausalDiagramSVG(ShortcodePlugin):
 
         """
         for j in self.juggler:
+            if "position" not in self.juggler[j]:
+                continue
             tmp = self.juggler[j]["position"]
             out = []
             for t in tmp:
-                if "@" in t[3]:
+                if isinstance(t[3], str) and "@" in t[3]:
                     name = t[3][1]
                     Ax, Ay = self.get_juggler_position_only(j, t[0])
                     if name == "0":
