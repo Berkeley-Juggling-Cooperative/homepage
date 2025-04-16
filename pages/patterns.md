@@ -16,7 +16,9 @@ If you want to submit your own, have a look at [the syntax we use](causal-diagra
 # By number of people
 
 - [2 People](link://tag/2-person)
+- [3 People](link://tag/3-person)
 - [4 People](link://tag/4-person)
+- [5 People](link://tag/5-person)
 - [N People](link://tag/N-person)
 
 # By count
@@ -25,6 +27,7 @@ If you want to submit your own, have a look at [the syntax we use](causal-diagra
 - [4 count](link://tag/4-count)
 - [6 count](link://tag/6-count)
 - [N count](link://tag/N-count)
+- [2/3rds](link://tag/pass-pass-self)
 
 # Clubs per juggler
 
