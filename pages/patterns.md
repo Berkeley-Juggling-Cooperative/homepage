@@ -2,14 +2,14 @@
 .. title: Juggling Patterns
 .. slug: patterns
 .. date: 2025-03-01 17:26:28 UTC-08:00
-.. tags: 
+.. tags:
 .. category: patterns
-.. link: 
-.. description: 
+.. link:
+.. description: Overview page for juggling patterns
 .. type: text
 -->
 
-We plan to have a list of patterns we like or made up ourselves listed here.
+This is an overview page to many of the patterns that we like to juggle here in Berkeley (more to come).
 
 If you want to submit your own, have a look at [the syntax we use](causal-diagrams).
 
@@ -38,6 +38,11 @@ If you want to submit your own, have a look at [the syntax we use](causal-diagra
 
 - [6 clubs](link://tag/6-clubs)
 - [7 clubs](link://tag/7-clubs)
+
+# Type
+
+- [Roundabouts](link://tag/roundabouts)
+- [Walking](link://tag/walking)
 
 # All tags
 
