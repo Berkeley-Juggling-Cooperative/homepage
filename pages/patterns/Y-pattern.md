@@ -2,7 +2,7 @@
 .. title: Y (walking)
 .. slug: y-pattern
 .. date: 2025-03-09 08:00:01 UTC-07:00
-.. tags: 4-person, 6-count
+.. tags: 4-person, 6-count, walking, 3-clubs-each
 .. category: patterns
 .. link:
 .. description: Y (walking)

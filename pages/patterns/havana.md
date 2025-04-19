@@ -2,7 +2,7 @@
 .. title: Havana
 .. slug: havana
 .. date: 2025-03-13 21:35:57 UTC-07:00
-.. tags: 4-person
+.. tags: 4-person, 3-clubs-each, walking
 .. category: patterns
 .. link:
 .. description: Havana
@@ -24,7 +24,7 @@ The person feeding is doing a 2 count, all other three positions a 6 count.
   3  3 3a 3 3  3 3  3 3a 3 3  3 3  3 3b 3 3  3 3  3 3b 3 3a 3 3d 3 3b 3 3a 3 3d 3 3  3 3  3 3d 3 3  3
   3a 3 3  3 3  3 3a 3 3  3 3  3 3b 3 3  3 3  3 3b 3 3  3 3  3 3c 3 3  3 3  3 3c 3 3b 3 3a 3 3c 3 3b 3
 title: Havana
-
+bars: 9.5,19.5,29.5
 position A:  0,-100,   0, @B;\  # feeding
 	         2,-100,   0, @C;\
 	         4,-100,   0, @D;\

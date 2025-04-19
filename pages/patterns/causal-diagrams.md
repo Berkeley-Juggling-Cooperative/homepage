@@ -2,9 +2,9 @@
 .. title: How we create Causal Diagrams
 .. slug: causal-diagrams
 .. date: 2025-03-08 08:04:37 UTC-08:00
-.. tags: 
+.. tags:
 .. category: patterns
-.. link: 
+.. link:
 .. description: How we create Causal Diagrams
 .. type: text
 -->
@@ -12,7 +12,9 @@
 We wrote our own extension for [Nikola](https://getnikola.com), our
 static web page generator, to generate Causal Diagrams.
 
-The basics are taken from [this article](https://jugglingedge.com/help/causaldiagrams.php).
+The basics are taken from [this
+article](https://jugglingedge.com/help/causaldiagrams.php). However,
+we modified this a bit and added more options to it. One of the mains ones is the ability to show and animate positions.
 
 Currently, the generator can handle the following syntax:
 
@@ -73,6 +75,53 @@ Offsets can be defined and a title for the whole diagram can be set:
 (LR 0.5) 3 3 3 3 3 3
 (RL 1) 3 3 3 3 3 3
 title: how to do offsets
+{{% /causal_diagram %}}
+
+# Layout changes
+
+To be able to make the layout a bit more compact or larger, you can change the
+step size between rows of jugglers and also between beats.
+
+Note: if you make these too small, items in the graphic might overlap
+
+## Distance bewteen rows
+
+    {{% raw %}}
+    {{% causal_diagram %}}
+    step_Y: 30
+    (RL 0) 3 3 3 3 3 3
+    (LR 0.5) 3 3 3 3 3 3
+    (RL 1) 3 3 3 3 3 3
+    title: how to change Y step size
+    {{% /causal_diagram %}}
+    {{% /raw %}}
+
+{{% causal_diagram %}}
+step_Y: 30
+(RL 0) 3 3 3 3 3 3
+(LR 0.5) 3 3 3 3 3 3
+(RL 1) 3 3 3 3 3 3
+title: how to change Y step size
+{{% /causal_diagram %}}
+
+## Distances between beats
+
+    {{% raw %}}
+    {{% causal_diagram %}}
+    step_X: 30
+    (RL 0) 3 3 3 3 3 3
+    (LR 0.5) 3 3 3 3 3 3
+    (RL 1) 3 3 3 3 3 3
+    title: how to change X step size
+    {{% /causal_diagram %}}
+    {{% /raw %}}
+
+{{% causal_diagram %}}
+step_X: 30
+(RL 0) 3 3 3 3 3 3
+(LR 0.5) 3 3 3 3 3 3
+(RL 1) 3 3 3 3 3 3
+title: how to change X step size
 {{% /causal_diagram %}}
 
 # Multi-person passes
@@ -162,6 +211,73 @@ either specify 2 numbers as ΔX and ΔY or 3 numbers. In which case the
 last number is the orientation of the juggler (0=looking to the right,
 180 looking to the left).
 
+## Predefined positions
+
+For many patterns, people either stand in a line opposite each other or in a circle.
+You can use the following shortcuts for this:
+
+### Circle
+
+    {{% raw %}}
+    {{% causal_diagram %}}
+    step_Y:30
+    step_X:30
+    3 3 3
+    3 3 3
+    3 3 3
+    3 3 3
+    3 3 3
+    3 3 3
+
+    positions: circle
+    {{% /causal_diagram %}}
+    {{% /raw %}}
+
+{{% causal_diagram %}}
+step_Y:30
+step_X:30
+3 3 3
+3 3 3
+3 3 3
+3 3 3
+3 3 3
+3 3 3
+
+positions: circle
+{{% /causal_diagram %}}
+
+### Line
+
+    {{% raw %}}
+    {{% causal_diagram %}}
+    step_Y:30
+    step_X:30
+    3 3 3
+    3 3 3
+    3 3 3
+    3 3 3
+    3 3 3
+    3 3 3
+
+    positions: line
+    {{% /causal_diagram %}}
+    {{% /raw %}}
+
+
+{{% causal_diagram %}}
+step_Y:30
+step_X:30
+3 3 3
+3 3 3
+3 3 3
+3 3 3
+3 3 3
+3 3 3
+
+positions: line
+{{% /causal_diagram %}}
+
+
 # Positions (walking)
 
 You can also define walking patterns.
@@ -202,7 +318,29 @@ Note that the number of positions for each juggler can vary.
 Currently, the last position should be the same as the first to achieve a smooth pattern.
 
 
-# Continuation lines
+# Formatting
+
+## Comments
+
+You can leave comments in the code starting with #
+
+    {{% raw %}}
+    {{% causal_diagram %}}
+    step_Y:30  # an inline comment
+    step_X:30
+    3 3 3
+    3 3 3
+    3 3 3
+    3 3 3
+    3 3 3
+    3 3 3
+	# a comment on its own line
+
+    positions: line
+    {{% /causal_diagram %}}
+    {{% /raw %}}
+
+## Continuation lines
 
 If lines get too long, you can break them up into multiple lines by using the '\' character at the end.
 
@@ -225,18 +363,3 @@ If lines get too long, you can break them up into multiple lines by using the '\
     {{% /causal_diagram %}}
     {{% /raw %}}
 
-{{% causal_diagram %}}
-3d 3 3 3 3 3
-3c 3 3 3 3 3
-3a 3 3 3 3 3
-3b 3 3 3 3 3
-title: Y (walking, 6 count)
-position A: 0,-100,0,0;     \
-            6,-200,+100,0;  \
-			12,-300,0,0;    \
-			18,-200,-100,0; \
-			24,-100,0,0;
-position B: 0,-300,0,0;      6,-200,-100,0;   12,-100,0,0;     18,-200,+100,0;   24,-300,0,0;
-position C: 0,+200,100,180;  6,+100,0,180;    12,200,-100,180; 18,+300,0,180;    24,200,100,180;
-position D: 0,+200,-100,180; 6,+300,0,180;    12,200,+100,180; 18,+100,0,180;    24,200,-100,180;
-{{% /causal_diagram %}}
