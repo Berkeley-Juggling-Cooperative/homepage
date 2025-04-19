@@ -114,8 +114,8 @@ class CausalDiagramSVG(ShortcodePlugin):
 
         Valid positions lines:
 
-        position: line
-        position: circle
+        positions: line
+        positions: circle
 
         position A:  0,-100,   0, @B;\  # feeding
                      2,-100,   0, @C;
