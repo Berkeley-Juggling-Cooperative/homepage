@@ -4,7 +4,6 @@ import math
 import svgwrite
 from itertools import cycle
 
-
 # define several styles that can be used for arrow inside the pattern
 COLORS = {
     ",": "stroke: #d12229; stroke-width: 4",
@@ -29,15 +28,10 @@ class CausalDiagramSVG(ShortcodePlugin):
     name = "causal_diagram"
 
     juggler_names = "ABCDEFGHIJKLNM"
-    step_X = 80
-    step_Y = 100
     margin = 10
     radius = 12
 
-    title_height = 50
-
-    # values for position
-    pos_height = 300
+    title_height = 25
 
     def __init__(self):
         super().__init__()
@@ -50,6 +44,8 @@ class CausalDiagramSVG(ShortcodePlugin):
         self.bars = []
         self.duration_position = 0
         self.duration_pattern = 0
+        self.step_X = 80
+        self.step_Y = 100
 
     def handler(self, site=None, data=None, lang=None, post=None):
         """This gets executed for the shortcode."""
@@ -91,7 +87,7 @@ class CausalDiagramSVG(ShortcodePlugin):
         self.bars = [float(x) for x in line[5:].split(",")]
 
     def parse_position(self, line):
-        """Parses positions.
+        r"""Parses positions.
 
         This can be static or include multiple locations for walking patterns.
 
@@ -254,6 +250,13 @@ class CausalDiagramSVG(ShortcodePlugin):
         tmp["height"] = self.margin + int(self.step_Y * (n + 0.5))
         self.juggler[juggler_name] = tmp
 
+    def parse_layout(self, text: str):
+        number = int(text.split(":")[1])
+        if text.startswith("step_X:"):
+            self.step_X = number
+        elif text.startswith("step_Y:"):
+            self.step_Y = number
+
     def parse(self, text: str):
         """Take the text in the shortcode and parse it.
 
@@ -288,9 +291,16 @@ class CausalDiagramSVG(ShortcodePlugin):
                 self.parse_bars(line)
             elif line.startswith("position"):
                 self.parse_position(line)
+            elif line.startswith("step"):
+                self.parse_layout(line)
             else:
                 self.parse_pattern(line)
             line = ""
+
+        # now that we have parsed everything, fix a few things that we
+        # can only do now, e.g. addjust the position for each juggler
+        # if there is a title (cannot do this on the fly, since title
+        # might be defined after the jugglers)
 
         # for the animation we need to rescale beats to the [0,1] interval
         # we do this already here
@@ -306,6 +316,10 @@ class CausalDiagramSVG(ShortcodePlugin):
                 for pos in j["position"]:
                     pos[0] = pos[0] / N
                 self.duration_position = max(self.duration_position, N + 1)
+
+        if self.title:
+            for j in self.juggler.values():
+                j["height"] += self.title_height
 
         # replace @A, @B, etc with actual angles
         self.calc_angle()
@@ -554,6 +568,21 @@ class CausalDiagramSVG(ShortcodePlugin):
                 has_position = False
         return has_position
 
+    def get_position_size(self):
+        X_min, X_max, Y_min, Y_max = 0, 0, 0, 0
+
+        for juggler in self.juggler.values():
+            if "position" in juggler:
+                for _, x, y, _ in juggler["position"]:
+                    X_min = min(x, X_min)
+                    X_max = max(x, X_max)
+                    Y_min = min(y, Y_min)
+                    Y_max = max(y, Y_max)
+        return (
+            X_max - X_min + 2 * self.margin + self.radius,
+            Y_max - Y_min + 2 * self.margin + self.radius,
+        )
+
     def to_svg(self):
         """Create the SVG.
 
@@ -562,27 +591,28 @@ class CausalDiagramSVG(ShortcodePlugin):
         """
         N = len(self.juggler)
 
-        length = self.step_X * (self.duration_pattern + 1.5)
+        width = self.step_X * (self.duration_pattern + 1.5)
 
         height = self.step_Y * N
 
         height += 2 * self.margin
-        length += 2 * self.margin
+        width += 2 * self.margin
 
         if self.title:
             height += self.title_height
 
         # positions
         if self.has_position():
-            height += self.pos_height
-            self.pos_length = length
-            self.pos_center_y = height - self.pos_height / 2
-            self.pos_center_x = length / 2
+            dX, dY = self.get_position_size()
+            height += self.margin + dY
+            width = max(dX + 2 * self.margin, width)
+            self.pos_center_y = height - dY / 2
+            self.pos_center_x = width / 2
 
         # Create an SVG drawing and add a box to frame it
-        dwg = svgwrite.Drawing(size=(length, height))
+        dwg = svgwrite.Drawing(size=(width, height))
         dwg.add(
-            dwg.rect(insert=(0, 0), size=(length, height), fill="none", stroke="black")
+            dwg.rect(insert=(0, 0), size=(width, height), fill="none", stroke="black")
         )
 
         # the arrow head as a marker in SVG
@@ -597,7 +627,7 @@ class CausalDiagramSVG(ShortcodePlugin):
             dwg.add(
                 dwg.text(
                     self.title,
-                    insert=(length // 2, self.title_height // 2 - 5),
+                    insert=(width // 2, self.title_height - 5),
                     fill="black",
                     text_anchor="middle",
                     dominant_baseline="middle",
@@ -640,7 +670,7 @@ class CausalDiagramSVG(ShortcodePlugin):
                 dwg.add(group)
                 p, style = self.get_style(p)
                 try:
-                    p = int(p) - 2
+                    p = float(p) - 2
                     Y = H
                 except ValueError:
                     target = p[-1]
@@ -648,7 +678,7 @@ class CausalDiagramSVG(ShortcodePlugin):
                         if target.lower() == k.lower():
                             Y = self.juggler[k]["height"]
 
-                    p = int(p[:-1]) - 2
+                    p = float(p[:-1]) - 2
                 end_x = X + self.step_X * p
                 arrow = self.draw_arrow(dwg, arrow_marker, X, H, end_x, Y, style=style)
                 if arrow:
@@ -758,7 +788,7 @@ class CausalDiagramSVG(ShortcodePlugin):
                         int(pat)
                     except ValueError:
                         # this is a pass
-                        p = int(pat[:-1])
+                        p = float(pat[:-1])
                         target = pat[-1].upper()
                         start_x, start_y = self.get_juggler_hand_position(
                             j, r * self.duration_pattern + i, 0
