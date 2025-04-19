@@ -8,7 +8,7 @@ from itertools import cycle
 COLORS = {
     ",": "stroke: #d12229; stroke-width: 4",
     "$": "stroke: #d12229; stroke-width: 2",
-    "#": "stroke: #f68a1e; stroke-dasharray: 6 3; stroke-width: 2",
+    "@": "stroke: #f68a1e; stroke-dasharray: 6 3; stroke-width: 2",
     ">": "stroke: #007940; stroke-dasharray: 9 2 9; stroke-width: 2",
     "<": "stroke: #fde01a; stroke-dasharray: 6 6; stroke-width: 3",
     "^": "stroke: #24408e; stroke-dasharray: 12 6; stroke-width: 3",

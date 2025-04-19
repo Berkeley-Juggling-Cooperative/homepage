@@ -171,14 +171,14 @@ Allowed symbols are ",#><^*".
     {{% raw %}}
 	{{% causal_diagram %}}
 	3p> 3 3 3p^ 4, 2 3p
-	3p< 3 3 3p# 3 3 3p*
+	3p< 3 3 3p@ 3 3 3p*
 	{{% /causal_diagram %}}
 
     {{% /raw %}}
 
 {{% causal_diagram %}}
 3p> 3 3 3p^ 4, 2 3p
-3p< 3 3 3p# 3 3 3p*
+3p< 3 3 3p@ 3 3 3p*
 {{% /causal_diagram %}}
 
 
