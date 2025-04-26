@@ -321,12 +321,12 @@ class CausalDiagramSVG(ShortcodePlugin):
             for j in self.juggler.values():
                 j["height"] += self.title_height
 
-        # replace @A, @B, etc with actual angles
-        self.calc_angle()
-
         # not a walking pattern, just  use the length given in the pattern
         if self.duration_position == 0:
             self.duration_position = self.duration_pattern
+
+        # replace @A, @B, etc with actual angles
+        self.calc_angle()
 
     def draw_circle(self, dwg, x, y, r, label, angle=None):
         """Draw a circel with a letter in it.
