@@ -680,8 +680,8 @@ DEPLOY_COMMANDS = {
         "rsync -av output/galleries/ berkeleyjuggling@nubati.net:berkeleyjuggling.org/galleries/",
     ],
     "download": [
-        "rsync -av --exclude='*.thumbnail.*' berkeleyjuggling@nubati.net:berkeleyjuggling.org/images/ images/",
-        "rsync -av --exclude='*.thumbnail.*' berkeleyjuggling@nubati.net:berkeleyjuggling.org/galleries/ galleries/",
+        "rsync -av --exclude='*.thumbnail.*' --exclude='*xml' berkeleyjuggling@nubati.net:berkeleyjuggling.org/images/ images/",
+        "rsync -av --exclude='*.thumbnail.*' --exclude='*xml' berkeleyjuggling@nubati.net:berkeleyjuggling.org/galleries/ galleries/",
     ],
 }
 
