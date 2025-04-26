@@ -19,6 +19,7 @@ If you want to submit your own, have a look at [the syntax we use](causal-diagra
 - [3 People](link://tag/3-person)
 - [4 People](link://tag/4-person)
 - [5 People](link://tag/5-person)
+- [6 People](link://tag/6-person)
 - [N People](link://tag/N-person)
 
 # By count
@@ -42,6 +43,7 @@ If you want to submit your own, have a look at [the syntax we use](causal-diagra
 # Type
 
 - [Roundabouts](link://tag/roundabouts)
+- [Torture Chambers](link://tag/torture)
 - [Walking](link://tag/walking)
 
 # All tags
