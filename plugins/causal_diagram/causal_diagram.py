@@ -538,7 +538,7 @@ class CausalDiagramSVG(ShortcodePlugin):
         delta = math.radians(15)
         # y-values have a minus, since the coordinate system is mirrored
         # e.g. y=0 is on top
-        if hand == "L":
+        if hand == "R":
             X = x + self.radius * 1.6 * math.cos(-(angle + delta))
             Y = y - self.radius * 1.6 * math.sin(-(angle + delta))
         else:
