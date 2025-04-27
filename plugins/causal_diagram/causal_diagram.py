@@ -519,17 +519,22 @@ class CausalDiagramSVG(ShortcodePlugin):
         return 0, 0, 0
 
     def get_juggler_hand_position(
-        self, name: str, time: int | float, hand_delay: int | float
+        self, name: str, time: int | float, pass_delay: int | float
     ):
         """Get position of the hand, so slightly offset from the jugglers position.
 
         Coordinates are relative to the position diagram center.
+
+        This is used for to get the hand of the person who does the pass
+        and how does the catch. For the latter, we add `pass_delay`.
+
+        Any delayed start of a juggler is included in pass_delay already.
         """
         x, y, angle = self.get_juggler_position(name, time)
         hands = self.juggler[name]["letters"]
         N = len(hands)
 
-        time = round(time + hand_delay)
+        time = round(time + pass_delay)
         idx = time % N
 
         hand = hands[idx]
@@ -790,11 +795,15 @@ class CausalDiagramSVG(ShortcodePlugin):
                         # this is a pass
                         p = float(pat[:-1])
                         target = pat[-1].upper()
+                        wait_A = self.juggler[j]["wait"]
+                        wait_B = self.juggler[target]["wait"]
                         start_x, start_y = self.get_juggler_hand_position(
                             j, r * self.duration_pattern + i, 0
                         )
                         end_x, end_y = self.get_juggler_hand_position(
-                            target, r * self.duration_pattern + i, p - 2
+                            target,
+                            r * self.duration_pattern + i,
+                            p - 2 - wait_B + wait_A,
                         )
                         tmp = self.draw_animated_arrow(
                             dwg,
