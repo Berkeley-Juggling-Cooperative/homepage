@@ -732,8 +732,12 @@ GITHUB_COMMIT_SOURCE = True
 # Many filters are shipped with Nikola. A list is available in the manual:
 # <https://getnikola.com/handbook.html#post-processing-filters>
 #
-# from nikola import filters
-# FILTERS = {
+
+from nikola import filters
+
+FILTERS = {
+    ".html": [filters.html_tidy_wrap],
+}
 #    ".html": [filters.typogrify],
 #    ".js": [filters.closure_compiler],
 #    ".jpg": ["jpegoptim --strip-all -m75 -v %s"],
@@ -754,7 +758,7 @@ GITHUB_COMMIT_SOURCE = True
 # Executable for the "html_tidy_withconfig", "html_tidy_nowrap",
 # "html_tidy_wrap", "html_tidy_wrap_attr" and "html_tidy_mini" filters
 # (defaults to 'tidy5').
-# HTML_TIDY_EXECUTABLE = 'tidy5'
+HTML_TIDY_EXECUTABLE = "tidy"
 
 # List of XPath expressions which should be used for finding headers
 # ({hx} is replaced by headers h1 through h6).

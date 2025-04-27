@@ -21,6 +21,10 @@ needed) inside .venv.
 After this you can eiher run `nikola` by using `uv run nikola` or by
 activating the venv and running `nikola` directly.
 
+We run all html through (tidy)[https://www.html-tidy.org], which needs
+to be installed. If `tidy` is not available, you can turn this off by
+commenting out the filter section in the `conf.py` file.
+
 ## How to add a new pattern
 
 Create a new page using, say for a 3-count pattern
