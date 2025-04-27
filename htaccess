@@ -4,3 +4,8 @@ Header always set Content-Security-Policy "default-src 'self';style-src 'self' '
 Header always set Strict-Transport-Security "max-age=31536000;includeSubDomains;"
 Header always set Referrer-Policy "strict-origin-when-cross-origin"
 Options -Indexes
+
+
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
