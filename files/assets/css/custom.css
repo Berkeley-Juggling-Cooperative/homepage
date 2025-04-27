@@ -25,6 +25,31 @@
   src: url('../../fonts/playfair-display-v37-latin-900.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
 }
 
+
+/* 2 column mode on pattern overview page*/
+.multi-columns {
+  column-count: 2;
+  column-gap: 2em;
+}
+
+@media (max-width: 900px) {
+  .multi-columns {
+    column-count: 1;
+  }
+}
+
+@media (min-width: 900px) {
+  .multi-columns {
+    column-count: 3;
+  }
+}
+
+.no-break {
+  break-inside: avoid;
+  margin-bottom: 1.5em;
+}
+
+
 /* leaflet */
 #map { height: 480px; }
 

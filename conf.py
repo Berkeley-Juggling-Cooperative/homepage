@@ -1147,6 +1147,7 @@ MARKDOWN_EXTENSIONS = [
     "markdown.extensions.fenced_code",
     "markdown.extensions.codehilite",
     "markdown.extensions.extra",
+    "markdown.extensions.md_in_html",
 ]
 
 # Options to be passed to markdown extensions (See https://python-markdown.github.io/reference/)
