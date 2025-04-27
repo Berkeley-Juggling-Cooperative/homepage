@@ -51,6 +51,7 @@ If you want to submit your own, have a look at [the syntax we use](causal-diagra
 
 - [6 clubs](link://tag/6-clubs)
 - [7 clubs](link://tag/7-clubs)
+- [8 clubs](link://tag/8-clubs)
 
 </div>
 <div class="no-break" markdown="1">
