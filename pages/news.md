@@ -10,7 +10,13 @@
 -->
 
 
-No upcoming events.
+Our very own festival:
+
+- [Berkeley Jam, September 22nd 2025](../festival)
+
+Upcoming festivals:
+
+- [Portland Juggling Festival, September 26th-28th, 2025](https://www.portlandjugglers.org/festival)
 
 We organized several festival in the past:
 

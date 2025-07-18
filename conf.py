@@ -145,6 +145,7 @@ NAVIGATION_LINKS = {
         ("/", "Home"),
         ("/meetup", "Weekly Meeting"),
         ("/news", "News and Events"),
+        ("/festival", "Festival"),
         ("/galleries", "Fotos & Videos"),
         ("/patterns", "Juggling Patterns"),
         ("https://berkeleyunicycling.org", "Unicycling"),
