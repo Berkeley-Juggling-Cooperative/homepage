@@ -3,7 +3,7 @@
 .. slug: festival
 .. date: 2025-07-17 22:16:53 UTC-07:00
 .. tags: 
-.. category: 
+.. category: map
 .. link: 
 .. description: Our current festival
 .. type: text
@@ -18,6 +18,8 @@ summer transitioning to autumn.
 When: Sunday 9/21/2025 12-5pm
 
 Where: Live Oak Park, 1301 Shattuck Ave., Berkeley, CA 94709
+
+{{% map lat=37.8845583 lng=-122.2695794 zoom=17 popup="Festival location" height="300px" width="300px" float="right" %}}
 
 Whether you're an experienced juggler or an absolute beginner, this
 event is for YOU. We're kicking off a fresh chapter in our juggling

@@ -76,8 +76,7 @@ lang="${lang}">
         %endif
     %endif
     %if post and post.meta('category')=='map':
-            <script src="/assets/js/leaflet.js"></script>
-            <script src="/assets/js/leaflet-custom.js"></script>
+            <script src="/assets/js/leaflet.js" defer></script>
     %endif
     %if date_fanciness != 0:
         %if use_cdn:

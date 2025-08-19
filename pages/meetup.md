@@ -12,4 +12,4 @@
 We meet every Wednesday at 6pm in the breezeway at Hildebrand Hall on the UC Berkeley campus..
 This is an outdoor location, so it might be a bit cold depending on the time of the year ;).
 
-<div id="map"></div>
+{{% map lat=37.8727222 lng=-122.25575 zoom=17 popup="Meeting location" height="500px" %}}
