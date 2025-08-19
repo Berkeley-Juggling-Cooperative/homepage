@@ -9,27 +9,28 @@
 .. type: text
 -->
 
+# Berkeley Jam
+
 Join us for a Day of Juggling & Circus Arts in the park on September
-22nd 2025, to celebrate community and creativity on the heels of
+21nd 2025, to celebrate community and creativity on the heels of
 summer transitioning to autumn.
 
-When: 9/22/2025
+When: Sunday 9/21/2025 12-5pm
 
-Where: TBD
-
+Where: Live Oak Park, 1301 Shattuck Ave., Berkeley, CA 94709
 
 Whether you're an experienced juggler or an absolute beginner, this
 event is for YOU. We're kicking off a fresh chapter in our juggling
 community, bringing back the spirit of our past festivals in a casual,
 one-day gathering. We’ll be offering free workshops throughout the
 day, so come learn a new skill or just enjoy watching the fun. All
-ages and skill levels are welcome—no experience necessary! Stay tuned
-for the exact location, and get ready for a day of juggling, laughter,
-and new connections.
+ages and skill levels are welcome—no experience necessary! Get ready
+for a day of juggling, laughter, and new connections.
+
+Details list of times for workshop will be published here soon.
 
 If you want to stay up to date, feel free to join our announcement
 list here:
 
 - **[Yearly Announcements](../signup-newsletter)** – Sign up for annual club updates and major events.
-
 
