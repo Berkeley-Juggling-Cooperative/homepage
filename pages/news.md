@@ -12,7 +12,7 @@
 
 Our very own festival:
 
-- [Berkeley Jam, September 22nd 2025](../festival)
+- [Berkeley Jam, September 21st 2025](../festival)
 
 Upcoming festivals:
 
