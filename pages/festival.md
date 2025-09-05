@@ -31,6 +31,10 @@ day, so come learn a new skill or just enjoy watching the fun. All
 ages and skill levels are welcome—no experience necessary! Get ready
 for a day of juggling, laughter, and new connections.
 
+## Questions? 
+
+Email us at [festival@berkeleyjuggling.org](mailtu:festival@berkeleyjuggling.org).
+
 
 ## Tentative schedule:
 
