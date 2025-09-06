@@ -21,7 +21,7 @@ summer transitioning to autumn.
 
 ## Where: Live Oak Park, 1301 Shattuck Ave., Berkeley, CA 94709
 
-{{% map lat=37.8845418188939 lng=-122.26899289947048 zoom=17 popup="Festival location" height="300px" width="300px" float="right" %}}
+{{% map lat=37.88426 lng=-122.26815 zoom=17 popup="Festival location" height="300px" width="300px" float="right" %}}
 
 Whether you're an experienced juggler or an absolute beginner, this
 event is for YOU. We're kicking off a fresh chapter in our juggling
@@ -46,7 +46,8 @@ workshops and juggling games, too:
 * **12:30 - 1**: Workshop Block #1
 * **1:15 - 1:45**: Workshop Block #2
 * **2 - 2:30**: Workshop Block #3
-* **5**: Games, Event ends
+* **3 - 4**: Games,
+* **5**: Event ends
 
 
 ## Workshops
