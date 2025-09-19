@@ -21,6 +21,11 @@ summer transitioning to autumn.
 
 ## Where: Live Oak Park, 1301 Shattuck Ave., Berkeley, CA 94709
 
+We’ll be at Live Oak Park, Picnic Area #2 (across the creek from the
+Berkeley Art Center, 1275 Walnut St). Best entrance is on Walnut
+Street. We’ll also spread out onto the big grassy lawn, so just look
+for jugglers!
+
 {{% map lat=37.88426 lng=-122.26815 zoom=17 popup="Festival location" height="300px" width="300px" float="right" %}}
 
 Whether you're an experienced juggler or an absolute beginner, this
@@ -31,22 +36,22 @@ day, so come learn a new skill or just enjoy watching the fun. All
 ages and skill levels are welcome—no experience necessary! Get ready
 for a day of juggling, laughter, and new connections.
 
-## Questions? 
+## Questions?
 
 Email us at [festival@berkeleyjuggling.org](mailtu:festival@berkeleyjuggling.org).
 
 
-## Tentative schedule:
+## Schedule:
 
 You can come by anytime you want, for example, if you want to learn
 how to juggle, just ask anyone at the Jam. We plan to have a few
 workshops and juggling games, too:
 
 * **Noon**: Event Starts
-* **12:30 - 1**: Workshop Block #1
-* **1:15 - 1:45**: Workshop Block #2
-* **2 - 2:30**: Workshop Block #3
-* **3 - 4**: Games,
+* **12:30 - 1**: Workshop Block #1 (Beginner Workshop & 2 Club Shenanigans)
+* **1:15 - 1:45**: Workshop Block #2 Balance Workshop & Kinos Prereqs/variations)
+* **2 - 2:30**: Workshop Block #3 (Funky Passing Workshop)
+* **3 - 4**: Games
 * **5**: Event ends
 
 
@@ -69,11 +74,25 @@ style. We’ll work through beginner centric drills, improvement
 techniques and variations for added flare.
 
 Funky Numbers Passing Patterns with Isaac: Time to get funky and
-explore different club passing patterns.
+explore different club passing patterns. This "funky passing" workshop
+is for moderate and advanced jugglers who can juggle 6 club 3 count.
+Have you ever been passing with someone and thought, 'there must be a
+harder way to do this'? If so, this workshop is for you! We'll get
+your left hand involved, and teach you a few of the funkier ways to
+juggle six clubs (three levels of difficulty to choose from). As time
+allows, we'll add a club and work through some of the hard ways to
+juggle seven!
+
 
 Beginners Guide to Juggling with Mike: This beginner workshop will
 teach the foundations of ball juggling, focusing on techniques and
 drills to begin your juggle journey.
+
+## Jam Off
+What is the Berkeley Jam without a Jam Off? Please bring homemade jam,
+jellies or marmalades to enter and get ready to taste and vote on your
+favorite jamz.
+
 
 
 ## Instagram
