@@ -10,16 +10,9 @@
 -->
 
 
-Our very own festival:
-
-- [Berkeley Jam, September 21st 2025](../festival)
-
-Upcoming festivals:
-
-- [Portland Juggling Festival, September 26th-28th, 2025](https://www.portlandjugglers.org/festival)
-
 We organized several festival in the past:
 
+- [Berkeley Jam 2025](https://jam-2025.berkeleyjuggling.org/)
 - 9th Bay Area Circus Arts Festival 2014
 - [8th Bay Area Circus Arts Festival 2013](https://festival-2013.berkeleyjuggling.org/)
 - [7th Berkeley Juggling & Unicycling Festival 2012](https://festival-2012.berkeleyjuggling.org/)
