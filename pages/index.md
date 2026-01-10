@@ -32,7 +32,7 @@ We have two email lists for different purposes:
 Both lists have low traffic, and you can unsubscribe at any time.
 
 ## Where & When We Meet
-We meet every Wednesday aroung 6pm at Hildebrand Hall on the UC Berkeley campus.
+We meet every Wednesday aroung 6pm on the UC Berkeley campus.
 
 For more details, visit our [Meetup Page](meetup) or contact us at info@berkeleyjuggling.org.
 

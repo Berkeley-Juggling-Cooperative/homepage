@@ -18,7 +18,7 @@
 
 # Festivals
 
-- Game of Throws (normally around February)
+- 1/23-1/25 [Game of Throws](https://sites.google.com/view/gameofthrowsjuggling/)
 
 # Patterns & Videos
 

@@ -9,7 +9,18 @@
 .. type: text
 -->
 
-We meet every Wednesday at 6pm in the breezeway at Hildebrand Hall on the UC Berkeley campus..
+# New Location !!
+
+We meet every Wednesday at 6pm on the UC Berkeley campus.
 This is an outdoor location, so it might be a bit cold depending on the time of the year ;).
 
-{{% map lat=37.8727222 lng=-122.25575 zoom=17 popup="Meeting location" height="500px" %}}
+We currently have two locations: Dwinelle Hall when the weather is
+nice and a breezeway at Stephens Hall when it's raining.
+
+## Dwinelle Hall
+
+{{% map map_id="sun" lat=37.870677 lng=-122.26 zoom=17 popup="Meeting location (no rain)" height="500px" %}}
+
+## Stephens Hall
+
+{{% map map_id="rain" lat=37.87145 lng=-122.25760706383768 zoom=17 popup="Meeting location (rain)" height="500px" %}}
