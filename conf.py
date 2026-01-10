@@ -675,14 +675,14 @@ REDIRECTIONS = []
 # }
 DEPLOY_COMMANDS = {
     "default": [
-        "rsync -av --delete --exclude='galleries' --exclude='images' --exclude='.dh-diag' output/ berkeleyjuggling@nubati.net:berkeleyjuggling.org/",
+        "rsync -av --delete --exclude='.htaccess' --exclude='images_orig' --exclude='galleries_orig' --exclude='.dh-diag' output/ berkeleyjuggling@nubati.net:berkeleyjuggling.org/",
         "rsync -av htaccess berkeleyjuggling@nubati.net:berkeleyjuggling.org/.htaccess",
-        "rsync -av output/images/ berkeleyjuggling@nubati.net:berkeleyjuggling.org/images/",
-        "rsync -av output/galleries/ berkeleyjuggling@nubati.net:berkeleyjuggling.org/galleries/",
+        "rsync -av images/ berkeleyjuggling@nubati.net:berkeleyjuggling.org/images_orig/",
+        "rsync -av galleries/ berkeleyjuggling@nubati.net:berkeleyjuggling.org/galleries_orig/",
     ],
     "download": [
-        "rsync -av --exclude='*.thumbnail.*' --exclude='*xml' berkeleyjuggling@nubati.net:berkeleyjuggling.org/images/ images/",
-        "rsync -av --exclude='*.thumbnail.*' --exclude='*xml' berkeleyjuggling@nubati.net:berkeleyjuggling.org/galleries/ galleries/",
+        "rsync -av --exclude='*.thumbnail.*' --exclude='*xml' berkeleyjuggling@nubati.net:berkeleyjuggling.org/images_orig/ images/",
+        "rsync -av --exclude='*.thumbnail.*' --exclude='*xml' berkeleyjuggling@nubati.net:berkeleyjuggling.org/galleries_orig/ galleries/",
     ],
 }
 
