@@ -12,10 +12,22 @@ type: text
 ## Unmoderated e-mail list
 
 This is the list you want to subscribe to in case you are interested
-in joining our weekly meetings. There are normally just a few emails per week
-about where and when we meet: last minute changes or impromptu
-meetings, etc.
+in joining our weekly meetings. There are normally just a few emails
+per week about where and when we meet: last minute changes or
+impromptu meetings, etc.
 
-To subscribe to the unmoderated list, please visit
-[this](http://lists.berkeleyjuggling.org/listinfo.cgi/club-berkeleyjuggling.org?_gl=1*fk63db*_ga*MTgyMjQ0NTM2MS4xNzA4Mzk1MzU5*_ga_PY8C9RL72N*MTcwODM5NTM1OC4xLjEuMTcwODM5Njk4MC4wLjAuMA..)
-web page and add your email address.
+To subscribe to the Berkeley Juggling Club mailing list, email
+<club-join@berkeleyjuggling.org> from the address you would like to
+subscribe (text and subject can both be empty). You will receive a
+confirmation email; follow the instructions there to complete your
+subscription.
+
+Once subscribed, you can email club@berkeleyjuggling.org to reach
+everyone on the list.
+
+To unsubscribe, email <club-leave@berkeleyjuggling.org>.
+
+If you have problems signing up, you can always just email us
+with your request at <info@berkeleyjuggling.org> and we can add you
+directly to the list.
+
