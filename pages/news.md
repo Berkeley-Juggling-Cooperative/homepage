@@ -12,6 +12,7 @@
 
 We organized several festival in the past:
 
+- [Berkeley Jam Spring Fling](/festival)
 - [Berkeley Jam 2025](https://jam-2025.berkeleyjuggling.org/)
 - 9th Bay Area Circus Arts Festival 2014
 - [8th Bay Area Circus Arts Festival 2013](https://festival-2013.berkeleyjuggling.org/)
