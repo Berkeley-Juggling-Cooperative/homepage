@@ -23,6 +23,8 @@ assets/js/all-nocdn.js=
     baguetteBox.min.js,
     fancydates.min.js,
     leaflet.js,
-    leaflet-custom.js
+    leaflet-custom.js,
+    site.js
 assets/js/all.js=
     fancydates.min.js,
+    site.js

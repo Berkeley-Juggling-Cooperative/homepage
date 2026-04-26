@@ -103,6 +103,19 @@ a[href^="https://"]::after
   margin-bottom: 3rem;
 }
 
+.hero-image .title.is-1 {
+  font-size: 4rem;
+  font-weight: 800;
+}
+
+.unicycle-logo-wrapper {
+  width: auto;
+}
+
+.unicycle-logo {
+  height: 2em;
+}
+
 @media (prefers-color-scheme: dark) {
   .hero-image {
     background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
