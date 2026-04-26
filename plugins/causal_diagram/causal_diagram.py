@@ -4,15 +4,15 @@ import math
 import svgwrite
 from itertools import cycle
 
-# define several styles that can be used for arrow inside the pattern
+# define several CSS classes that can be used for arrow inside the pattern
 COLORS = {
-    ",": "stroke: #d12229; stroke-width: 4",
-    "$": "stroke: #d12229; stroke-width: 2",
-    "@": "stroke: #f68a1e; stroke-dasharray: 6 3; stroke-width: 2",
-    ">": "stroke: #007940; stroke-dasharray: 9 2 9; stroke-width: 2",
-    "<": "stroke: #fde01a; stroke-dasharray: 6 6; stroke-width: 3",
-    "^": "stroke: #24408e; stroke-dasharray: 12 6; stroke-width: 3",
-    "*": "stroke: #732982; stroke-dasharray: 8 2 8 2 8; stroke-width: 3",
+    ",": "arrow-red-thick",
+    "$": "arrow-red-thin",
+    "@": "arrow-orange-dash",
+    ">": "arrow-green-dash",
+    "<": "arrow-yellow-dash",
+    "^": "arrow-blue-dash",
+    "*": "arrow-purple-dash",
 }
 
 
@@ -371,7 +371,7 @@ class CausalDiagramSVG(ShortcodePlugin):
 
         return group
 
-    def draw_arrow(self, dwg, arrow_marker, start_x, start_y, end_x, end_y, style):
+    def draw_arrow(self, dwg, arrow_marker, start_x, start_y, end_x, end_y, css_class):
         """Draw an arrow in the diagram.
 
         These start and stop at the circle.
@@ -405,7 +405,7 @@ class CausalDiagramSVG(ShortcodePlugin):
             return dwg.path(
                 d=path_data,
                 fill="none",
-                style=style,
+                class_=css_class,
                 marker_end=arrow_marker.get_funciri(),
             )
 
@@ -413,7 +413,7 @@ class CausalDiagramSVG(ShortcodePlugin):
             return dwg.line(
                 start=(start_x, start_y),
                 end=(end_x, end_y),
-                style=style,
+                class_=css_class,
                 marker_end=arrow_marker.get_funciri(),
             )
 
@@ -427,7 +427,7 @@ class CausalDiagramSVG(ShortcodePlugin):
         end_y,
         start_time,
         end_time,
-        style,
+        css_class,
     ):
         """These are animated arrows for the position diagram."""
 
@@ -446,7 +446,7 @@ class CausalDiagramSVG(ShortcodePlugin):
             start=(start_x, start_y),
             end=(end_x, end_y),
             opacity=0,
-            style=style,
+            class_=css_class,
             marker_end=arrow_marker.get_funciri(),
         )
         line.add(
@@ -556,7 +556,7 @@ class CausalDiagramSVG(ShortcodePlugin):
         if value[-1] in COLORS.keys():
             return [value[:-1], COLORS[value[-1]]]
         else:
-            return [value, "stroke: black"]
+            return [value, "arrow-default"]
 
     def drawing_to_str(self, dwg) -> str:
         """svgwrite can only write to file, so this converts to a str"""
@@ -685,7 +685,7 @@ class CausalDiagramSVG(ShortcodePlugin):
 
                     p = float(p[:-1]) - 2
                 end_x = X + self.step_X * p
-                arrow = self.draw_arrow(dwg, arrow_marker, X, H, end_x, Y, style=style)
+                arrow = self.draw_arrow(dwg, arrow_marker, X, H, end_x, Y, css_class=style)
                 if arrow:
                     dwg.add(arrow)
                 X += self.step_X
@@ -814,7 +814,7 @@ class CausalDiagramSVG(ShortcodePlugin):
                             end_y,
                             r * self.duration_pattern + i,
                             r * self.duration_pattern + i + p - 2,
-                            style=style,
+                            css_class=style,
                         )
                         dwg.add(tmp)
 

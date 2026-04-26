@@ -335,3 +335,55 @@ article h5,
 .leaflet-map-container.map-height-400 {
   height: 400px;
 }
+
+/* Causal diagram arrow styles */
+.arrow-default {
+  stroke: black;
+}
+
+.arrow-red-thick {
+  stroke: #d12229;
+  stroke-width: 4;
+}
+
+.arrow-red-thin {
+  stroke: #d12229;
+  stroke-width: 2;
+}
+
+.arrow-orange-dash {
+  stroke: #f68a1e;
+  stroke-dasharray: 6 3;
+  stroke-width: 2;
+}
+
+.arrow-green-dash {
+  stroke: #007940;
+  stroke-dasharray: 9 2 9;
+  stroke-width: 2;
+}
+
+.arrow-yellow-dash {
+  stroke: #fde01a;
+  stroke-dasharray: 6 6;
+  stroke-width: 3;
+}
+
+.arrow-blue-dash {
+  stroke: #24408e;
+  stroke-dasharray: 12 6;
+  stroke-width: 3;
+}
+
+.arrow-purple-dash {
+  stroke: #732982;
+  stroke-dasharray: 8 2 8 2 8;
+  stroke-width: 3;
+}
+
+/* Dark mode: change default black arrows to white */
+@media (prefers-color-scheme: dark) {
+  .arrow-default {
+    stroke: #ffffff;
+  }
+}
