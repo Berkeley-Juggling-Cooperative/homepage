@@ -105,7 +105,7 @@ a[href^="https://"]::after
 
 @media (prefers-color-scheme: dark) {
   .hero-image {
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
                 url('/galleries/BerkeleyJam2025/Berkeley Jam_sh13.png') center center / cover;
   }
 }
@@ -184,6 +184,49 @@ a[href^="https://"]::after
 
   .has-background-primary {
     background-color: #667eea !important;
+  }
+
+  /* Light background for unicycle logo in dark mode */
+  .icon-text .icon img {
+    background-color: #f5f5f5;
+    padding: 0.25rem;
+    border-radius: 4px;
+  }
+
+  /* Fix SVG diagrams in dark mode - change default/black to light gray */
+  svg line,
+  svg circle {
+    stroke: #e0e0e0;
+  }
+
+  svg text,
+  svg path {
+    fill: #e0e0e0;
+  }
+
+  /* Also handle elements with explicit black color */
+  svg [stroke="black"] {
+    stroke: #e0e0e0;
+  }
+
+  svg [fill="black"] {
+    fill: #e0e0e0;
+  }
+
+  /* Lines with inline style="stroke: black" need !important to override */
+  svg line[style*="stroke: black"] {
+    stroke: #ffffff !important;
+  }
+
+  /* Arrowheads - make them white in dark mode */
+  svg marker path {
+    fill: #ffffff !important;
+  }
+
+  /* Keep backgrounds transparent */
+  svg rect[fill="none"],
+  svg circle[fill="none"] {
+    fill: none !important;
   }
 }
 
