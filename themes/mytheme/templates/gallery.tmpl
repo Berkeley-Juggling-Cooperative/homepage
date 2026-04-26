@@ -6,33 +6,49 @@
 {% block sourcelink %}{% endblock %}
 
 {% block content %}
-    {{ ui.breadcrumbs(crumbs) }}
+    <header>
+        <h1 class="title is-2">{{ title|title }}</h1>
+    </header>
     {% if post %}
-    <p>
+    <div class="content">
         {{ post.text() }}
-    </p>
+    </div>
     {% endif %}
     {% if folders %}
+        <div class="columns is-multiline">
         {% if galleries_use_thumbnail %}
             {% for (folder, ftitle, fpost) in folders %}
-            <div class="thumnbnail-container">
-                <a href="{{ folder }}" class="thumbnail image-reference" title="{{ ftitle|e }}">
-                    {% if fpost and fpost.previewimage %}
-                        <img src="{{ fpost.previewimage }}" alt="{{ ftitle|e }}" loading="lazy" style="max-width:{{ thumbnail_size }}px; max-height:{{ thumbnail_size }}px;" />
-                    {% else %}
-                        <div style="height: {{ thumbnail_size }}px; width: {{ thumbnail_size }}px; background-color: #eee;"></div>
-                    {% endif %}
-                <p class="thumbnail-caption">{{ ftitle|e }}</p>
-                </a>
+            <div class="column is-one-third-desktop is-half-tablet">
+                <div class="card">
+                    <div class="card-content">
+                        <p class="title is-5">{{ ftitle|e }}</p>
+                    </div>
+                    <a href="{{ folder }}" title="{{ ftitle|e }}">
+                        <div class="card-image">
+                            <figure class="image is-4by3">
+                                {% if fpost and fpost.previewimage %}
+                                    <img src="{{ fpost.previewimage }}" alt="{{ ftitle|e }}" loading="lazy" />
+                                {% else %}
+                                    <div style="background-color: #eee; width: 100%; height: 100%;"></div>
+                                {% endif %}
+                            </figure>
+                        </div>
+                    </a>
+                </div>
             </div>
             {% endfor %}
         {% else %}
-            <ul>
             {% for folder, ftitle in folders %}
-                <li><a href="{{ folder }}">&#x1f4c2;&nbsp;{{ ftitle|e }}</a></li>
+            <div class="column is-one-third-desktop is-half-tablet">
+                <div class="card">
+                    <div class="card-content">
+                        <p class="title is-5"><a href="{{ folder }}">{{ ftitle|e }}</a></p>
+                    </div>
+                </div>
+            </div>
             {% endfor %}
-            </ul>
         {% endif %}
+        </div>
     {% endif %}
 
 <div id="gallery_container"></div>

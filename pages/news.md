@@ -3,24 +3,21 @@
 .. slug: news
 .. date: 2025-03-01 17:23:10 UTC-08:00
 .. tags: festival
-.. category: 
+.. category:
 .. link: 
 .. description: News and Events
 .. type: text
 -->
 
+# Berkeley Jam Spring Fling 2026 - Thank You!
 
-We organized several festival in the past:
+Thank you to everyone who joined us for the Berkeley Jam Spring Fling on April 12th! Despite the rainy weather, we had a fantastic turnout and enjoyed wonderful workshops, passing sessions, and community juggling throughout the day.
 
-- [Berkeley Jam Spring Fling](/festival)
-- [Berkeley Jam 2025](https://jam-2025.berkeleyjuggling.org/)
-- 9th Bay Area Circus Arts Festival 2014
-- [8th Bay Area Circus Arts Festival 2013](https://festival-2013.berkeleyjuggling.org/)
-- [7th Berkeley Juggling & Unicycling Festival 2012](https://festival-2012.berkeleyjuggling.org/)
-- (no festival in 2011)
-- [6th Berkeley Juggling and Unicycling Festival 2010](https://festival-2010.berkeleyjuggling.org/)
-- [5th Berkeley Juggling and Unicycling Festival 2009](https://festival-2009.berkeleyjuggling.org/)
-- [4th Berkeley Juggling and Unicycling Festival 2008](https://festival-2008.berkeleyjuggling.org/)
-- [3rd Annual Berkeley Juggling & Unicycling Festival 2007](https://festival-2007.berkeleyjuggling.org/)
-- 2nd Annual Berkeley Juggling & Unicycling Festival 2006
-- 1st Annual Berkeley Juggling & Unicycling Festival 2005
+We're already looking forward to organizing another event in the near future. To stay updated on upcoming jams and festivals, sign up for our announcement list:
+
+**[Yearly Announcements](../signup-newsletter)** – Get updates on major events and festivals
+
+## Share Your Photos!
+
+Were you there? We'd love to see your photos from the event! Please send them to us at [festival.info@berkeleyjuggling.org](mailto:festival.info@berkeleyjuggling.org) and we'll add them to our gallery.
+

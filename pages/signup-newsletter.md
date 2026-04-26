@@ -10,10 +10,6 @@ type: text
 ---
 
 ## Announcements email list
-This is the list you want to subscribe to for information about
-festivals or other events we’re participating in or putting on. There
-are just a few emails per year.
-
 
 <form action="https://scripts.dreamhost.com/add_list.cgi"
 method="post">This is the list you want to subscribe to for

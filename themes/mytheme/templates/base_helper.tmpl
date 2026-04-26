@@ -100,6 +100,7 @@ lang="{{ lang }}">
             <link href="/assets/css/bulma.min.css" rel="stylesheet" type="text/css">
             <link href="/assets/css/baguetteBox.min.css" rel="stylesheet" type="text/css">
         {% endif %}
+        <link href="/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href="/assets/css/rst.css" rel="stylesheet" type="text/css">
         <link href="/assets/css/code.css" rel="stylesheet" type="text/css">
         <link href="/assets/css/theme.css" rel="stylesheet" type="text/css">
@@ -140,7 +141,17 @@ lang="{{ lang }}">
             {% if rel_link(permalink, url) == "#" %}
                 <a href="{{ permalink }}" class="navbar-item is-active" aria-current="page">{{ text }}</a>
             {% else %}
-                <a href="{{ url }}" class="navbar-item">{{ text }}</a>
+                <a href="{{ url }}" class="navbar-item"{% if 'instagram' in url.lower() %} target="_blank" title="Follow us on Instagram"{% endif %}>
+                    {% if 'instagram' in url.lower() %}
+                        <span class="icon"><i class="fab fa-instagram"></i></span>
+                        <span>{{ text }}</span>
+                    {% elif url.startswith('mailto:') %}
+                        <span class="icon">📧</span>
+                        <span>{{ text }}</span>
+                    {% else %}
+                        {{ text }}
+                    {% endif %}
+                </a>
             {% endif %}
         {% endif %}
     {% endfor %}

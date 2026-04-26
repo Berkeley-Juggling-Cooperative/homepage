@@ -13,8 +13,8 @@ This is an overview page to many of the patterns that we like to juggle here in 
 
 If you want to submit your own, have a look at [the syntax we use](causal-diagrams).
 
-<div class="multi-columns" markdown="1">
-<div class="no-break" markdown="1">
+<div class="columns is-multiline" markdown="1">
+<div class="column is-one-third-desktop is-half-tablet" markdown="1">
 
 # Number of people
 
@@ -26,7 +26,7 @@ If you want to submit your own, have a look at [the syntax we use](causal-diagra
 - [N People](link://tag/N-person)
 
 </div>
-<div class="no-break" markdown="1">
+<div class="column is-one-third-desktop is-half-tablet" markdown="1">
 
 # Count
 
@@ -37,7 +37,7 @@ If you want to submit your own, have a look at [the syntax we use](causal-diagra
 - [2/3](link://tag/pass-pass-self)
 
 </div>
-<div class="no-break" markdown="1">
+<div class="column is-one-third-desktop is-half-tablet" markdown="1">
 
 # Clubs per juggler
 
@@ -45,7 +45,7 @@ If you want to submit your own, have a look at [the syntax we use](causal-diagra
 - [3.5 clubs each](link://tag/3.5-clubs-each)
 
 </div>
-<div class="no-break" markdown="1">
+<div class="column is-one-third-desktop is-half-tablet" markdown="1">
 
 # Total clubs
 
@@ -54,17 +54,23 @@ If you want to submit your own, have a look at [the syntax we use](causal-diagra
 - [8 clubs](link://tag/8-clubs)
 
 </div>
-<div class="no-break" markdown="1">
+<div class="column is-one-third-desktop is-half-tablet" markdown="1">
 
 # Type
 
 - [Roundabouts](link://tag/roundabouts)
-- [Torture Chambers](link://tag/torture)
+- [Torture Chambers](link://tag/torture-chamber)
 - [Walking](link://tag/walking)
+</div>
 
-</div>
-</div>
+<div class="column is-one-third-desktop is-half-tablet" markdown="1">
 
 # All tags
 
 [The tag index](link://tag_index)
+
+</div>
+</div>
+
+
+

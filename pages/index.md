@@ -7,6 +7,7 @@ category:
 link: 
 description: The Berkeley Juggling Club Home Page.
 type: text
+template: home.tmpl
 ---
 
 # Welcome to Berkeley Juggling Club!

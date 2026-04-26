@@ -1,8 +1,8 @@
 <!--
-.. title: Double Tortute Chamber
+.. title: Double Torture Chamber
 .. slug: double_torture_chamber
 .. date: 2025-04-25 20:53:58 UTC-07:00
-.. tags: 6-person, 3-clubs-each, 4-count, torture
+.. tags: 6-person, 3-clubs-each, 4-count, torture-chamber
 .. category: patterns
 .. link:
 .. description: Double torture chamber

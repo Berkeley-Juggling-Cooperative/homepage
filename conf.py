@@ -142,22 +142,21 @@ TRANSLATIONS_PATTERN = "{path}.{lang}.{ext}"
 
 NAVIGATION_LINKS = {
     DEFAULT_LANG: (
-        ("/", "Home"),
         ("/meetup", "Weekly Meeting"),
         ("/news", "News and Events"),
-        ("/festival", "Festival"),
-        ("/galleries", "Fotos & Videos"),
+        ("/galleries", "Galleries"),
         ("/patterns", "Juggling Patterns"),
-        ("https://berkeleyunicycling.org", "Unicycling"),
         ("/links", "Links"),
-        ("/contact", "Hire a Juggler/Contact us"),
     ),
 }
 
 # Alternative navigation links. Works the same way NAVIGATION_LINKS does,
 # although themes may not always support them. (translatable)
 # (Bootstrap 4: right-side of navbar, Bootblog 4: right side of title)
-NAVIGATION_ALT_LINKS = {DEFAULT_LANG: ()}
+NAVIGATION_ALT_LINKS = {DEFAULT_LANG: (
+    ("https://www.instagram.com/berkeleyjam/", "Instagram"),
+    ("mailto:info@berkeleyjuggling.org", "Contact"),
+)}
 
 # Name of the theme to use.
 THEME = "mytheme"
@@ -363,7 +362,7 @@ COMPILERS = {
 # Nikola supports logo display.  If you have one, you can put the URL here.
 # Final output is <img src="LOGO_URL" id="logo" alt="BLOG_TITLE">.
 # The URL may be relative to the site root.
-LOGO_URL = "/logo.jpg"
+LOGO_URL = "/images/Peace-Bag-color.png"
 
 # When linking posts to social media, Nikola provides Open Graph metadata
 # which is used to show a nice preview. This includes an image preview
@@ -804,7 +803,7 @@ GALLERY_FOLDERS = {"galleries": "galleries"}
 
 # Use a thumbnail (defined by ".. previewimage:" in the gallery's index) in
 # list of galleries for each gallery
-GALLERIES_USE_THUMBNAIL = False
+GALLERIES_USE_THUMBNAIL = True
 
 # Image to use as thumbnail for those galleries that don't have one
 # None: show a grey square

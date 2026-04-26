@@ -1,6 +1,7 @@
 ; css bundles
 assets/css/all-nocdn.css=
     bulma.min.css,
+    font-awesome.min.css,
     rst_base.css,
     nikola_rst.css,
     code.css,
@@ -9,6 +10,7 @@ assets/css/all-nocdn.css=
     custom.css,
     leaflet.css,
 assets/css/all.css=
+    font-awesome.min.css,
     rst_base.css,
     nikola_rst.css,
     code.css,

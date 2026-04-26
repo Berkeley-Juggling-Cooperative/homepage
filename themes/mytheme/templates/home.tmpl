@@ -1,0 +1,176 @@
+{#  -*- coding: utf-8 -*- #}
+{% extends 'base.tmpl' %}
+{% import 'comments_helper.tmpl' as comments with context %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-image">
+  <div class="hero-content">
+    <h1 class="title is-1 has-text-white" style="font-size: 4rem; font-weight: 800;">
+      Welcome to Berkeley Juggling Club!
+    </h1>
+    <p class="subtitle is-3 has-text-white mt-4">
+      Join our community of jugglers – from complete beginners to experienced performers
+    </p>
+    <div class="buttons is-centered mt-6">
+      <a class="button is-white is-medium is-rounded" href="{{ _link('root', None, lang) }}meetup">
+        <span class="icon">
+          <i class="fas fa-calendar"></i>
+        </span>
+        <span>Join Our Weekly Meeting</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- What We Do Section -->
+<section class="section">
+  <div class="container">
+    <h2 class="title is-2 section-title">What We Do</h2>
+    <p class="subtitle is-5 mb-6 mt-4">Our weekly gatherings are open to anyone interested in learning or improving their juggling skills. We offer a relaxed and supportive environment for all levels.</p>
+
+    <div class="columns">
+      <div class="column is-4">
+        <div class="card icon-card">
+          <div class="card-content has-text-centered">
+            <div class="card-header-icon">
+              <i class="fas fa-calendar-week"></i>
+            </div>
+            <h3 class="title is-4 mt-4">Weekly Practice</h3>
+            <p>Join us every Wednesday at 6pm for fun, friendly juggling sessions on the UC Berkeley campus.</p>
+          </div>
+        </div>
+      </div>
+      <div class="column is-4">
+        <div class="card icon-card">
+          <div class="card-content has-text-centered">
+            <div class="card-header-icon">
+              <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h3 class="title is-4 mt-4">Pattern Tutorials</h3>
+            <p>Learn new tricks and patterns from experienced jugglers in our supportive community.</p>
+          </div>
+        </div>
+      </div>
+      <div class="column is-4">
+        <div class="card icon-card">
+          <div class="card-content has-text-centered">
+            <div class="card-header-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <h3 class="title is-4 mt-4">Welcoming Community</h3>
+            <p>Connect with fellow jugglers of all skill levels in a fun and inclusive environment.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Join Community Section -->
+<section class="section has-background-light">
+  <div class="container">
+    <div class="columns is-vcentered">
+      <div class="column is-6">
+        <h2 class="title is-2 section-title">Join Our Community!</h2>
+        <p class="mb-4">Stay connected with two email lists designed for different purposes. Both have low traffic and you can unsubscribe anytime.</p>
+      </div>
+      <div class="column is-6">
+        <div class="box">
+          <div class="media">
+            <div class="media-left">
+              <span class="icon is-large has-text-info">
+                <i class="fas fa-bell fa-2x"></i>
+              </span>
+            </div>
+            <div class="media-content">
+              <h3 class="title is-5">Yearly Announcements</h3>
+              <p class="mb-3">Sign up for annual club updates and major events.</p>
+              <a class="button is-info" href="{{ _link('root', None, lang) }}signup-newsletter">Subscribe</a>
+            </div>
+          </div>
+        </div>
+        <div class="box">
+          <div class="media">
+            <div class="media-left">
+              <span class="icon is-large has-text-primary">
+                <i class="fas fa-comments fa-2x"></i>
+              </span>
+            </div>
+            <div class="media-content">
+              <h3 class="title is-5">Weekly Discussions</h3>
+              <p class="mb-3">Get regular club updates and join practice discussions.</p>
+              <a class="button is-primary" href="{{ _link('root', None, lang) }}signup-weekly">Subscribe</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Location & Partner Section -->
+<section class="section">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-6">
+        <div class="card">
+          <div class="card-content">
+            <h2 class="title is-3">
+              <span class="icon-text">
+                <span class="icon has-text-success">
+                  <i class="fas fa-map-marker-alt"></i>
+                </span>
+                <span>Where & When We Meet</span>
+              </span>
+            </h2>
+            <p class="mb-4">We meet every Wednesday around 6pm on the UC Berkeley campus.</p>
+            <p class="mb-4">For more details, visit our <a href="{{ _link('root', None, lang) }}meetup">Weekly Meetings</a> page or reach out at <a href="mailto:info@berkeleyjuggling.org">info@berkeleyjuggling.org</a>.</p>
+            <a class="button is-success is-rounded" href="{{ _link('root', None, lang) }}meetup">
+              <span class="icon">
+                <i class="fas fa-info-circle"></i>
+              </span>
+              <span>View Meeting Details</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="column is-6">
+        <div class="card">
+          <div class="card-content">
+            <h2 class="title is-3">
+              <span class="icon-text">
+                <span class="icon has-text-warning" style="width: auto;">
+                  <img src="/images/cropped-berkeleyunicyclists-logo.png" alt="Unicycling" style="height: 2em;">
+                </span>
+                <span>Berkeley Unicycling</span>
+              </span>
+            </h2>
+            <p class="mb-4">If you're interested in unicycling, check out our partner group!</p>
+            <a class="button is-warning is-rounded" href="https://berkeleyunicycling.org" target="_blank">
+              <span class="icon">
+                <i class="fas fa-external-link-alt"></i>
+              </span>
+              <span>Visit Their Website</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="section has-background-primary">
+  <div class="container has-text-centered">
+    <h2 class="title is-2 has-text-white">Ready to Start Juggling?</h2>
+    <p class="subtitle is-4 has-text-white mt-4 mb-6">We can't wait to meet you at our next session!</p>
+    <a class="button is-white is-large is-rounded" href="{{ _link('root', None, lang) }}meetup">
+      <span class="icon">
+        <i class="fas fa-arrow-right"></i>
+      </span>
+      <span>Find Us This Wednesday</span>
+    </a>
+  </div>
+</section>
+{% endblock %}

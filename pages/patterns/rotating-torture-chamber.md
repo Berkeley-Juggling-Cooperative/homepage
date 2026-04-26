@@ -2,7 +2,7 @@
 .. title: Rotating Torture Chamber
 .. slug: rotating_torture_chamber
 .. date: 2025-04-25 19:45:31 UTC-07:00
-.. tags: 5-person, 3-clubs-each, 4-count, torture
+.. tags: 5-person, 3-clubs-each, 4-count, torture-chamber
 .. category: patterns
 .. link:
 .. description: Rotating Torture chamber
