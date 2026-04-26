@@ -313,3 +313,12 @@ article h5,
   margin-bottom: 0.5rem;
   line-height: 1.4;
 }
+
+/* Gallery styles */
+#gallery_container {
+  position: relative;
+}
+
+.image-block {
+  position: absolute;
+}
