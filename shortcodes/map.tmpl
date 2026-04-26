@@ -1,33 +1,22 @@
-{# --- build style attribute --- #}
-{% set style_parts = [] %}
-{% set _ = style_parts.append("height: " ~ (height | default("400px")) ~ ";") %}
-
-{% if width %}
-    {% set _ = style_parts.append("width: " ~ width ~ ";") %}
-{% endif %}
-
-{% if float %}
-    {% set _ = style_parts.append("float: " ~ float ~ ";") %}
-{% endif %}
-
-{% set style_attr = style_parts | join(" ") %}
 {% set map_id = map_id | default("map") %}
+{% set map_height = height | default("400px") %}
+{% set map_width = width | default("") %}
+{% set map_float = float | default("") %}
 
-<div id="{{ map_id }}" style="{{ style_attr }}"></div>
+{# Build class list #}
+{% set class_list = ["leaflet-map-container"] %}
+{% if map_height == "500px" %}
+    {% set _ = class_list.append("map-height-500") %}
+{% elif map_height == "400px" %}
+    {% set _ = class_list.append("map-height-400") %}
+{% endif %}
 
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    var map = L.map({{ map_id | tojson }})
-               .setView([{{ lat }}, {{ lng }}], {{ zoom | default(13) }});
-
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map);
-
-    {% if popup %}
-    var marker = L.marker([{{ lat }}, {{ lng }}]).addTo(map);
-    marker.bindPopup({{ popup | tojson }}).openPopup();
-    {% endif %}
-});
-</script>
+<div id="{{ map_id }}"
+     class="{{ class_list | join(' ') }}"
+     data-lat="{{ lat }}"
+     data-lng="{{ lng }}"
+     data-zoom="{{ zoom | default(13) }}"
+     {% if popup %}data-popup="{{ popup }}"{% endif %}
+     {% if map_width %}data-width="{{ map_width }}"{% endif %}
+     {% if map_float %}data-float="{{ map_float }}"{% endif %}
+></div>

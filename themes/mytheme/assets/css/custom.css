@@ -322,3 +322,16 @@ article h5,
 .image-block {
   position: absolute;
 }
+
+/* Leaflet map container styles */
+.leaflet-map-container {
+  height: 400px;
+}
+
+.leaflet-map-container.map-height-500 {
+  height: 500px;
+}
+
+.leaflet-map-container.map-height-400 {
+  height: 400px;
+}
