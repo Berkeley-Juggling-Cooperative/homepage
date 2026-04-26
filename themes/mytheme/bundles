@@ -1,12 +1,11 @@
 ; css bundles
 assets/css/all-nocdn.css=
-    bootstrap.min.css,
+    bulma.min.css,
     rst_base.css,
     nikola_rst.css,
     code.css,
     baguetteBox.min.css,
     theme.css,
-    bootblog.css,
     custom.css,
     leaflet.css,
 assets/css/all.css=
@@ -15,14 +14,10 @@ assets/css/all.css=
     code.css,
     baguetteBox.min.css,
     theme.css,
-    bootblog.css,
     custom.css,
 
 ; javascript bundles
 assets/js/all-nocdn.js=
-    jquery.min.js,
-    popper.min.js,
-    bootstrap.min.js,
     baguetteBox.min.js,
     fancydates.min.js,
     leaflet.js,
