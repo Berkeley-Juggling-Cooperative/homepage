@@ -473,8 +473,7 @@ class CausalDiagramSVG(ShortcodePlugin):
         Skipping the angle
 
         """
-        # rescale time to [0, 1] interval
-        time = time / self.duration_position
+        # time is in beats, keyframes are also in beats - no normalization needed
         if "position" not in self.juggler[name]:
             return
         pos = self.juggler[name]["position"]
