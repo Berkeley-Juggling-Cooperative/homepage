@@ -1,7 +1,7 @@
 # Security Headers
 Header always set X-Content-Type-Options nosniff
 Header always set X-Frame-Options DENY
-Header always set Content-Security-Policy "default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data: https://tile.openstreetmap.org;"
+Header always set Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data: https://tile.openstreetmap.org;"
 Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains;"
 Header always set Referrer-Policy "strict-origin-when-cross-origin"
 Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
