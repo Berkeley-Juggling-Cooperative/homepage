@@ -337,6 +337,10 @@ article h5,
 }
 
 /* Causal diagram arrow styles */
+.arrow-marker {
+  fill: black;
+}
+
 .arrow-default {
   stroke: black;
 }
@@ -383,7 +387,59 @@ article h5,
 
 /* Dark mode: change default black arrows to white */
 @media (prefers-color-scheme: dark) {
+  .arrow-marker {
+    fill: #ffffff;
+  }
+
   .arrow-default {
     stroke: #ffffff;
+  }
+}
+
+/* Split diagram container */
+.diagram-sync-container {
+  margin: 2rem 0;
+}
+
+.causal-diagram-section,
+.position-diagram-section {
+  margin: 1.5rem 0;
+}
+
+.causal-diagram-section h3,
+.position-diagram-section h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+/* Causal diagram scrollable container */
+.causal-diagram-container {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  scroll-behavior: smooth;
+}
+
+.causal-diagram-container svg {
+  display: block;
+}
+
+/* Position diagram stays centered */
+.position-diagram-section svg {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .causal-diagram-container,
+  .position-diagram-section svg {
+    border-color: #444;
   }
 }

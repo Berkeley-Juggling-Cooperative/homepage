@@ -25,7 +25,9 @@ assets/js/all-nocdn.js=
     leaflet.js,
     leaflet-custom.js,
     leaflet-init.js,
+    causal-diagram-scroll.js,
     site.js
 assets/js/all.js=
     fancydates.min.js,
+    causal-diagram-scroll.js,
     site.js

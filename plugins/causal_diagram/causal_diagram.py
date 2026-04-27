@@ -565,6 +565,22 @@ class CausalDiagramSVG(ShortcodePlugin):
         svg_content = svg_string_io.getvalue()
         return svg_content
 
+    def add_scroll_data_attributes(self, svg_content: str, width: float, x_min: float, x_max: float, duration: float) -> str:
+        """Add data attributes to SVG for auto-scrolling."""
+        import re
+        import random
+
+        svg_id = f"causal-diagram-{random.randint(1000, 9999)}"
+
+        # Add class and data attributes to the SVG tag
+        svg_content = re.sub(
+            r'<svg\s+',
+            f'<svg class="causal-diagram-svg" id="{svg_id}" data-diagram-width="{width}" data-x-min="{x_min}" data-x-max="{x_max}" data-duration="{duration}" ',
+            svg_content,
+            count=1
+        )
+        return svg_content
+
     def has_position(self):
         """Check, if all jugglers have position information."""
         has_position = True
@@ -574,45 +590,81 @@ class CausalDiagramSVG(ShortcodePlugin):
         return has_position
 
     def get_position_size(self):
+        """Calculate bounding box for all juggler positions including all animation frames."""
         X_min, X_max, Y_min, Y_max = 0, 0, 0, 0
 
         for juggler in self.juggler.values():
             if "position" in juggler:
+                # Check ALL position keyframes to find the actual bounding box
                 for _, x, y, _ in juggler["position"]:
                     X_min = min(x, X_min)
                     X_max = max(x, X_max)
                     Y_min = min(y, Y_min)
                     Y_max = max(y, Y_max)
-        return (
-            X_max - X_min + 2 * self.margin + self.radius,
-            Y_max - Y_min + 2 * self.margin + self.radius,
-        )
+
+        # Add padding for juggler circles, direction indicators, and labels
+        # Keep it proportional to content size
+        padding = 50  # Fixed 50px padding
+
+        width = X_max - X_min + 2 * padding
+        height = Y_max - Y_min + 2 * padding
+
+        # Ensure reasonable minimum size
+        min_size = 300
+        width = max(width, min_size)
+        height = max(height, min_size)
+
+        return (width, height)
 
     def to_svg(self):
-        """Create the SVG.
+        """Create the SVG(s).
 
-        This create the causal diagram and if positions are defined also
-        a position diagram. Possible with animation.
+        If positions are defined, returns two separate SVGs wrapped in HTML.
+        Otherwise returns a single causal diagram SVG.
         """
+        if self.has_position():
+            return self.create_split_svgs()
+        else:
+            return self.create_single_svg()
+
+    def create_split_svgs(self):
+        """Create two separate synchronized SVGs for causal + position diagrams."""
+        import random
+        sync_id = random.randint(1000, 9999)
+
+        # Generate both SVGs
+        causal_svg = self.generate_causal_diagram_svg()
+        position_svg = self.generate_position_diagram_svg()
+
+        # Wrap in synchronized container
+        wrapper = f'''<div class="diagram-sync-container" data-sync-id="{sync_id}" data-duration="{self.duration_pattern}">
+    <div class="causal-diagram-section">
+        <h3>Pattern Diagram</h3>
+        {causal_svg}
+    </div>
+    <div class="position-diagram-section">
+        <h3>Position Diagram</h3>
+        {position_svg}
+    </div>
+</div>'''
+        return wrapper
+
+    def create_single_svg(self):
+        """Create single SVG with just causal diagram (no positions)."""
+        causal_svg = self.generate_causal_diagram_svg()
+        return causal_svg
+
+    def generate_causal_diagram_svg(self):
+        """Generate the causal diagram SVG as a string."""
         N = len(self.juggler)
 
         width = self.step_X * (self.duration_pattern + 1.5)
-
         height = self.step_Y * N
-
         height += 2 * self.margin
         width += 2 * self.margin
 
         if self.title:
             height += self.title_height
-
-        # positions
-        if self.has_position():
-            dX, dY = self.get_position_size()
-            height += self.margin + dY
-            width = max(dX + 2 * self.margin, width)
-            self.pos_center_y = height - dY / 2
-            self.pos_center_x = width / 2
 
         # Create an SVG drawing and add a box to frame it
         dwg = svgwrite.Drawing(size=(width, height))
@@ -624,7 +676,7 @@ class CausalDiagramSVG(ShortcodePlugin):
         arrow_marker = dwg.marker(
             id="arrowhead", insert=(5, 2.5), size=(5, 5), orient="auto"
         )
-        arrow_marker.add(dwg.path(d="M 0 0 L 5 2.5 L 0 5 z", fill="black"))
+        arrow_marker.add(dwg.path(d="M 0 0 L 5 2.5 L 0 5 z", class_="arrow-marker"))
 
         dwg.defs.add(arrow_marker)
 
@@ -691,12 +743,12 @@ class CausalDiagramSVG(ShortcodePlugin):
                 X += self.step_X
                 X_max = X
 
-        if not self.has_position():
-            return self.drawing_to_str(dwg)
+        # Add animated red bar for scrolling sync
+        min_offset = min([j["wait"] for j in self.juggler.values()])
+        y_min = min([j["height"] for j in self.juggler.values()]) - self.step_Y * 0.3
+        y_max = max([j["height"] for j in self.juggler.values()]) + self.step_Y * 0.3
+        X_min = 2 * self.margin + self.step_X * (1 + min_offset)
 
-        # the position diagram
-
-        # animate the red bar across the pattern
         bar = dwg.line(
             start=(X_min, y_min),
             end=(X_min, y_max),
@@ -716,7 +768,33 @@ class CausalDiagramSVG(ShortcodePlugin):
         )
         dwg.add(bar)
 
-        # the positions
+        svg_str = self.drawing_to_str(dwg)
+        return self.add_scroll_data_attributes(svg_str, width, X_min, X_max, self.duration_pattern)
+
+    def generate_position_diagram_svg(self):
+        """Generate the position diagram (walking pattern) SVG as a string."""
+        # Calculate dimensions with proper bounding box
+        width, height = self.get_position_size()
+
+        self.pos_center_x = width / 2
+        self.pos_center_y = height / 2
+
+        # Create SVG (no scaling - use natural coordinates)
+        dwg = svgwrite.Drawing(size=(width, height))
+        dwg.add(
+            dwg.rect(insert=(0, 0), size=(width, height), fill="none", stroke="black")
+        )
+
+        # Arrow marker
+        arrow_marker = dwg.marker(
+            id="arrowhead-pos", insert=(5, 2.5), size=(5, 5), orient="auto"
+        )
+        arrow_marker.add(dwg.path(d="M 0 0 L 5 2.5 L 0 5 z", class_="arrow-marker"))
+        dwg.defs.add(arrow_marker)
+
+        # the position diagram
+
+        # Draw juggler positions
         for i, (name, juggler) in enumerate(self.juggler.items()):
             if "position" not in juggler:
                 continue
@@ -818,4 +896,5 @@ class CausalDiagramSVG(ShortcodePlugin):
                         )
                         dwg.add(tmp)
 
+        # Return the SVG
         return self.drawing_to_str(dwg)
