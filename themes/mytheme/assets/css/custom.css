@@ -110,10 +110,26 @@ a[href^="https://"]::after
 
 .unicycle-logo-wrapper {
   width: auto;
+  align-self: flex-start;
 }
 
 .unicycle-logo {
   height: 2em;
+}
+
+/* Ensure icon doesn't overlap multi-line text in mobile */
+@media (max-width: 768px) {
+  .unicycle-logo-wrapper .unicycle-logo {
+    height: 1.5em;
+  }
+
+  .icon-text {
+    align-items: flex-start;
+  }
+
+  .icon-text .icon {
+    margin-top: 0.25rem;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
