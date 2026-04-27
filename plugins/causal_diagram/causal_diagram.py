@@ -186,9 +186,8 @@ class CausalDiagramSVG(ShortcodePlugin):
          90 = ...
         270 = ...
 
-        Currently there is a bug e.g. when animating from -172 to
-        +188, the animation does a full rotation instead of taking the
-        shorted route.
+        The angle specification can end with "!" to force the long rotation
+        path (e.g., @A! or @B!). By default, we always take the shortest path.
 
         """
         for j in self.juggler:
@@ -196,9 +195,18 @@ class CausalDiagramSVG(ShortcodePlugin):
                 continue
             tmp = self.juggler[j]["position"]
             out = []
+            use_long_rotation = []  # Track which transitions should use long path
+
             for t in tmp:
+                use_long = False
                 if isinstance(t[3], str) and "@" in t[3]:
-                    name = t[3][1]
+                    angle_spec = t[3].strip()
+                    # Check for ! flag
+                    if angle_spec.endswith("!"):
+                        use_long = True
+                        angle_spec = angle_spec[:-1]  # Remove the !
+
+                    name = angle_spec[1]  # Character after @
                     Ax, Ay = self.get_juggler_position_only(j, t[0])
                     if name == "0":
                         Bx, By = 0, 0
@@ -213,7 +221,34 @@ class CausalDiagramSVG(ShortcodePlugin):
                     t[3] = float(angle)
                 else:
                     t[3] = float(t[3])
+
                 out.append(t)
+                use_long_rotation.append(use_long)
+
+            # Normalize angles to take shortest path (or longest if flagged)
+            for i in range(1, len(out)):
+                prev_angle = out[i-1][3]
+                curr_angle = out[i][3]
+
+                # Calculate the angular difference
+                diff = curr_angle - prev_angle
+
+                # Normalize to [-180, 180] for shortest path
+                while diff > 180:
+                    diff -= 360
+                while diff < -180:
+                    diff += 360
+
+                # If ! flag is set, invert to take the long path
+                if use_long_rotation[i]:
+                    if diff > 0:
+                        diff -= 360
+                    else:
+                        diff += 360
+
+                # Update the current angle to ensure smooth transition
+                out[i][3] = prev_angle + diff
+
             self.juggler[j]["position"] = out
 
     def parse_pattern(self, line: str) -> None:

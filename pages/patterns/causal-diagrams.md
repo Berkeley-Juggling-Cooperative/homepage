@@ -317,6 +317,42 @@ Note that the number of positions for each juggler can vary.
 
 Currently, the last position should be the same as the first to achieve a smooth pattern.
 
+## Dynamic angles with @ notation
+
+Instead of specifying a fixed angle (like `0` or `180`), you can use `@` notation to make a juggler automatically face toward a specific target. The angle will be calculated dynamically based on the juggler's current position.
+
+### Syntax
+
+- `@0` - face toward the center (origin)
+- `@A` - face toward juggler A
+- `@B` - face toward juggler B
+- etc.
+
+Example:
+```
+position D: 0,100,0,@A;  4,100,50,@A;  8,100,0,@B
+```
+
+This makes juggler D face toward juggler A for the first two keyframes, then face toward juggler B at the third keyframe.
+
+### Rotation direction
+
+By default, jugglers always rotate the **shortest way** when transitioning between angles. For example, rotating from 10° to 350° will go clockwise (+20°) rather than counterclockwise (-340°).
+
+To force rotation the **long way**, add `!` after the angle specification:
+
+- `@A!` - face toward A, but rotate the long way to get there
+- `@B!` - face toward B, but rotate the long way to get there
+
+Example:
+```
+position D: 0,100,0,0;  4,100,0,@A!
+```
+
+This forces juggler D to rotate the long way (340° instead of 20°) when turning to face A.
+
+The `!` flag works with both `@` notation and numeric angles. The normalization always happens between consecutive keyframes, so the flag should be placed on the **target** keyframe you're rotating toward.
+
 
 # Formatting
 
