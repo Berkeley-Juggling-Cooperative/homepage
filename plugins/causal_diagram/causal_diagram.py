@@ -747,6 +747,7 @@ class CausalDiagramSVG(ShortcodePlugin):
                     end=(X, y_max),
                     stroke="lightgrey",
                     stroke_width=2,
+                    class_="static-bar",
                 )
             )
 
@@ -798,6 +799,7 @@ class CausalDiagramSVG(ShortcodePlugin):
             end=(X_min, y_max),
             stroke="red",
             stroke_width=2,
+            class_="animated-bar",
         )
         bar.add(
             svgwrite.animate.AnimateTransform(

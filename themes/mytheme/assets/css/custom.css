@@ -223,7 +223,8 @@ a[href^="https://"]::after
   }
 
   /* Fix SVG diagrams in dark mode - change default/black to light gray */
-  svg line,
+  /* Exclude colored arrows and bars which should keep their colors */
+  svg line:not(.arrow-red-thick):not(.arrow-red-thin):not(.arrow-orange-dash):not(.arrow-green-dash):not(.arrow-yellow-dash):not(.arrow-blue-dash):not(.arrow-purple-dash):not(.animated-bar):not(.static-bar),
   svg circle {
     stroke: #e0e0e0;
   }
