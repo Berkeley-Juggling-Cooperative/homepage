@@ -9,7 +9,7 @@
 .. type: text
 -->
 
-A walking pattern where you always turn left ;) 5 beat pattern with changing feeder.
+A walking pattern where you always turn left in Havana;) 5 beat pattern with changing feeder.
 The person feeding is doing a 2 count, all other three positions a 6 count.
 
 {{% causal_diagram %}}
@@ -51,6 +51,7 @@ position B:  0,  50,  86, @A;\
 position C:  0,  50,   0, @A;\
              2,  24, -43, @A;\
 			 8,  50, -86, @A;\
+		    14,  50, -86, @B;\
 		    20,  50, -86, @B;\  # feeding
 		    22,  50, -86, @A;\
 		    24,  50, -86, @D;\
@@ -70,5 +71,5 @@ position D:  0,  50, -86, @A;\
 			34,-100,   0, @A;\
 			36,-100,   0, @C;\
 			38,-100,   0, @B;\
-			39,-100,   0, @A;
+			39,-100,   0, @B;
 {{% /causal_diagram %}}
