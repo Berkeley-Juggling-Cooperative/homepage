@@ -1,6 +1,7 @@
 from nikola.plugin_categories import ShortcodePlugin
 import io
 import math
+import re
 import svgwrite
 from itertools import cycle
 
@@ -597,6 +598,15 @@ class CausalDiagramSVG(ShortcodePlugin):
         svg_string_io = io.StringIO()
         dwg.write(svg_string_io)
         svg_content = svg_string_io.getvalue()
+
+        # Round floats to 4 decimal places to reduce file size
+        def round_float(match):
+            value = float(match.group(0))
+            rounded = f"{value:.4f}".rstrip('0').rstrip('.')
+            return rounded
+
+        svg_content = re.sub(r'\b\d+\.\d{5,}\b', round_float, svg_content)
+
         return svg_content
 
     def add_scroll_data_attributes(self, svg_content: str, width: float, x_min: float, x_max: float, duration: float) -> str:
