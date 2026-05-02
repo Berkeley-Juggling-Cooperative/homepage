@@ -1,7 +1,7 @@
 # Security Headers
 Header always set X-Content-Type-Options nosniff
 Header always set X-Frame-Options DENY
-Header always set Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data: https://tile.openstreetmap.org;"
+Header always set Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data: https://tile.openstreetmap.org; form-action 'self' https://scripts.dreamhost.com; media-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; font-src 'self';"
 Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains;"
 Header always set Referrer-Policy "strict-origin-when-cross-origin"
 Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
@@ -24,4 +24,5 @@ Options -Indexes
 # HTTPS Redirect
 RewriteEngine On
 RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
