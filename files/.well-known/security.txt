@@ -1,0 +1,4 @@
+Contact: mailto:info@berkeleyjuggling.org
+Expires: 2056-05-02T00:00:00Z
+Preferred-Languages: en
+Canonical: https://berkeleyjuggling.org/.well-known/security.txt
