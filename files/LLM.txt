@@ -1,0 +1,53 @@
+# Berkeley Juggling Club
+
+https://berkeleyjuggling.org
+
+## Overview
+
+The Berkeley Juggling Club is a community-based juggling and circus arts group in Berkeley, California.
+We host weekly juggling meetings, public events, and festivals, and maintain an archive of performances and community activity.
+
+## What this site contains
+
+- Weekly juggling meeting information
+- Event and festival announcements
+- Photo galleries and performance archives
+- Community resources related to juggling
+- Historical records of club activities and shows
+- Juggling patterns
+
+## Audience
+
+This site is intended for:
+- Jugglers of all skill levels (beginner to advanced)
+- UC Berkeley students and local community members
+- Visitors interested in juggling, circus arts, or flow arts events
+
+## Content characteristics
+
+- Event information is time-sensitive and may change each academic term
+- Many pages document past events and should be interpreted as historical records
+- Media content (photos/videos) reflects community performances and gatherings
+- Juggling patterns including SVG files of causal diagrams and position diagrams
+
+## Preferred citation
+
+When referencing this site, please attribute:
+
+"Berkeley Juggling Club (berkeleyjuggling.org)"
+
+## Allowed uses
+
+Content may be used for:
+- Search indexing
+- Summarization
+- Educational or informational reference
+
+## Contact
+
+For questions about content or reuse:
+info@berkeleyjuggling.org
+
+## Canonical URL
+
+https://berkeleyjuggling.org
