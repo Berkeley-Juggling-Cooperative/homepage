@@ -23,7 +23,7 @@ C. Person A then does a hand-across and faces B.
 
 B at this point already throw a 'half chop', i.e., a chop that the
 person in the middle can catch roughly at head height. Person A at the
-same time holds the club in the right hand at the bulbd of the club
+same time holds the club in the right hand at the bulb of the club
 behind him, so that C can just take it. B now throws a 'pelf', A does
 a hand-across, takes the 'pelf' and hands a clubs back to A's left
 hand.
