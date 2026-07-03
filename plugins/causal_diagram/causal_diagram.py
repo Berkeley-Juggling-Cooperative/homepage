@@ -228,7 +228,7 @@ class CausalDiagramSVG(ShortcodePlugin):
 
             # Normalize angles to take shortest path (or longest if flagged)
             for i in range(1, len(out)):
-                prev_angle = out[i-1][3]
+                prev_angle = out[i - 1][3]
                 curr_angle = out[i][3]
 
                 # Calculate the angular difference
@@ -489,7 +489,7 @@ class CausalDiagramSVG(ShortcodePlugin):
             svgwrite.animate.Animate(
                 attributeName_="opacity",
                 values="0;0;1;0;0",
-                keyTimes=f"0;{start_time/self.duration_position};{end_time/self.duration_position};{end_time/self.duration_position};1",
+                keyTimes=f"0;{start_time / self.duration_position};{end_time / self.duration_position};{end_time / self.duration_position};1",
                 begin="0s",
                 dur=f"{self.duration_position}s",
                 repeatCount="indefinite",
@@ -602,14 +602,21 @@ class CausalDiagramSVG(ShortcodePlugin):
         # Round floats to 4 decimal places to reduce file size
         def round_float(match):
             value = float(match.group(0))
-            rounded = f"{value:.4f}".rstrip('0').rstrip('.')
+            rounded = f"{value:.4f}".rstrip("0").rstrip(".")
             return rounded
 
-        svg_content = re.sub(r'\b\d+\.\d{5,}\b', round_float, svg_content)
+        svg_content = re.sub(r"\b\d+\.\d{5,}\b", round_float, svg_content)
 
         return svg_content
 
-    def add_scroll_data_attributes(self, svg_content: str, width: float, x_min: float, x_max: float, duration: float) -> str:
+    def add_scroll_data_attributes(
+        self,
+        svg_content: str,
+        width: float,
+        x_min: float,
+        x_max: float,
+        duration: float,
+    ) -> str:
         """Add data attributes to SVG for auto-scrolling."""
         import re
         import random
@@ -618,10 +625,10 @@ class CausalDiagramSVG(ShortcodePlugin):
 
         # Add class and data attributes to the SVG tag
         svg_content = re.sub(
-            r'<svg\s+',
+            r"<svg\s+",
             f'<svg class="causal-diagram-svg" id="{svg_id}" data-diagram-width="{width}" data-x-min="{x_min}" data-x-max="{x_max}" data-duration="{duration}" ',
             svg_content,
-            count=1
+            count=1,
         )
         return svg_content
 
@@ -674,6 +681,7 @@ class CausalDiagramSVG(ShortcodePlugin):
     def create_split_svgs(self):
         """Create two separate synchronized SVGs for causal + position diagrams."""
         import random
+
         sync_id = random.randint(1000, 9999)
 
         # Generate both SVGs
@@ -782,8 +790,10 @@ class CausalDiagramSVG(ShortcodePlugin):
 
                     p = float(p[:-1]) - 2
                 end_x = X + self.step_X * p
-                arrow = self.draw_arrow(dwg, arrow_marker, X, H, end_x, Y, css_class=style)
-                if arrow:
+                arrow = self.draw_arrow(
+                    dwg, arrow_marker, X, H, end_x, Y, css_class=style
+                )
+                if arrow and p != -2:
                     dwg.add(arrow)
                 X += self.step_X
                 X_max = X
@@ -806,7 +816,7 @@ class CausalDiagramSVG(ShortcodePlugin):
                 transform="translate",
                 attributeName_="transform",
                 from_="0",
-                to=f"{X_max-X_min}",
+                to=f"{X_max - X_min}",
                 dur=f"{self.duration_pattern}s",
                 begin="0s",
                 repeatCount="indefinite",
@@ -815,7 +825,9 @@ class CausalDiagramSVG(ShortcodePlugin):
         dwg.add(bar)
 
         svg_str = self.drawing_to_str(dwg)
-        return self.add_scroll_data_attributes(svg_str, width, X_min, X_max, self.duration_pattern)
+        return self.add_scroll_data_attributes(
+            svg_str, width, X_min, X_max, self.duration_pattern
+        )
 
     def generate_position_diagram_svg(self):
         """Generate the position diagram (walking pattern) SVG as a string."""
@@ -851,7 +863,7 @@ class CausalDiagramSVG(ShortcodePlugin):
             values = ";".join([f"{x[1]},{x[2]}" for x in juggler["position"]])
             values_rot = ";".join(
                 [
-                    f"{x[3]-angle} {x[1]+self.pos_center_x} {x[2]+self.pos_center_y}"
+                    f"{x[3] - angle} {x[1] + self.pos_center_x} {x[2] + self.pos_center_y}"
                     for x in juggler["position"]
                 ]
             )
