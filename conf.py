@@ -153,10 +153,12 @@ NAVIGATION_LINKS = {
 # Alternative navigation links. Works the same way NAVIGATION_LINKS does,
 # although themes may not always support them. (translatable)
 # (Bootstrap 4: right-side of navbar, Bootblog 4: right side of title)
-NAVIGATION_ALT_LINKS = {DEFAULT_LANG: (
-    ("https://www.instagram.com/berkeleyjam/", "Instagram"),
-    ("mailto:info@berkeleyjuggling.org", "Contact"),
-)}
+NAVIGATION_ALT_LINKS = {
+    DEFAULT_LANG: (
+        ("https://www.instagram.com/berkeleyjam/", "Instagram"),
+        ("mailto:info@berkeleyjuggling.org", "Contact"),
+    )
+}
 
 # Name of the theme to use.
 THEME = "mytheme"
@@ -674,14 +676,14 @@ REDIRECTIONS = []
 # }
 DEPLOY_COMMANDS = {
     "default": [
-        "rsync -av --delete --exclude='.htaccess' --exclude='images_orig' --exclude='galleries_orig' --exclude='.dh-diag' output/ berkeleyjuggling@nubati.net:berkeleyjuggling.org/",
-        "rsync -av htaccess berkeleyjuggling@nubati.net:berkeleyjuggling.org/.htaccess",
-        "rsync -av images/ berkeleyjuggling@nubati.net:berkeleyjuggling.org/images_orig/",
-        "rsync -av galleries/ berkeleyjuggling@nubati.net:berkeleyjuggling.org/galleries_orig/",
+        "rsync -av --delete --exclude='.htaccess' --exclude='images_orig' --exclude='galleries_orig' --exclude='.dh-diag' output/ berkeleyjuggling@ssh.berkeleyjuggling.org:berkeleyjuggling.org/",
+        "rsync -av htaccess berkeleyjuggling@ssh.berkeleyjuggling.org:berkeleyjuggling.org/.htaccess",
+        "rsync -av images/ berkeleyjuggling@ssh.berkeleyjuggling.org:berkeleyjuggling.org/images_orig/",
+        "rsync -av galleries/ berkeleyjuggling@ssh.berkeleyjuggling.org:berkeleyjuggling.org/galleries_orig/",
     ],
     "download": [
-        "rsync -av --exclude='*.thumbnail.*' --exclude='*xml' berkeleyjuggling@nubati.net:berkeleyjuggling.org/images_orig/ images/",
-        "rsync -av --exclude='*.thumbnail.*' --exclude='*xml' berkeleyjuggling@nubati.net:berkeleyjuggling.org/galleries_orig/ galleries/",
+        "rsync -av --exclude='*.thumbnail.*' --exclude='*xml' berkeleyjuggling@ssh.berkeleyjuggling.org:berkeleyjuggling.org/images_orig/ images/",
+        "rsync -av --exclude='*.thumbnail.*' --exclude='*xml' berkeleyjuggling@ssh.berkeleyjuggling.org:berkeleyjuggling.org/galleries_orig/ galleries/",
     ],
 }
 
