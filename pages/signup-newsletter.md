@@ -11,17 +11,18 @@ type: text
 
 ## Announcements email list
 
-<form action="https://scripts.dreamhost.com/add_list.cgi"
-method="post">This is the list you want to subscribe to for
+This is the list you want to subscribe to for
 information about the festival or other events we are participating in
-or putting on. There are just a few emails per year.<br />
+or putting on. There are just a few emails per year.
 
-Name: <input name="name" type="text"><br />
-E-mail: <input name="email" type="text"><br />
+Please visit our [google group interface](https://groups.google.com/g/berkeleyjuggling-announce) to sign up.
 
-<input name="submit" value="Join Our Announcement List" type="submit"><br />
-<input name="unsub" value="Unsubscribe" type="submit"><br />
-<input name="list" value="festival.announce" type="hidden"><br />
-<input name="domain" value="berkeleyjuggling.org" type="hidden"><br />
-<input name="emailit" value="1" type="hidden">
-</form>
+Alternatively, you can also just email <berkeleyjuggling-announce+subscribe@googlegroups.com> to subscribe (text and subject can both be empty).
+
+Note: this is just an announcement list and you will not be able to post to the group.
+
+To unsubscribe, email <berkeleyjuggling-announce+unsubscribe@googlegroups.com> or visit the web interface at the first link.
+
+If you have problems signing up, you can always just email us
+with your request at <info@berkeleyjuggling.org> and we can add you
+directly to the list.

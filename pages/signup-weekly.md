@@ -16,16 +16,14 @@ in joining our weekly meetings. There are normally just a few emails
 per week about where and when we meet: last minute changes or
 impromptu meetings, etc.
 
-To subscribe to the Berkeley Juggling Club mailing list, email
-<club-join@berkeleyjuggling.org> from the address you would like to
-subscribe (text and subject can both be empty). You will receive a
-confirmation email; follow the instructions there to complete your
-subscription.
+Please visit our [google group interface](https://groups.google.com/g/berkeleyjuggling-club) to sign up.
 
-Once subscribed, you can email club@berkeleyjuggling.org to reach
+Alternatively, you can also just email <berkeleyjuggling-club+subscribe@googlegroups.com> to subscribe (text and subject can both be empty).
+
+Once subscribed, you can email `berkeleyjuggling-club@googlegroups.com` to reach
 everyone on the list.
 
-To unsubscribe, email <club-leave@berkeleyjuggling.org>.
+To unsubscribe, email <berkeleyjuggling-club+unsubscribe@googlegroups.com> or visit the web interface at the first link.
 
 If you have problems signing up, you can always just email us
 with your request at <info@berkeleyjuggling.org> and we can add you
