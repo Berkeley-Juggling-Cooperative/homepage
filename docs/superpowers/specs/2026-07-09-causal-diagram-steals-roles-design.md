@@ -101,7 +101,26 @@ Example — A passes 4-count, then spends two beats as the thief:
 A: 3b 3 3 3 (2: 0 steal b>L; 0.25 hand R>cL; 0.5 zip L>R) 3b 3
 ```
 
-### 4. Role-based rotation: `swap:`
+### 4. Arrow labels
+
+Any token or event that draws an arrow can carry a short text label,
+shown next to the arrow in both diagrams (e.g. "lofty", "chop"):
+
+- grid tokens: the label is a double-quoted string attached directly
+  to the token, after the color suffix if present — `3b"lofty"`,
+  `4.5p$"early"`.
+- event actions: a trailing quoted string — `steal b>L "chop"`.
+
+Labels may contain spaces; the line tokenizer becomes quote-aware
+(quoted regions are never split, and `#` inside quotes is not a
+comment). Label placement is at the arrow's midpoint, offset to sit
+above the line/curve, CSS class `arrow-label`. In the position
+diagram the label animates with the same opacity timing as its
+arrow, so it appears and disappears with it. Avoiding label overlap
+in dense diagrams is the author's responsibility (consistent with
+"just draw it").
+
+### 5. Role-based rotation: `swap:`
 
 ```
 swap: A->B->C->D
@@ -140,6 +159,7 @@ New CSS classes in `themes/mytheme/assets/css/custom.css`:
   event (steal/receive) to the juggler's next release event
   (hand/zip/throw), showing "carrying a club" during walks. (No club
   identity tracking; it simply spans catch to next release.)
+- `arrow-label` — text next to an arrow, both diagrams.
 
 Causal diagram: event circles are drawn at their fractional x
 position with the specified hand letter. The receiving side of a
@@ -173,11 +193,13 @@ hand positions.
    steal arrow rerouting, hold lines, new CSS classes.
 5. **Position-diagram rendering of events**: animated arrows at
    fractional times, zip arrows.
-6. **`swap:` role unrolling**: tokens, target remapping, positions,
+6. **Arrow labels**: quote-aware tokenizer, label parsing on grid
+   tokens and event actions, rendering in both diagrams.
+7. **`swap:` role unrolling**: tokens, target remapping, positions,
    per-period waits.
-7. **Documentation**: extend pages/patterns/causal-diagrams.md with
+8. **Documentation**: extend pages/patterns/causal-diagrams.md with
    the new syntax and small live examples.
-8. **Pattern pages**: add a diagram to roundabout.md; rewrite
+9. **Pattern pages**: add a diagram to roundabout.md; rewrite
    havana.md with `swap:` notation and verify the rendered diagram
    matches the current hand-unrolled one.
 
