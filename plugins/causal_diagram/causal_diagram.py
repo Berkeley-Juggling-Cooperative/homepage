@@ -1,4 +1,5 @@
 from nikola.plugin_categories import ShortcodePlugin
+import hashlib
 import io
 import math
 import re
@@ -42,6 +43,7 @@ class CausalDiagramSVG(ShortcodePlugin):
         """Needed in case we have several diagrams on one page."""
         self.juggler = {}
         self.title = ""
+        self.diagram_id = ""
         self.bars = []
         self.duration_position = 0
         self.duration_pattern = 0
@@ -304,6 +306,9 @@ class CausalDiagramSVG(ShortcodePlugin):
         break up long lines.
 
         """
+        # a stable id derived from the input, so rebuilds produce
+        # identical output (unlike random ids)
+        self.diagram_id = hashlib.md5(text.encode()).hexdigest()[:8]
 
         # build up the whole input line in case continuous lines are used
         line = ""
@@ -620,10 +625,7 @@ class CausalDiagramSVG(ShortcodePlugin):
         duration: float,
     ) -> str:
         """Add data attributes to SVG for auto-scrolling."""
-        import re
-        import random
-
-        svg_id = f"causal-diagram-{random.randint(1000, 9999)}"
+        svg_id = f"causal-diagram-{self.diagram_id}"
 
         # Add class and data attributes to the SVG tag
         svg_content = re.sub(
@@ -682,9 +684,7 @@ class CausalDiagramSVG(ShortcodePlugin):
 
     def create_split_svgs(self):
         """Create two separate synchronized SVGs for causal + position diagrams."""
-        import random
-
-        sync_id = random.randint(1000, 9999)
+        sync_id = self.diagram_id
 
         # Generate both SVGs
         causal_svg = self.generate_causal_diagram_svg()
