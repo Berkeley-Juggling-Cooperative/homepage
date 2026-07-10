@@ -623,7 +623,10 @@ class CausalDiagramSVG(ShortcodePlugin):
                     events[person].append(
                         replace(e, time=e.time + shift, src=src, dst=dst))
                 role_pos = self.juggler[role].get("position")
-                if role_pos:
+                # a path longer than one period cannot be a role path;
+                # leave it untouched as a per-person path (e.g. Havana,
+                # where the feeder feeds from wherever they stand)
+                if role_pos and role_pos[-1][0] <= period:
                     for kf in role_pos:
                         positions[person].append(
                             [kf[0] + shift, kf[1], kf[2], kf[3]])

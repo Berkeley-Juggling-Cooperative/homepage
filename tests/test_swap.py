@@ -60,6 +60,21 @@ def test_swap_concatenates_positions():
     assert len(pos) == 4
 
 
+def test_swap_keeps_per_person_positions():
+    # a position path longer than one period is a per-person path
+    # (covering the whole unrolled cycle) and must not be unrolled
+    d = make(
+        "swap: A->B\n"
+        "3b 3\n"
+        "3a 3\n"
+        "position A: 0, -100, 0, 0; 4, 100, 0, 180;\n"
+        "position B: 0, 100, 0, 180; 4, -100, 0, 0;\n"
+    )
+    pos = d.juggler["A"]["position"]
+    assert len(pos) == 2
+    assert pos[-1][0] == 1.0  # normalized; raw last beat 4 kept as-is
+
+
 def test_no_swap_line_changes_nothing():
     d = make("3b 3 3\n3a 3 3")
     assert d.duration_pattern == 3

@@ -141,7 +141,11 @@ swap: A->B->C->D
 - `position X:` lines describe role X's path for one period;
   unrolling concatenates the paths per person. Continuity (role A's
   path ends where role B's begins) is the author's responsibility and
-  physically true anyway.
+  physically true anyway. A position path **longer than one period**
+  cannot be a role path and is kept untouched as a per-person path for
+  the whole unrolled cycle — needed for patterns like Havana where the
+  throw pattern is role-periodic but the floor geometry is not (the
+  feeder feeds from wherever they stand).
 - A role line's `(hands wait)` prefix applies within each period:
   when a person occupies role r in period k, their tokens sit at
   `period_start + wait_r + i`.
