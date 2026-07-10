@@ -306,6 +306,9 @@ class CausalDiagramSVG(ShortcodePlugin):
         We allow "\" as a marker for continuous lines to be able to
         break up long lines.
 
+        Everything after a "#" is treated as a comment, so "#" cannot
+        be used anywhere in the input (including titles).
+
         """
         # a stable id derived from the input, so rebuilds produce
         # identical output (unlike random ids)
@@ -595,11 +598,11 @@ class CausalDiagramSVG(ShortcodePlugin):
 
         return X, Y
 
-    def get_style(self, value: str) -> list[str, str]:
-        if value[-1] in COLORS.keys():
-            return [value[:-1], COLORS[value[-1]]]
+    def get_style(self, value: str) -> tuple[str, str]:
+        if value[-1] in COLORS:
+            return value[:-1], COLORS[value[-1]]
         else:
-            return [value, "arrow-default"]
+            return value, "arrow-default"
 
     def drawing_to_str(self, dwg) -> str:
         """svgwrite can only write to file, so this converts to a str"""
