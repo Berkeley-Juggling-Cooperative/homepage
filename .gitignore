@@ -7,6 +7,8 @@ cache
 \#*#
 state_data.json
 
-# we don't want to commit large images to git
+# we don't want to commit large images and videos to git
+# (they live on the server in *_orig/, use 'nikola deploy download')
 galleries
 images
+files/videos
