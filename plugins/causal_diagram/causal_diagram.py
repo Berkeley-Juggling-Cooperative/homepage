@@ -646,8 +646,17 @@ class CausalDiagramSVG(ShortcodePlugin):
                 # where the feeder feeds from wherever they stand)
                 if role_pos and role_pos[-1][0] <= period:
                     for kf in role_pos:
+                        angle = kf[3]
+                        # facing references name roles: point them at
+                        # the person occupying the role this period
+                        if isinstance(angle, str) and angle.strip().startswith("@"):
+                            spec = angle.strip()
+                            bang = "!" if spec.endswith("!") else ""
+                            ref = spec.rstrip("!")[1:]
+                            if ref != "0":
+                                angle = "@" + occupant(ref.upper(), k) + bang
                         positions[person].append(
-                            [kf[0] + shift, kf[1], kf[2], kf[3]])
+                            [kf[0] + shift, kf[1], kf[2], angle])
 
         self.throws, self.circles, self.events = throws, circles, events
         for person in self.juggler:

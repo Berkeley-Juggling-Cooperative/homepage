@@ -123,3 +123,35 @@ def test_swap_role_labels_follow_the_role():
     assert pos.count("feeder") == 2
     assert pos.count("feedee") == 2
     assert 'calcMode="discrete"' in pos
+
+
+def test_swap_remaps_position_angle_references():
+    d = make(
+        "swap: A->B\n"
+        "3b 3\n"
+        "3a 3\n"
+        "position A: 0, -100, 0, @B; 2, -100, 0, @B;\n"
+        "position B: 0, 100, 0, @A; 2, 100, 0, @A;\n"
+    )
+    # person A, period 1 (role B at (100,0)): the role path says @A,
+    # whose period-1 occupant is person B over at (-100,0) -> 180 deg.
+    # without remapping this would be a self-reference.
+    pos = d.juggler["A"]["position"]
+    assert pos[-1][3] == 180.0
+
+
+def test_swap_remaps_position_angle_references_nondegenerate():
+    # geometry chosen so the buggy self-reference (atan2(0,0)+180=180)
+    # differs from the correctly remapped angle
+    d = make(
+        "swap: A->B\n"
+        "3b 3\n"
+        "3a 3\n"
+        "position A: 0, 0, 0, @B; 2, 0, 0, @B;\n"
+        "position B: 0, 100, 100, @A; 2, 100, 100, @A;\n"
+    )
+    pos = d.juggler["A"]["position"]
+    # period 1: person A sits at (100,100); @A must mean the period-1
+    # occupant of role A, person B at (0,0) -> -135 deg (after the
+    # shortest-path normalization), not the degenerate 180
+    assert pos[-1][3] == -135.0
