@@ -5,7 +5,6 @@ import io
 import math
 import re
 import svgwrite
-from itertools import cycle
 
 # define several CSS classes that can be used for arrow inside the pattern
 COLORS = {
@@ -65,6 +64,28 @@ def logical_lines(text: str) -> list[str]:
     if current:
         lines.append(current)
     return lines
+
+
+def parse_swap(line: str) -> list:
+    """ "swap: A->B->C, D->E" -> [["A", "B", "C"], ["D", "E"]].
+
+    After each period the person doing a role's line does the next
+    role's line in the chain (the last role wraps to the first).
+    """
+    chains = []
+    for chain in line.removeprefix("swap:").split(","):
+        chains.append([r.strip().upper() for r in chain.split("->") if r.strip()])
+    return [c for c in chains if c]
+
+
+@dataclass
+class Circle:
+    """One circle (hand marker) in the causal diagram."""
+
+    juggler: str
+    time: float          # absolute beat (includes wait)
+    label: str           # hand letter, "" for empty beats
+    css_class: str | None = None
 
 
 def split_label(token: str) -> tuple:
@@ -212,6 +233,11 @@ class CausalDiagramSVG(ShortcodePlugin):
         self.duration_pattern = 0
         self.step_X = 80
         self.step_Y = 100
+        self.swap_chains = None
+        # precomputed by parse(): the drawing records the renderers use
+        self.throws = []
+        self.circles = []
+        self.events = {}
 
     def handler(self, site=None, data=None, lang=None, post=None):
         """This gets executed for the shortcode.
@@ -504,6 +530,110 @@ class CausalDiagramSVG(ShortcodePlugin):
                     )
         return throws
 
+    def collect_circles(self) -> list:
+        """The circle (hand marker) schedule for the causal diagram."""
+        circles = []
+        for name, juggler in self.juggler.items():
+            beat = 0.0
+            letter_idx = 0
+            letters = juggler["letters"]
+            for tok in juggler["pattern"]:
+                t = juggler["wait"] + beat
+                if isinstance(tok, dict):
+                    for e in tok["events"]:
+                        hand = self.event_circle_hand(e)
+                        if hand is not None:
+                            circles.append(Circle(name, t + e.time, hand))
+                    beat += tok["beats"]
+                    letter_idx += int(round(tok["beats"]))
+                elif split_label(tok)[0] == "-":
+                    circles.append(Circle(name, t, "", "beat-empty"))
+                    beat += 1
+                    letter_idx += 1
+                else:
+                    circles.append(
+                        Circle(name, t, letters[letter_idx % len(letters)]))
+                    beat += 1
+                    letter_idx += 1
+        return circles
+
+    def unroll_swap(self):
+        """Unroll role-based lines into per-person records.
+
+        The written lines describe roles for one period; `swap:` says
+        who moves to which role after each period. We repeat the role
+        records until everyone is back in their starting role, mapping
+        role letters to the person occupying them at the relevant time.
+        Persons are named after their starting role.
+        """
+        period = self.duration_pattern
+        chains = self.swap_chains
+        cycles = math.lcm(*[len(c) for c in chains]) if chains else 1
+
+        chain_of = {}
+        for chain in chains:
+            for i, role in enumerate(chain):
+                chain_of[role] = (chain, i)
+
+        def role_at(person, k):
+            if person not in chain_of:
+                return person
+            chain, i = chain_of[person]
+            return chain[(i + k) % len(chain)]
+
+        def occupant(role, k):
+            if role not in chain_of:
+                return role
+            chain, i = chain_of[role]
+            return chain[(i - k) % len(chain)]
+
+        def remap(role_letter, absolute_time):
+            k = int(absolute_time // period) % cycles
+            return occupant(role_letter, k)
+
+        by_role_throws = {n: [] for n in self.juggler}
+        for t in self.throws:
+            by_role_throws[t.juggler].append(t)
+        by_role_circles = {n: [] for n in self.juggler}
+        for c in self.circles:
+            by_role_circles[c.juggler].append(c)
+
+        throws, circles = [], []
+        events = {n: [] for n in self.juggler}
+        positions = {n: [] for n in self.juggler}
+        for person in self.juggler:
+            for k in range(cycles):
+                role = role_at(person, k)
+                shift = k * period
+                for t in by_role_throws[role]:
+                    if t.target == role:
+                        # a self stays with the person who threw it
+                        target = person
+                    else:
+                        target = remap(t.target, t.time + shift + t.value - 2)
+                    throws.append(replace(
+                        t, juggler=person, time=t.time + shift, target=target))
+                for c in by_role_circles[role]:
+                    circles.append(replace(c, juggler=person, time=c.time + shift))
+                for e in self.events.get(role, []):
+                    src = ((remap(e.src[0], e.time + shift), e.src[1])
+                           if e.src[0] else e.src)
+                    dst = ((remap(e.dst[0], e.time + shift), e.dst[1])
+                           if e.dst[0] else e.dst)
+                    events[person].append(
+                        replace(e, time=e.time + shift, src=src, dst=dst))
+                role_pos = self.juggler[role].get("position")
+                if role_pos:
+                    for kf in role_pos:
+                        positions[person].append(
+                            [kf[0] + shift, kf[1], kf[2], kf[3]])
+
+        self.throws, self.circles, self.events = throws, circles, events
+        for person in self.juggler:
+            if positions[person]:
+                self.juggler[person]["position"] = positions[person]
+        self.duration_pattern = period * cycles
+
     def apply_steals(self, throws: list) -> None:
         """Match steal events to in-flight throws and reroute them.
 
@@ -513,7 +643,7 @@ class CausalDiagramSVG(ShortcodePlugin):
         and do not touch the throw list.
         """
         for name in self.juggler:
-            for e in self.collect_events(name):
+            for e in self.events.get(name, []):
                 if e.action != "steal" or e.src[1] is not None:
                     continue
                 source = e.src[0]
@@ -596,6 +726,8 @@ class CausalDiagramSVG(ShortcodePlugin):
                 self.parse_position(line)
             elif line.startswith("step"):
                 self.parse_layout(line)
+            elif line.startswith("swap:"):
+                self.swap_chains = parse_swap(line)
             else:
                 self.parse_pattern(line)
 
@@ -609,6 +741,15 @@ class CausalDiagramSVG(ShortcodePlugin):
         self.duration_pattern = max(
             [self.pattern_beats(j) for j in self.juggler.values()]
         )
+
+        # precompute the drawing records; a swap line unrolls them
+        self.throws = self.collect_throws()
+        self.circles = self.collect_circles()
+        self.events = {name: self.collect_events(name) for name in self.juggler}
+        if self.swap_chains:
+            self.unroll_swap()
+        self.apply_steals(self.throws)
+
         self.duration_position = 0
         for j in self.juggler.values():
             if "position" in j:
@@ -1022,7 +1163,7 @@ class CausalDiagramSVG(ShortcodePlugin):
         releases = {name: [] for name in self.juggler}
         for name in self.juggler:
             H = self.juggler[name]["height"]
-            for e in self.collect_events(name):
+            for e in self.events.get(name, []):
                 x = self.x_of(e.time)
                 if e.action == "steal":
                     catches[name].append(e.time)
@@ -1141,35 +1282,16 @@ class CausalDiagramSVG(ShortcodePlugin):
                     dominant_baseline="middle",
                 )
             )
-            beat = 0.0
-            letter_idx = 0
-            letters = juggler["letters"]
-            for tok in juggler["pattern"]:
-                X = self.x_of(juggler["wait"] + beat)
-                if isinstance(tok, dict):
-                    for e in tok["events"]:
-                        ex = self.x_of(juggler["wait"] + beat + e.time)
-                        hand = self.event_circle_hand(e)
-                        if hand is not None:
-                            dwg.add(self.draw_circle(dwg, ex, H, self.radius, hand))
-                    beat += tok["beats"]
-                    letter_idx += int(round(tok["beats"]))
-                elif split_label(tok)[0] == "-":
-                    dwg.add(self.draw_circle(dwg, X, H, self.radius, "",
-                                             css_class="beat-empty"))
-                    beat += 1
-                    letter_idx += 1
-                else:
-                    dwg.add(self.draw_circle(
-                        dwg, X, H, self.radius,
-                        letters[letter_idx % len(letters)]))
-                    beat += 1
-                    letter_idx += 1
-                X_max = max(X_max, self.x_of(juggler["wait"] + beat))
+            for c in self.circles:
+                if c.juggler != name:
+                    continue
+                dwg.add(self.draw_circle(dwg, self.x_of(c.time), H,
+                                         self.radius, c.label,
+                                         css_class=c.css_class))
+                X_max = max(X_max, self.x_of(c.time + 1))
 
-        # phase 2: throws -> steals -> arrows
-        throws = self.collect_throws()
-        self.apply_steals(throws)
+        # phase 2: arrows from the precomputed throws (steals applied)
+        throws = self.throws
         for t in throws:
             if t.value == 0:
                 continue  # a 0 is an empty hand, no arrow
@@ -1315,8 +1437,7 @@ class CausalDiagramSVG(ShortcodePlugin):
         # target-hand delay compensating with wait_B/wait_A). We keep
         # that clock: t.time - wait gives the token index back, and
         # event arrows use the initiator's clock the same way.
-        throws = self.collect_throws()
-        self.apply_steals(throws)
+        throws = self.throws
         repeats = max(1, int(self.duration_position // self.duration_pattern))
         for r in range(repeats):
             shift = r * self.duration_pattern
@@ -1359,7 +1480,7 @@ class CausalDiagramSVG(ShortcodePlugin):
                 if tmp:
                     dwg.add(tmp)
             for name in self.juggler:
-                for e in self.collect_events(name):
+                for e in self.events.get(name, []):
                     self.draw_position_event(dwg, arrow_marker, name, e, shift)
 
         # Return the SVG
@@ -1367,7 +1488,7 @@ class CausalDiagramSVG(ShortcodePlugin):
 
     def steal_catch_hand(self, throw) -> str | None:
         """The hand a stolen throw is caught with (from the steal event)."""
-        for e in self.collect_events(throw.stolen_by):
+        for e in self.events.get(throw.stolen_by, []):
             if (
                 e.action == "steal"
                 and e.src[0] == throw.juggler
