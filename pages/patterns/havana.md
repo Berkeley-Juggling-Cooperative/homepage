@@ -13,16 +13,14 @@ A walking pattern where you always turn left in Havana;) 5 beat pattern with cha
 The person feeding is doing a 2 count, all other three positions a 6 count.
 
 {{% causal_diagram %}}
-# Feeder
-# A                        B                        C                        D
-# passes
-# 1    2    3    4    5    1    2    3    4    5    1    2    3    4    5    1    2    3    4    5
-# animation beats
-# 0  1 2  3 4  5 6  7 8  9 10  12   14   16   18   20   22   24   26   28   30   32   34   36   38 39
-  3d 3 3c 3 3b 3 3d 3 3c 3 3b 3 3  3 3  3 3b 3 3  3 3  3 3c 3 3  3 3  3 3c 3 3  3 3  3 3d 3 3  3 3  3
-  3  3 3  3 3a 3 3  3 3  3 3a 3 3d 3 3c 3 3a 3 3d 3 3c 3 3  3 3  3 3c 3 3  3 3  3 3d 3 3  3 3  3 3d 3
-  3  3 3a 3 3  3 3  3 3a 3 3  3 3  3 3b 3 3  3 3  3 3b 3 3a 3 3d 3 3b 3 3a 3 3d 3 3  3 3  3 3d 3 3  3
-  3a 3 3  3 3  3 3a 3 3  3 3  3 3b 3 3  3 3  3 3b 3 3  3 3  3 3c 3 3  3 3  3 3c 3 3b 3 3a 3 3c 3 3b 3
+# one 10-beat cycle written per role (A = feeder); the swap line
+# unrolls the full 40 beats: after each cycle the feeder (A) takes
+# role D, D takes C, and C takes B, who becomes the new feeder
+swap: A->D->C->B
+  3d 3 3c 3 3b 3 3d 3 3c 3
+  3  3 3  3 3a 3 3  3 3  3
+  3  3 3a 3 3  3 3  3 3a 3
+  3a 3 3  3 3  3 3a 3 3  3
 title: Havana
 bars: 9.5,19.5,29.5
 position A:  0,-100,   0, @B;\  # feeding
