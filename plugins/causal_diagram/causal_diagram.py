@@ -1,4 +1,5 @@
 from nikola.plugin_categories import ShortcodePlugin
+from dataclasses import dataclass, replace
 import hashlib
 import io
 import math
@@ -59,6 +60,84 @@ def logical_lines(text: str) -> list[str]:
     return lines
 
 
+@dataclass
+class Event:
+    """One sparse action inside an event block.
+
+    src/dst are (juggler, hand) endpoints; juggler None means "self".
+    """
+
+    time: float
+    action: str
+    src: tuple = (None, None)
+    dst: tuple = (None, None)
+    value: str | None = None
+    hand: str | None = None
+    label: str | None = None
+
+
+def tokenize_pattern(line: str) -> list[str]:
+    """Whitespace split that keeps (...) groups (event blocks) intact."""
+    tokens, cur, depth = [], "", 0
+    for ch in line:
+        if ch == "(":
+            depth += 1
+        elif ch == ")":
+            depth -= 1
+        if ch.isspace() and depth == 0:
+            if cur:
+                tokens.append(cur)
+            cur = ""
+        else:
+            cur += ch
+    if cur:
+        tokens.append(cur)
+    return tokens
+
+
+def parse_endpoint(s: str) -> tuple:
+    """ "L" -> (None, "L"); "cR" -> ("C", "R"); "b" -> ("B", None).
+
+    Own juggler is implied by None. Hands are only R or L; any other
+    letter is a juggler name.
+    """
+    juggler, hand = None, None
+    for ch in s.strip():
+        if ch in "RL":
+            hand = ch
+        elif ch.isalpha():
+            juggler = ch.upper()
+    return juggler, hand
+
+
+def parse_event(text: str) -> Event:
+    parts = text.split()
+    time = float(parts[0])
+    action = parts[1]
+    if action == "throw":
+        return Event(time=time, action="throw", value=parts[2],
+                     hand=parts[3] if len(parts) > 3 else None)
+    if action not in ("steal", "hand", "zip"):
+        raise ValueError(f"unknown event action: {action!r}")
+    src, dst = parts[2].split(">")
+    return Event(time=time, action=action,
+                 src=parse_endpoint(src), dst=parse_endpoint(dst))
+
+
+def parse_event_block(token: str) -> dict:
+    """ "(2: 0 steal b>L; 0.25 hand R>cL)" -> {"beats": 2.0, "events": [...]}. """
+    inner = token[1:-1]
+    beats_str, rest = inner.split(":", 1)
+    beats = float(beats_str)
+    events = [parse_event(e) for e in rest.split(";") if e.strip()]
+    for e in events:
+        if not 0 <= e.time < beats:
+            raise ValueError(
+                f"event time {e.time} outside block of {beats} beats: {token}"
+            )
+    return {"beats": beats, "events": events}
+
+
 class CausalDiagramSVG(ShortcodePlugin):
     """A simple script/shortcode to display causal diagrams.
 
@@ -98,32 +177,6 @@ class CausalDiagramSVG(ShortcodePlugin):
         diagram.parse(data)
         return diagram.to_svg(), []
 
-    def parse_hands_and_delay(self, line: str):
-        """Parse () in front of a pattern line.
-
-        This should be the letters that will be shown in the circles.
-        The default is "RL", but it could be "RRLL" for some patterns.
-
-        If there is a number at the end, this will be the delay.
-        """
-        if line.startswith("("):
-            values, pattern = line[1:].split(")")
-            values = values.strip()
-            if " " in values:
-                hands, wait = values.split()
-                wait = float(wait)
-            else:
-                try:
-                    hands = "RL"
-                    wait = float(values)
-                except ValueError:
-                    hands = values
-                    wait = 0
-        else:
-            hands = "RL"
-            wait = 0
-            pattern = line
-        return pattern, hands, wait
 
     def parse_title(self, line: str) -> None:
         self.title = line[6:].strip()
@@ -313,22 +366,60 @@ class CausalDiagramSVG(ShortcodePlugin):
         n = len(self.juggler)
         juggler_name = self.juggler_names[n]
         tmp = {}
-        # parse extra information in () at the start
-        pattern, hands, wait = self.parse_hands_and_delay(line)
+        tokens = tokenize_pattern(line)
+        # parse extra information in () at the start; a "(" group with a
+        # ":" is an event block, not the hands/wait prefix
+        hands, wait = "RL", 0
+        if tokens and tokens[0].startswith("(") and ":" not in tokens[0]:
+            prefix = tokens.pop(0)[1:-1].strip()
+            if " " in prefix:
+                hands, wait_str = prefix.rsplit(None, 1)
+                wait = float(wait_str)
+            else:
+                try:
+                    wait = float(prefix)
+                except ValueError:
+                    hands = prefix
         tmp["letters"] = hands
         tmp["wait"] = wait
+        pattern = []
+        for tok in tokens:
+            if tok.startswith("(") and ":" in tok:
+                pattern.append(parse_event_block(tok))
+            else:
+                pattern.append(tok)
         # 'p' for passes are only allowed in 2 person patterns
         # otherwise it should be letters. Replace 'p' with 'a' and 'b'
         # here so that it is easier later in the program
-        if "p" in pattern:
-            if juggler_name == "A":
-                pattern = pattern.replace("p", "b")
-            else:
-                pattern = pattern.replace("p", "a")
-        tmp["pattern"] = pattern.split()
+        if any(isinstance(t, str) and "p" in t for t in pattern):
+            other = "b" if juggler_name == "A" else "a"
+            pattern = [t.replace("p", other) if isinstance(t, str) else t
+                       for t in pattern]
+        tmp["pattern"] = pattern
         # the y-coordinate the juggler line should be drawn in the diagram
         tmp["height"] = self.margin + int(self.step_Y * (n + 0.5))
         self.juggler[juggler_name] = tmp
+
+    def pattern_beats(self, juggler: dict) -> float:
+        """Total beats of a pattern (blocks may span several beats)."""
+        total = 0.0
+        for t in juggler["pattern"]:
+            total += t["beats"] if isinstance(t, dict) else 1
+        return total
+
+    def collect_events(self, name: str) -> list:
+        """All events of a juggler, times converted to absolute beats."""
+        juggler = self.juggler[name]
+        out = []
+        beat = float(juggler["wait"])
+        for t in juggler["pattern"]:
+            if isinstance(t, dict):
+                for e in t["events"]:
+                    out.append(replace(e, time=beat + e.time))
+                beat += t["beats"]
+            else:
+                beat += 1
+        return out
 
     def parse_layout(self, text: str):
         number = int(text.split(":")[1])
@@ -375,7 +466,9 @@ class CausalDiagramSVG(ShortcodePlugin):
 
         # for the animation we need to rescale beats to the [0,1] interval
         # we do this already here
-        self.duration_pattern = max([len(j["pattern"]) for j in self.juggler.values()])
+        self.duration_pattern = max(
+            [self.pattern_beats(j) for j in self.juggler.values()]
+        )
         self.duration_position = 0
         for j in self.juggler.values():
             if "position" in j:
