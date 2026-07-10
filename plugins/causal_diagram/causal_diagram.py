@@ -37,10 +37,6 @@ class CausalDiagramSVG(ShortcodePlugin):
 
     def __init__(self):
         super().__init__()
-        self.clear()
-
-    def clear(self):
-        """Needed in case we have several diagrams on one page."""
         self.juggler = {}
         self.title = ""
         self.diagram_id = ""
@@ -51,10 +47,15 @@ class CausalDiagramSVG(ShortcodePlugin):
         self.step_Y = 100
 
     def handler(self, site=None, data=None, lang=None, post=None):
-        """This gets executed for the shortcode."""
-        self.clear()
-        self.parse(data)
-        return self.to_svg(), []
+        """This gets executed for the shortcode.
+
+        Nikola keeps one plugin instance around, so we parse each
+        diagram on a fresh instance to avoid state leaking between
+        diagrams.
+        """
+        diagram = CausalDiagramSVG()
+        diagram.parse(data)
+        return diagram.to_svg(), []
 
     def parse_hands_and_delay(self, line: str):
         """Parse () in front of a pattern line.
