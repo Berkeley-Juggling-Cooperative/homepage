@@ -16,8 +16,13 @@ person (C) is standing in the middle between them with one extra club.
 {{% causal_diagram %}}
 title: Roundabout, first rotation (C in the middle)
 3b 3 3"pelf" 3 3b (1: 0.25 steal cR>R) (2: 0.25 hand R>cL)
-3a 3 3 3 3a 3 3 3
-(8: 1 steal b>L; 1.25 hand R>aL; 1.5 zip L>R; 3 steal a>L; 6 throw 3 L)
+3a 3 3 3 3c 3 3 3
+(8: 0.5 steal b>L; 0.75 hand R>aL; 1 zip L>R; 2.5 steal a>L; 5.5 throw 3 L)
+position A: 0,-100,0,@B;    2.5,-100,0,@B;   4,-100,50,@B; \
+            5.5,-100,50,@B; 6.5,0,40,@C;     7,0,40,90;
+position B: 100, 0, @A
+position C: 0,0,40,270;     1.5,0,40,270;    2.5,0,40,@A; \
+            4,-100,-50,@B;  5.5,-100,-50,@B; 7,-100,0,@B;
 {{% /causal_diagram %}}
 
 In a single rotation of the pattern, the person in the middle (C)
