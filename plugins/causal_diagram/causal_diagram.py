@@ -33,8 +33,14 @@ def logical_lines(text: str) -> list[str]:
     current = ""
     glue_next = False  # previous physical line ended with "\"
     for raw in text.split("\n"):
-        if "#" in raw:
-            raw = raw.split("#")[0]
+        # strip comments, but a '#' inside a quoted label is content
+        in_quote = False
+        for i, ch in enumerate(raw):
+            if ch == '"':
+                in_quote = not in_quote
+            elif ch == "#" and not in_quote:
+                raw = raw[:i]
+                break
         raw = raw.strip()
         if raw.endswith("\\"):
             # legacy continuation: joins without spaces, exactly as before
@@ -59,6 +65,14 @@ def logical_lines(text: str) -> list[str]:
     if current:
         lines.append(current)
     return lines
+
+
+def split_label(token: str) -> tuple:
+    """ '3b"lofty"' -> ("3b", "lofty"); no label -> (token, None). """
+    if token.endswith('"') and token.count('"') >= 2:
+        head, _, rest = token[:-1].partition('"')
+        return head, rest
+    return token, None
 
 
 @dataclass
@@ -97,14 +111,18 @@ class Throw:
 
 
 def tokenize_pattern(line: str) -> list[str]:
-    """Whitespace split that keeps (...) groups (event blocks) intact."""
+    """Whitespace split keeping (...) groups and "..." labels intact."""
     tokens, cur, depth = [], "", 0
+    in_quote = False
     for ch in line:
-        if ch == "(":
-            depth += 1
-        elif ch == ")":
-            depth -= 1
-        if ch.isspace() and depth == 0:
+        if ch == '"':
+            in_quote = not in_quote
+        elif not in_quote:
+            if ch == "(":
+                depth += 1
+            elif ch == ")":
+                depth -= 1
+        if ch.isspace() and depth == 0 and not in_quote:
             if cur:
                 tokens.append(cur)
             cur = ""
@@ -131,17 +149,26 @@ def parse_endpoint(s: str) -> tuple:
 
 
 def parse_event(text: str) -> Event:
+    text = text.strip()
+    # pull a trailing quoted label off before splitting fields
+    label = None
+    if text.endswith('"'):
+        text, _, rest = text[:-1].rpartition('"')
+        label = rest
+        text = text.strip()
     parts = text.split()
     time = float(parts[0])
     action = parts[1]
     if action == "throw":
         return Event(time=time, action="throw", value=parts[2],
-                     hand=parts[3] if len(parts) > 3 else None)
+                     hand=parts[3] if len(parts) > 3 else None,
+                     label=label)
     if action not in ("steal", "hand", "zip"):
         raise ValueError(f"unknown event action: {action!r}")
     src, dst = parts[2].split(">")
     return Event(time=time, action=action,
-                 src=parse_endpoint(src), dst=parse_endpoint(dst))
+                 src=parse_endpoint(src), dst=parse_endpoint(dst),
+                 label=label)
 
 
 def parse_event_block(token: str) -> dict:
@@ -448,6 +475,7 @@ class CausalDiagramSVG(ShortcodePlugin):
                     # hands keep alternating per beat while events happen
                     letter_idx += int(round(tok["beats"]))
                     continue
+                tok, label = split_label(tok)
                 if tok == "-":
                     beat += 1
                     letter_idx += 1
@@ -461,6 +489,7 @@ class CausalDiagramSVG(ShortcodePlugin):
                         target=target,
                         style=style,
                         hand=letters[letter_idx % len(letters)],
+                        label=label,
                     )
                 )
                 beat += 1
@@ -470,7 +499,8 @@ class CausalDiagramSVG(ShortcodePlugin):
                     value, target, style = self.split_throw_token(name, e.value)
                     throws.append(
                         Throw(juggler=name, time=e.time, value=value,
-                              target=target, style=style, hand=e.hand or "")
+                              target=target, style=style, hand=e.hand or "",
+                              label=e.label)
                     )
         return throws
 
@@ -650,13 +680,16 @@ class CausalDiagramSVG(ShortcodePlugin):
 
         return group
 
-    def draw_arrow(self, dwg, arrow_marker, start_x, start_y, end_x, end_y, css_class):
+    def draw_arrow(self, dwg, arrow_marker, start_x, start_y, end_x, end_y,
+                   css_class, label=None):
         """Draw an arrow in the diagram.
 
         These start and stop at the circle.
 
         If doubles and other longer throughs that are selves, are drawn
         using an arc.
+
+        An optional label is placed next to the arrow's midpoint.
         """
 
         dx = end_x - start_x
@@ -672,7 +705,8 @@ class CausalDiagramSVG(ShortcodePlugin):
         end_x -= arrow_offset * (dx / length)
         end_y -= arrow_offset * (dy / length)
 
-        if abs(end_x - start_x) - self.step_X > 10 and dy == 0:
+        is_arc = abs(end_x - start_x) - self.step_X > 10 and dy == 0
+        if is_arc:
             # Calculate control point for the Bezier curve
             control_x = (start_x + end_x) / 2
             control_y = start_y - self.step_Y / 2
@@ -681,7 +715,7 @@ class CausalDiagramSVG(ShortcodePlugin):
             path_data = (
                 f"M {start_x},{start_y} Q {control_x},{control_y} {end_x},{end_y}"
             )
-            return dwg.path(
+            element = dwg.path(
                 d=path_data,
                 fill="none",
                 class_=css_class,
@@ -689,12 +723,26 @@ class CausalDiagramSVG(ShortcodePlugin):
             )
 
         else:
-            return dwg.line(
+            element = dwg.line(
                 start=(start_x, start_y),
                 end=(end_x, end_y),
                 class_=css_class,
                 marker_end=arrow_marker.get_funciri(),
             )
+
+        if not label:
+            return element
+
+        mid_x = (start_x + end_x) / 2
+        mid_y = (start_y + end_y) / 2 - 6
+        if is_arc:
+            # quadratic bezier at t=0.5 sits halfway to the control point
+            mid_y -= self.step_Y / 4
+        group = dwg.g()
+        group.add(element)
+        group.add(dwg.text(label, insert=(mid_x, mid_y),
+                           class_="arrow-label", text_anchor="middle"))
+        return group
 
     def draw_animated_arrow(
         self,
@@ -707,8 +755,12 @@ class CausalDiagramSVG(ShortcodePlugin):
         start_time,
         end_time,
         css_class,
+        label=None,
     ):
-        """These are animated arrows for the position diagram."""
+        """These are animated arrows for the position diagram.
+
+        An optional label fades in and out together with the arrow.
+        """
 
         dx = end_x - start_x
         dy = end_y - start_y
@@ -721,6 +773,19 @@ class CausalDiagramSVG(ShortcodePlugin):
         end_x += self.pos_center_x
         end_y += self.pos_center_y
 
+        keytimes = f"0;{start_time/self.duration_position};{end_time/self.duration_position};{end_time/self.duration_position};1"
+
+        def opacity_animation():
+            return svgwrite.animate.Animate(
+                attributeName_="opacity",
+                values="0;0;1;0;0",
+                keyTimes=keytimes,
+                begin="0s",
+                dur=f"{self.duration_position}s",
+                repeatCount="indefinite",
+                fill="remove",
+            )
+
         line = dwg.line(
             start=(start_x, start_y),
             end=(end_x, end_y),
@@ -728,18 +793,22 @@ class CausalDiagramSVG(ShortcodePlugin):
             class_=css_class,
             marker_end=arrow_marker.get_funciri(),
         )
-        line.add(
-            svgwrite.animate.Animate(
-                attributeName_="opacity",
-                values="0;0;1;0;0",
-                keyTimes=f"0;{start_time / self.duration_position};{end_time / self.duration_position};{end_time / self.duration_position};1",
-                begin="0s",
-                dur=f"{self.duration_position}s",
-                repeatCount="indefinite",
-                fill="remove",
-            )
+        line.add(opacity_animation())
+        if not label:
+            return line
+
+        text = dwg.text(
+            label,
+            insert=((start_x + end_x) / 2, (start_y + end_y) / 2 - 6),
+            opacity=0,
+            class_="arrow-label",
+            text_anchor="middle",
         )
-        return line
+        text.add(opacity_animation())
+        group = dwg.g()
+        group.add(line)
+        group.add(text)
+        return group
 
     def get_juggler_position_only(self, name: str, time: int | float):
         """The X,Y position of a juggler for the position diagram at a given time.
@@ -961,7 +1030,8 @@ class CausalDiagramSVG(ShortcodePlugin):
                         src_h = self.juggler[e.src[0]]["height"]
                         arr = self.draw_arrow(dwg, arrow_marker,
                                               x, src_h, x, H,
-                                              css_class="arrow-hand")
+                                              css_class="arrow-hand",
+                                              label=e.label)
                         if arr:
                             dwg.add(arr)
                         releases[e.src[0]].append(e.time)
@@ -971,7 +1041,8 @@ class CausalDiagramSVG(ShortcodePlugin):
                     catches[tgt].append(e.time)
                     tgt_h = self.juggler[tgt]["height"]
                     arr = self.draw_arrow(dwg, arrow_marker, x, H,
-                                          x, tgt_h, css_class="arrow-hand")
+                                          x, tgt_h, css_class="arrow-hand",
+                                          label=e.label)
                     if arr:
                         dwg.add(arr)
                 elif e.action == "zip":
@@ -980,7 +1051,7 @@ class CausalDiagramSVG(ShortcodePlugin):
                     arr = self.draw_arrow(
                         dwg, arrow_marker,
                         x - 0.2 * self.step_X, H, x + 0.2 * self.step_X, H,
-                        css_class="arrow-zip")
+                        css_class="arrow-zip", label=e.label)
                     if arr:
                         dwg.add(arr)
                 elif e.action == "throw":
@@ -1083,7 +1154,7 @@ class CausalDiagramSVG(ShortcodePlugin):
                             dwg.add(self.draw_circle(dwg, ex, H, self.radius, hand))
                     beat += tok["beats"]
                     letter_idx += int(round(tok["beats"]))
-                elif tok == "-":
+                elif split_label(tok)[0] == "-":
                     dwg.add(self.draw_circle(dwg, X, H, self.radius, "",
                                              css_class="beat-empty"))
                     beat += 1
@@ -1113,7 +1184,8 @@ class CausalDiagramSVG(ShortcodePlugin):
                 end_y = self.juggler[t.target]["height"]
                 style = t.style
             arrow = self.draw_arrow(dwg, arrow_marker, start_x, start_y,
-                                    end_x, end_y, css_class=style)
+                                    end_x, end_y, css_class=style,
+                                    label=t.label)
             if arrow:
                 dwg.add(arrow)
 
@@ -1282,6 +1354,7 @@ class CausalDiagramSVG(ShortcodePlugin):
                     shift + i,
                     end_t,
                     css_class=style,
+                    label=t.label,
                 )
                 if tmp:
                     dwg.add(tmp)
@@ -1328,7 +1401,7 @@ class CausalDiagramSVG(ShortcodePlugin):
             start_t = max(0, t - 0.1)
         arrow = self.draw_animated_arrow(
             dwg, arrow_marker, start[0], start[1], end[0], end[1],
-            start_t, t, css_class=style,
+            start_t, t, css_class=style, label=e.label,
         )
         if arrow:
             dwg.add(arrow)
