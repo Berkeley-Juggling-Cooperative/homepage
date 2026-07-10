@@ -18,6 +18,47 @@ COLORS = {
 }
 
 
+def logical_lines(text: str) -> list[str]:
+    """Split shortcode text into logical lines.
+
+    A logical line continues onto the next physical line when it is
+    syntactically unfinished: an unclosed "(" or a trailing ";".
+    A trailing "\\" forces continuation (legacy syntax). Leading
+    whitespace is insignificant (pages indent cosmetically), and a
+    trailing "," must NOT continue (it is a color suffix).
+    """
+    lines = []
+    current = ""
+    glue_next = False  # previous physical line ended with "\"
+    for raw in text.split("\n"):
+        if "#" in raw:
+            raw = raw.split("#")[0]
+        raw = raw.strip()
+        if raw.endswith("\\"):
+            # legacy continuation: joins without spaces, exactly as before
+            raw = raw[:-1].strip()
+            if current and raw and not glue_next:
+                current += " " + raw
+            else:
+                current += raw
+            glue_next = True
+            continue
+        if current and raw and not glue_next:
+            current += " " + raw
+        else:
+            current += raw
+        glue_next = False
+        if not current:
+            continue
+        if current.count("(") > current.count(")") or current.endswith(";"):
+            continue
+        lines.append(current)
+        current = ""
+    if current:
+        lines.append(current)
+    return lines
+
+
 class CausalDiagramSVG(ShortcodePlugin):
     """A simple script/shortcode to display causal diagrams.
 
@@ -314,21 +355,7 @@ class CausalDiagramSVG(ShortcodePlugin):
         # identical output (unlike random ids)
         self.diagram_id = hashlib.md5(text.encode()).hexdigest()[:8]
 
-        # build up the whole input line in case continuous lines are used
-        line = ""
-        for current_line in text.split("\n"):
-            if "#" in current_line:
-                current_line = current_line.split("#")[0]
-            current_line = current_line.strip()
-
-            # handle continuation lines
-            if current_line.endswith("\\"):
-                line += current_line[:-1].strip()
-                continue
-            line += current_line
-            if not line:
-                continue
-
+        for line in logical_lines(text):
             # handle the different input options
             if line.startswith("title:"):
                 self.parse_title(line)
@@ -340,7 +367,6 @@ class CausalDiagramSVG(ShortcodePlugin):
                 self.parse_layout(line)
             else:
                 self.parse_pattern(line)
-            line = ""
 
         # now that we have parsed everything, fix a few things that we
         # can only do now, e.g. addjust the position for each juggler
