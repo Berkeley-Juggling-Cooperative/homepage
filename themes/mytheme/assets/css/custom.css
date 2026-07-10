@@ -392,6 +392,12 @@ article h5,
   fill: #555;
 }
 
+/* role name below a juggler in the position diagram */
+.role-label {
+  font-size: 0.7em;
+  fill: #555;
+}
+
 .arrow-default {
   stroke: black;
 }

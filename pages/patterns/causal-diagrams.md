@@ -491,6 +491,29 @@ swap: A->B
 3a 3 3 3
 {{% /causal_diagram %}}
 
+Positions can carry a role name, written as `position A("feeder"): ...`.
+The name is shown below the juggler in the position diagram, and with
+`swap:` it follows the role: whoever currently occupies the position
+shows its label.
+
+    {{% raw %}}
+    {{% causal_diagram %}}
+    swap: A->B
+    3b 3 3 3
+    3a 3 3 3
+    position A("feeder"): 0, -100, 0, 0; 8, -100, 0, 0;
+    position B("feedee"): 0, 100, 0, 180; 8, 100, 0, 180;
+    {{% /causal_diagram %}}
+    {{% /raw %}}
+
+{{% causal_diagram %}}
+swap: A->B
+3b 3 3 3
+3a 3 3 3
+position A("feeder"): 0, -100, 0, 0; 8, -100, 0, 0;
+position B("feedee"): 0, 100, 0, 180; 8, 100, 0, 180;
+{{% /causal_diagram %}}
+
 # More on long lines
 
 Besides the `\` continuation above, a line continues automatically

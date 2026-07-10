@@ -84,3 +84,42 @@ def test_no_swap_line_changes_nothing():
 def test_swap_renders():
     out, _ = CausalDiagramSVG().handler(data="swap: A->B\n3b 3 3 3\n3a 3 3 3")
     assert "<svg" in out
+
+
+def test_position_role_label_parsed():
+    d = make(
+        '3b 3\n'
+        '3a 3\n'
+        'position A("feeder"): 0, -100, 0, 0; 2, -100, 0, 0;\n'
+        'position B: 0, 100, 0, 180;\n'
+    )
+    assert d.juggler["A"]["role_label"] == "feeder"
+    assert "role_label" not in d.juggler["B"]
+    assert len(d.juggler["A"]["position"]) == 2
+
+
+def test_static_role_label_rendered():
+    out, _ = CausalDiagramSVG().handler(
+        data='3b 3\n3a 3\n'
+        'position A("feeder"): 0, -100, 0, 0;\n'
+        'position B: 0, 100, 0, 180;\n'
+    )
+    pos = out.split("position-diagram-section")[1]
+    assert "role-label" in pos
+    assert ">feeder<" in pos.replace("\n", "")
+
+
+def test_swap_role_labels_follow_the_role():
+    out, _ = CausalDiagramSVG().handler(
+        data="swap: A->B\n"
+        "3b 3\n"
+        "3a 3\n"
+        'position A("feeder"): 0, -100, 0, 0; 4, -100, 0, 0;\n'
+        'position B("feedee"): 0, 100, 0, 180; 4, 100, 0, 180;\n'
+    )
+    pos = out.split("position-diagram-section")[1]
+    # both persons must carry both labels (each occupies each role once),
+    # shown/hidden by an animation window
+    assert pos.count("feeder") == 2
+    assert pos.count("feedee") == 2
+    assert 'calcMode="discrete"' in pos

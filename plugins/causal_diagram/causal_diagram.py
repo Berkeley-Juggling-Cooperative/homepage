@@ -322,6 +322,11 @@ class CausalDiagramSVG(ShortcodePlugin):
         line = line.removeprefix("position")
         name, values = line.split(":")
         name = name.strip()
+        # an optional role label: position A("feeder"): ...
+        role_label = None
+        m = re.match(r'^(\w+)\s*\(\s*"([^"]*)"\s*\)$', name)
+        if m:
+            name, role_label = m.group(1), m.group(2)
         values = values.split(";")
         tmp = []
         for v in values:
@@ -344,6 +349,8 @@ class CausalDiagramSVG(ShortcodePlugin):
             tmp.append(t)
 
         self.juggler[name]["position"] = tmp
+        if role_label:
+            self.juggler[name]["role_label"] = role_label
 
     def calc_angle(self):
         """The angle can either be a number or a string.
@@ -601,10 +608,14 @@ class CausalDiagramSVG(ShortcodePlugin):
         throws, circles = [], []
         events = {n: [] for n in self.juggler}
         positions = {n: [] for n in self.juggler}
+        labels = {n: [] for n in self.juggler}
         for person in self.juggler:
             for k in range(cycles):
                 role = role_at(person, k)
                 shift = k * period
+                role_label = self.juggler[role].get("role_label")
+                if role_label:
+                    labels[person].append((shift, shift + period, role_label))
                 for t in by_role_throws[role]:
                     if t.target == role:
                         # a self stays with the person who threw it
@@ -635,6 +646,9 @@ class CausalDiagramSVG(ShortcodePlugin):
         for person in self.juggler:
             if positions[person]:
                 self.juggler[person]["position"] = positions[person]
+            if labels[person]:
+                # the role label follows the role, not the person
+                self.juggler[person]["role_labels"] = labels[person]
         self.duration_pattern = period * cycles
 
     def apply_steals(self, throws: list) -> None:
@@ -1432,6 +1446,12 @@ class CausalDiagramSVG(ShortcodePlugin):
                     angle=angle,
                 )
 
+            if len(juggler["position"]) > 1:
+                label_x, label_y = self.pos_center_x, self.pos_center_y
+            else:
+                label_x, label_y = X, Y
+            self.add_role_labels(dwg, pos, juggler, label_x,
+                                 label_y + 2.2 * self.radius)
             dwg.add(pos)
 
         # the arrows in the position diagram
@@ -1488,6 +1508,38 @@ class CausalDiagramSVG(ShortcodePlugin):
 
         # Return the SVG
         return self.drawing_to_str(dwg)
+
+    def add_role_labels(self, dwg, group, juggler, x, y):
+        """Role label(s) below a juggler circle in the position diagram.
+
+        Static case: one text with the juggler's role_label. With swap,
+        role_labels holds (start_beat, end_beat, text) windows -- the
+        label follows the role, so each entry is only visible while
+        this person occupies that role (discrete opacity animation).
+
+        The text lives inside the juggler's animated group, so it
+        walks (and turns) with them.
+        """
+        schedule = juggler.get("role_labels")
+        if schedule:
+            for start, end, text in schedule:
+                t = dwg.text(text, insert=(x, y), opacity=0,
+                             class_="role-label", text_anchor="middle")
+                t.add(
+                    svgwrite.animate.Animate(
+                        attributeName_="opacity",
+                        values="0;1;0",
+                        keyTimes=f"0;{start / self.duration_position};{end / self.duration_position}",
+                        calcMode="discrete",
+                        begin="0s",
+                        dur=f"{self.duration_position}s",
+                        repeatCount="indefinite",
+                    )
+                )
+                group.add(t)
+        elif juggler.get("role_label"):
+            group.add(dwg.text(juggler["role_label"], insert=(x, y),
+                               class_="role-label", text_anchor="middle"))
 
     def steal_catch_hand(self, throw) -> str | None:
         """The hand a stolen throw is caught with (from the steal event)."""
