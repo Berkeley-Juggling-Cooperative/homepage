@@ -399,3 +399,110 @@ If lines get too long, you can break them up into multiple lines by using the '\
     {{% /causal_diagram %}}
     {{% /raw %}}
 
+
+# Silent beats
+
+A `-` marks a beat where a juggler does nothing (idle or holding a
+club). It renders as a faint dashed circle.
+
+    {{% raw %}}
+    {{% causal_diagram %}}
+    3 - 3 3
+    3 3 3 3
+    {{% /causal_diagram %}}
+    {{% /raw %}}
+
+{{% causal_diagram %}}
+3 - 3 3
+3 3 3 3
+{{% /causal_diagram %}}
+
+# Steals, hand-ins, and zips
+
+Sparse actions are written in an inline event block
+`(<beats>: <time> <action>; ...)` that takes the place of grid tokens.
+Times are relative to the start of the block and can be fractional.
+Transfers use `source>destination`, each side `[juggler][hand]`, with
+your own juggler implied when omitted:
+
+* `steal b>L` — intercept B's club in flight, catch with the left hand
+* `steal cR>L` — take the club held in C's right hand
+* `hand R>cL` — place your right-hand club into C's left hand
+* `zip L>R` — hand-across, own left to own right
+* `throw 3a R` — a normal throw at an off-grid time
+
+The victim of a steal writes their line as if the pass were normal —
+the steal reroutes the arrow. A thin grey line shows a juggler
+carrying a club between a catch and the next release.
+
+    {{% raw %}}
+    {{% causal_diagram %}}
+    3b 3 3 3
+    3a 3 3 3
+    (RL 1) (3: 0 steal a>L; 0.25 hand R>bL; 0.5 zip L>R)
+    {{% /causal_diagram %}}
+    {{% /raw %}}
+
+{{% causal_diagram %}}
+3b 3 3 3
+3a 3 3 3
+(RL 1) (3: 0 steal a>L; 0.25 hand R>bL; 0.5 zip L>R)
+{{% /causal_diagram %}}
+
+# Arrow labels
+
+Attach a quoted text to any throw or event and it is drawn next to
+the arrow (in both diagrams):
+
+    {{% raw %}}
+    {{% causal_diagram %}}
+    3b"lofty" 3 3 3
+    3a 3 3"chop" 3
+    {{% /causal_diagram %}}
+    {{% /raw %}}
+
+{{% causal_diagram %}}
+3b"lofty" 3 3 3
+3a 3 3"chop" 3
+{{% /causal_diagram %}}
+
+# Moving patterns: roles and swaps
+
+For patterns where people rotate through positions, write the pattern
+lines for the **roles** over one short cycle and add a `swap:` line.
+`swap: A->B` means: whoever is doing line A does line B in the next
+cycle (the last role wraps around to the first, and independent
+chains can be separated by commas). The diagram unrolls automatically
+until everyone is back in their starting role; rows are labeled by
+person (named after their starting role), and pass targets always
+mean "whoever is in that role".
+
+    {{% raw %}}
+    {{% causal_diagram %}}
+    swap: A->B
+    3b 3 3 3
+    3a 3 3 3
+    {{% /causal_diagram %}}
+    {{% /raw %}}
+
+{{% causal_diagram %}}
+swap: A->B
+3b 3 3 3
+3a 3 3 3
+{{% /causal_diagram %}}
+
+# More on long lines
+
+Besides the `\` continuation above, a line continues automatically
+while a parenthesis is still open, so an event block can be split
+over several lines without any marker:
+
+    {{% raw %}}
+    {{% causal_diagram %}}
+    3b 3 3 3
+    3a 3 3 3
+    (RL 1) (3: 0    steal a>L;
+               0.25 hand R>bL;
+               0.5  zip L>R)
+    {{% /causal_diagram %}}
+    {{% /raw %}}
