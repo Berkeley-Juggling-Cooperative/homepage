@@ -471,10 +471,16 @@ class CausalDiagramSVG(ShortcodePlugin):
                 pattern.append(tok)
         # 'p' for passes are only allowed in 2 person patterns
         # otherwise it should be letters. Replace 'p' with 'a' and 'b'
-        # here so that it is easier later in the program
-        if any(isinstance(t, str) and "p" in t for t in pattern):
+        # here so that it is easier later in the program. Quoted labels
+        # must not be touched (e.g. 3"pelf").
+        def replace_p(tok, other):
+            head, label = split_label(tok)
+            head = head.replace("p", other)
+            return f'{head}"{label}"' if label is not None else head
+
+        if any(isinstance(t, str) and "p" in split_label(t)[0] for t in pattern):
             other = "b" if juggler_name == "A" else "a"
-            pattern = [t.replace("p", other) if isinstance(t, str) else t
+            pattern = [replace_p(t, other) if isinstance(t, str) else t
                        for t in pattern]
         tmp["pattern"] = pattern
         # the y-coordinate the juggler line should be drawn in the diagram
@@ -675,6 +681,8 @@ class CausalDiagramSVG(ShortcodePlugin):
                 best = min(candidates, key=lambda t: abs(t.arrival - e.time))
                 best.stolen_by = name
                 best.steal_time = e.time
+                if e.label and not best.label:
+                    best.label = e.label
 
     def event_circle_hand(self, e) -> str | None:
         """Which hand letter to show in the circle drawn for an event."""

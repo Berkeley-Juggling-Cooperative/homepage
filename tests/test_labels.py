@@ -48,3 +48,20 @@ def test_label_animated_in_position_svg():
     )
     pos = svg.split("position-diagram-section")[1]
     assert "arrow-label" in pos and ">lofty<" in pos
+
+
+def test_p_replacement_does_not_touch_labels():
+    d = CausalDiagramSVG()
+    d.parse('3p 3"pelf" 3\n3p 3 3')
+    labels = [t.label for t in d.throws if t.label]
+    assert labels == ["pelf"]
+    # and the actual p tokens were still replaced
+    assert d.throws[0].target == "B"
+
+
+def test_steal_event_label_lands_on_rerouted_arrow():
+    d = CausalDiagramSVG()
+    d.parse('3b 3 3 3\n3a 3 3 3\n(4: 1 steal b>L "snatch")')
+    stolen = [t for t in d.throws if t.stolen_by]
+    assert len(stolen) == 1
+    assert stolen[0].label == "snatch"

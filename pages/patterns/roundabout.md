@@ -13,14 +13,11 @@ The Roundabout is a 3 person pattern where two people are passing (say
 person A and B) in a [4 count](link:///patterns/4-count) and the third
 person (C) is standing in the middle between them with one extra club.
 
-<!-- TODO(user): verify steal/hand-in timings and hands against how we
-     actually run this; the beats below encode the description in the
-     text as a first approximation -->
 {{% causal_diagram %}}
-title: Roundabout (start): C steals B's pass and hands their club to A
-3b 3 3 3 3b 3 3 3
+title: Roundabout, first rotation (C in the middle)
+3b 3 3"pelf" 3 3b (1: 0.25 steal cR>R) (2: 0.25 hand R>cL)
 3a 3 3 3 3a 3 3 3
-(RL 0) (8: 1 steal b>L; 1.25 hand R>aL; 1.5 zip L>R; 3 steal a>R "pelf")
+(8: 1 steal b>L; 1.25 hand R>aL; 1.5 zip L>R; 3 steal a>L; 6 throw 3 L)
 {{% /causal_diagram %}}
 
 In a single rotation of the pattern, the person in the middle (C)
