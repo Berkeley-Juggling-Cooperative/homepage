@@ -398,6 +398,23 @@ article h5,
   fill: #555;
 }
 
+/* static snapshot row below the animated diagrams */
+.snapshot-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+}
+
+.snapshot svg {
+  width: 250px;
+  height: auto;
+}
+
+.snapshot-caption {
+  font-size: 0.8em;
+  text-align: center;
+}
+
 .arrow-default {
   stroke: black;
 }

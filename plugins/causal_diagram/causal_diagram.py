@@ -234,6 +234,7 @@ class CausalDiagramSVG(ShortcodePlugin):
         self.step_X = 80
         self.step_Y = 100
         self.swap_chains = None
+        self.snapshots = []
         # precomputed by parse(): the drawing records the renderers use
         self.throws = []
         self.circles = []
@@ -745,6 +746,10 @@ class CausalDiagramSVG(ShortcodePlugin):
                 self.parse_layout(line)
             elif line.startswith("swap:"):
                 self.swap_chains = parse_swap(line)
+            elif line.startswith("snapshots:"):
+                self.snapshots = [
+                    float(x) for x in line.removeprefix("snapshots:").split(",")
+                ]
             else:
                 self.parse_pattern(line)
 
@@ -1153,6 +1158,21 @@ class CausalDiagramSVG(ShortcodePlugin):
         causal_svg = self.generate_causal_diagram_svg()
         position_svg = self.generate_position_diagram_svg()
 
+        # optional static snapshots below the animated diagrams
+        snapshot_section = ""
+        if self.snapshots:
+            snaps = "".join(
+                f'<div class="snapshot">'
+                f'<div class="snapshot-caption">beat {t:g}</div>'
+                f"{self.generate_snapshot_svg(t)}</div>"
+                for t in self.snapshots
+            )
+            snapshot_section = f'''
+    <div class="snapshot-section">
+        <h3>Snapshots</h3>
+        <div class="snapshot-row">{snaps}</div>
+    </div>'''
+
         # Wrap in synchronized container
         wrapper = f'''<div class="diagram-sync-container" data-sync-id="{sync_id}" data-duration="{self.duration_pattern}">
     <div class="causal-diagram-section">
@@ -1162,7 +1182,7 @@ class CausalDiagramSVG(ShortcodePlugin):
     <div class="position-diagram-section">
         <h3>Position Diagram</h3>
         {position_svg}
-    </div>
+    </div>{snapshot_section}
 </div>'''
         return wrapper
 
@@ -1541,6 +1561,121 @@ class CausalDiagramSVG(ShortcodePlugin):
             group.add(dwg.text(juggler["role_label"], insert=(x, y),
                                class_="role-label", text_anchor="middle"))
 
+    def role_label_at(self, juggler, t):
+        """The role label a juggler shows at time t (None if none)."""
+        schedule = juggler.get("role_labels")
+        if schedule is not None:
+            for start, end, text in schedule:
+                if start <= t < end:
+                    return text
+            return None
+        return juggler.get("role_label")
+
+    def draw_snapshot_arrow(self, dwg, arrow_marker, start, end, css_class,
+                            label=None):
+        """A static arrow in a snapshot, coordinates relative to center."""
+        sx, sy = start[0] + self.pos_center_x, start[1] + self.pos_center_y
+        ex, ey = end[0] + self.pos_center_x, end[1] + self.pos_center_y
+        if sx == ex and sy == ey:
+            return
+        line = dwg.line(start=(sx, sy), end=(ex, ey), class_=css_class,
+                        marker_end=arrow_marker.get_funciri())
+        if not label:
+            return line
+        group = dwg.g()
+        group.add(line)
+        group.add(dwg.text(label, insert=((sx + ex) / 2, (sy + ey) / 2 - 6),
+                           class_="arrow-label", text_anchor="middle"))
+        return group
+
+    def generate_snapshot_svg(self, t_snap):
+        """A static position diagram at one moment in time.
+
+        Shows every juggler where they are at t_snap (with facing and
+        role label) plus an arrow for every club in the air and every
+        transfer happening around that moment. Uses the same clock as
+        the animated position diagram.
+        """
+        width, height = self.get_position_size()
+        self.pos_center_x = width / 2
+        self.pos_center_y = height / 2
+
+        dwg = svgwrite.Drawing(size=(width, height))
+        dwg.viewbox(0, 0, width, height)
+        dwg.add(
+            dwg.rect(insert=(0, 0), size=(width, height), fill="none",
+                     stroke="black")
+        )
+        arrow_marker = dwg.marker(
+            id="arrowhead-snap", insert=(5, 2.5), size=(5, 5), orient="auto"
+        )
+        arrow_marker.add(dwg.path(d="M 0 0 L 5 2.5 L 0 5 z", class_="arrow-marker"))
+        dwg.defs.add(arrow_marker)
+
+        # jugglers at their interpolated positions
+        for name, juggler in self.juggler.items():
+            if "position" not in juggler:
+                continue
+            x, y, angle = self.get_juggler_position(name, t_snap)
+            X = self.pos_center_x + x
+            Y = self.pos_center_y + y
+            group = self.draw_circle(dwg, X, Y, self.radius, label=name,
+                                     angle=angle)
+            role = self.role_label_at(juggler, t_snap)
+            if role:
+                group.add(dwg.text(role, insert=(X, Y + 2.2 * self.radius),
+                                   class_="role-label", text_anchor="middle"))
+            dwg.add(group)
+
+        # clubs in the air / transfers at t_snap (same clock and windows
+        # as the animated arrows)
+        repeats = max(1, int(self.duration_position // self.duration_pattern))
+        for r in range(repeats):
+            shift = r * self.duration_pattern
+            for t in self.throws:
+                if t.value == 0:
+                    continue
+                if t.target == t.juggler and not t.stolen_by:
+                    continue
+                wait_A = self.juggler[t.juggler]["wait"]
+                i = t.time - wait_A
+                start_t = shift + i
+                if t.stolen_by:
+                    end_t = start_t + (t.steal_time - t.time)
+                else:
+                    end_t = start_t + t.value - 2
+                if not start_t <= t_snap <= end_t:
+                    continue
+                start = self.get_juggler_hand_position(t.juggler, start_t, 0)
+                if t.stolen_by:
+                    hand = self.steal_catch_hand(t)
+                    end = self.get_hand_position(t.stolen_by, end_t, hand or "L")
+                    style = "arrow-steal"
+                else:
+                    wait_B = self.juggler[t.target]["wait"]
+                    end = self.get_juggler_hand_position(
+                        t.target, start_t, t.value - 2 - wait_B + wait_A)
+                    style = t.style
+                arrow = self.draw_snapshot_arrow(dwg, arrow_marker, start,
+                                                 end, style, t.label)
+                if arrow:
+                    dwg.add(arrow)
+            for name in self.juggler:
+                for e in self.events.get(name, []):
+                    te = shift + e.time - self.juggler[name]["wait"]
+                    if not te - 0.5 <= t_snap <= te:
+                        continue
+                    endpoints = self.position_event_endpoints(name, e, te)
+                    if endpoints is None:
+                        continue
+                    start, end, style = endpoints
+                    arrow = self.draw_snapshot_arrow(dwg, arrow_marker, start,
+                                                     end, style, e.label)
+                    if arrow:
+                        dwg.add(arrow)
+
+        return self.drawing_to_str(dwg)
+
     def steal_catch_hand(self, throw) -> str | None:
         """The hand a stolen throw is caught with (from the steal event)."""
         for e in self.events.get(throw.stolen_by, []):
@@ -1553,25 +1688,35 @@ class CausalDiagramSVG(ShortcodePlugin):
                 return e.dst[1]
         return None
 
+    def position_event_endpoints(self, name, e, t):
+        """(start, end, style) of a hand/take/zip arrow, or None.
+
+        Coordinates are hand positions relative to the position center,
+        evaluated at time t.
+        """
+        if e.action == "hand":
+            return (self.get_hand_position(name, t, e.src[1] or "R"),
+                    self.get_hand_position(e.dst[0], t, e.dst[1] or "L"),
+                    "arrow-hand")
+        if e.action == "steal" and e.src[1] is not None:  # take
+            return (self.get_hand_position(e.src[0], t, e.src[1]),
+                    self.get_hand_position(name, t, e.dst[1] or "L"),
+                    "arrow-hand")
+        if e.action == "zip":
+            return (self.get_hand_position(name, t, e.src[1] or "L"),
+                    self.get_hand_position(name, t, e.dst[1] or "R"),
+                    "arrow-zip")
+        return None  # steal-from-air via Throw; throw events via collect_throws
+
     def draw_position_event(self, dwg, arrow_marker, name, e, shift):
         """Animated arrow for hand / take / zip at its absolute time."""
         # initiator's clock: strip the juggler's own wait (see NOTE above)
         t = shift + e.time - self.juggler[name]["wait"]
         window = 0.5  # arrows show for half a beat before the transfer
-        if e.action == "hand":
-            start = self.get_hand_position(name, t, e.src[1] or "R")
-            end = self.get_hand_position(e.dst[0], t, e.dst[1] or "L")
-            style = "arrow-hand"
-        elif e.action == "steal" and e.src[1] is not None:  # take
-            start = self.get_hand_position(e.src[0], t, e.src[1])
-            end = self.get_hand_position(name, t, e.dst[1] or "L")
-            style = "arrow-hand"
-        elif e.action == "zip":
-            start = self.get_hand_position(name, t, e.src[1] or "L")
-            end = self.get_hand_position(name, t, e.dst[1] or "R")
-            style = "arrow-zip"
-        else:
-            return  # steal-from-air via Throw; throw events via collect_throws
+        endpoints = self.position_event_endpoints(name, e, t)
+        if endpoints is None:
+            return
+        start, end, style = endpoints
         start_t = max(0, t - window)
         if t <= start_t:
             start_t = max(0, t - 0.1)

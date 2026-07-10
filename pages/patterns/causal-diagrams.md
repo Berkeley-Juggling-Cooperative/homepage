@@ -514,6 +514,32 @@ position A("feeder"): 0, -100, 0, 0; 8, -100, 0, 0;
 position B("feedee"): 0, 100, 0, 180; 8, 100, 0, 180;
 {{% /causal_diagram %}}
 
+# Snapshots
+
+For patterns where it helps to see the key moments as still images, a
+`snapshots:` line renders static views of the position diagram at the
+given beats, below the animated diagrams. Each snapshot shows the
+jugglers where they are at that moment plus every club in the air and
+transfer happening around it. Requires positions.
+
+    {{% raw %}}
+    {{% causal_diagram %}}
+    3b 3 3 3
+    3a 3 3 3
+    position A: -100, 0, @B
+    position B: 100, 0, @A
+    snapshots: 0.5, 2
+    {{% /causal_diagram %}}
+    {{% /raw %}}
+
+{{% causal_diagram %}}
+3b 3 3 3
+3a 3 3 3
+position A: -100, 0, @B
+position B: 100, 0, @A
+snapshots: 0.5, 2
+{{% /causal_diagram %}}
+
 # More on long lines
 
 Besides the `\` continuation above, a line continues automatically
