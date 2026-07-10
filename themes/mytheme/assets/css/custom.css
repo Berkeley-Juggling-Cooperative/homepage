@@ -402,6 +402,20 @@ article h5,
   stroke: black;
 }
 
+/* arced arrows are <path> elements; never fill them (the dark-mode
+   "svg path" fill rule would otherwise override their fill="none"
+   attribute and fill the arc) */
+.arrow-default,
+.arrow-red-thick,
+.arrow-red-thin,
+.arrow-orange-dash,
+.arrow-green-dash,
+.arrow-yellow-dash,
+.arrow-blue-dash,
+.arrow-purple-dash {
+  fill: none;
+}
+
 .arrow-red-thick {
   stroke: #d12229;
   stroke-width: 4;
