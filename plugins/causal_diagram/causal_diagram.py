@@ -22,11 +22,12 @@ COLORS = {
 def logical_lines(text: str) -> list[str]:
     """Split shortcode text into logical lines.
 
-    A logical line continues onto the next physical line when it is
-    syntactically unfinished: an unclosed "(" or a trailing ";".
-    A trailing "\\" forces continuation (legacy syntax). Leading
-    whitespace is insignificant (pages indent cosmetically), and a
-    trailing "," must NOT continue (it is a color suffix).
+    A logical line continues onto the next physical line while it has
+    an unclosed "(" (event blocks spanning lines). A trailing "\\"
+    forces continuation (legacy syntax, e.g. long position lines).
+    Leading whitespace is insignificant (pages indent cosmetically),
+    and a trailing "," or ";" must NOT continue: "," is a color
+    suffix, and complete position lines conventionally end with ";".
     """
     lines = []
     current = ""
@@ -51,7 +52,7 @@ def logical_lines(text: str) -> list[str]:
         glue_next = False
         if not current:
             continue
-        if current.count("(") > current.count(")") or current.endswith(";"):
+        if current.count("(") > current.count(")"):
             continue
         lines.append(current)
         current = ""
@@ -74,6 +75,25 @@ class Event:
     value: str | None = None
     hand: str | None = None
     label: str | None = None
+
+
+@dataclass
+class Throw:
+    """One throw in the causal diagram (a grid token or a 'throw' event)."""
+
+    juggler: str            # thrower name ("A", ...)
+    time: float             # absolute throw beat (includes wait)
+    value: float            # numeric throw value
+    target: str             # intended target juggler (== juggler for selves)
+    style: str              # css class from get_style
+    hand: str               # letter drawn in the throw circle
+    label: str | None = None
+    stolen_by: str | None = None   # set by apply_steals
+    steal_time: float | None = None
+
+    @property
+    def arrival(self) -> float:
+        return self.time + self.value - 2
 
 
 def tokenize_pattern(line: str) -> list[str]:
@@ -399,6 +419,96 @@ class CausalDiagramSVG(ShortcodePlugin):
         # the y-coordinate the juggler line should be drawn in the diagram
         tmp["height"] = self.margin + int(self.step_Y * (n + 0.5))
         self.juggler[juggler_name] = tmp
+
+    def x_of(self, t: float) -> float:
+        """Causal-diagram x coordinate for an absolute beat time."""
+        return 2 * self.margin + self.step_X * (1 + t)
+
+    def split_throw_token(self, name: str, tok: str) -> tuple:
+        """A grid token -> (value, target, style)."""
+        tok2, style = self.get_style(tok)
+        try:
+            value = float(tok2)
+            target = name
+        except ValueError:
+            target = tok2[-1].upper()
+            value = float(tok2[:-1])
+        return value, target, style
+
+    def collect_throws(self) -> list:
+        """All grid throws plus explicit 'throw' events, as Throw records."""
+        throws = []
+        for name, juggler in self.juggler.items():
+            beat = 0.0
+            letter_idx = 0
+            letters = juggler["letters"]
+            for tok in juggler["pattern"]:
+                if isinstance(tok, dict):
+                    beat += tok["beats"]
+                    # hands keep alternating per beat while events happen
+                    letter_idx += int(round(tok["beats"]))
+                    continue
+                if tok == "-":
+                    beat += 1
+                    letter_idx += 1
+                    continue
+                value, target, style = self.split_throw_token(name, tok)
+                throws.append(
+                    Throw(
+                        juggler=name,
+                        time=juggler["wait"] + beat,
+                        value=value,
+                        target=target,
+                        style=style,
+                        hand=letters[letter_idx % len(letters)],
+                    )
+                )
+                beat += 1
+                letter_idx += 1
+            for e in self.collect_events(name):
+                if e.action == "throw":
+                    value, target, style = self.split_throw_token(name, e.value)
+                    throws.append(
+                        Throw(juggler=name, time=e.time, value=value,
+                              target=target, style=style, hand=e.hand or "")
+                    )
+        return throws
+
+    def apply_steals(self, throws: list) -> None:
+        """Match steal events to in-flight throws and reroute them.
+
+        A steal (src hand is None) matches a throw by the source juggler
+        that is in the air at the event time; if several match, the one
+        whose arrival is nearest. Takes (src hand set) grab a held club
+        and do not touch the throw list.
+        """
+        for name in self.juggler:
+            for e in self.collect_events(name):
+                if e.action != "steal" or e.src[1] is not None:
+                    continue
+                source = e.src[0]
+                candidates = [
+                    t for t in throws
+                    if t.juggler == source and t.stolen_by is None
+                    and t.time <= e.time <= t.arrival + 1e-9
+                ]
+                if not candidates:
+                    continue  # just draw it: nothing to reroute
+                best = min(candidates, key=lambda t: abs(t.arrival - e.time))
+                best.stolen_by = name
+                best.steal_time = e.time
+
+    def event_circle_hand(self, e) -> str | None:
+        """Which hand letter to show in the circle drawn for an event."""
+        if e.action == "steal":
+            return e.dst[1]      # catching hand
+        if e.action == "hand":
+            return e.src[1]      # giving hand
+        if e.action == "zip":
+            return e.dst[1]      # club ends up here
+        if e.action == "throw":
+            return e.hand
+        return None
 
     def pattern_beats(self, juggler: dict) -> float:
         """Total beats of a pattern (blocks may span several beats)."""
@@ -836,6 +946,64 @@ class CausalDiagramSVG(ShortcodePlugin):
         causal_svg = self.generate_causal_diagram_svg()
         return causal_svg
 
+    def draw_causal_events(self, dwg, arrow_marker, throws):
+        """Transfer arrows (hand / take / zip) and hold lines.
+
+        `throws` is the record list from phase 2, steals applied.
+        """
+        catches = {name: [] for name in self.juggler}
+        releases = {name: [] for name in self.juggler}
+        for name in self.juggler:
+            H = self.juggler[name]["height"]
+            for e in self.collect_events(name):
+                x = self.x_of(e.time)
+                if e.action == "steal":
+                    catches[name].append(e.time)
+                    if e.src[1] is not None:      # take from a held hand
+                        src_h = self.juggler[e.src[0]]["height"]
+                        arr = self.draw_arrow(dwg, arrow_marker,
+                                              x, src_h, x, H,
+                                              css_class="arrow-hand")
+                        if arr:
+                            dwg.add(arr)
+                        releases[e.src[0]].append(e.time)
+                elif e.action == "hand":
+                    releases[name].append(e.time)
+                    tgt = e.dst[0]
+                    catches[tgt].append(e.time)
+                    tgt_h = self.juggler[tgt]["height"]
+                    arr = self.draw_arrow(dwg, arrow_marker, x, H,
+                                          x, tgt_h, css_class="arrow-hand")
+                    if arr:
+                        dwg.add(arr)
+                elif e.action == "zip":
+                    releases[name].append(e.time)
+                    catches[name].append(e.time)
+                    arr = self.draw_arrow(
+                        dwg, arrow_marker,
+                        x - 0.2 * self.step_X, H, x + 0.2 * self.step_X, H,
+                        css_class="arrow-zip")
+                    if arr:
+                        dwg.add(arr)
+                elif e.action == "throw":
+                    releases[name].append(e.time)
+        # stolen clubs are catches too
+        for t in throws:
+            if t.stolen_by:
+                catches[t.stolen_by].append(t.steal_time)
+        # hold lines: from each catch to the juggler's next release
+        for name in self.juggler:
+            H = self.juggler[name]["height"]
+            rel = sorted(releases[name])
+            for c in sorted(catches[name]):
+                nxt = [r for r in rel if r > c + 1e-9]
+                if not nxt:
+                    continue
+                dwg.add(dwg.line(
+                    start=(self.x_of(c) + self.radius, H),
+                    end=(self.x_of(nxt[0]) - self.radius, H),
+                    class_="hold-line"))
+
     def generate_causal_diagram_svg(self):
         """Generate the causal diagram SVG as a string."""
         N = len(self.juggler)
@@ -890,7 +1058,9 @@ class CausalDiagramSVG(ShortcodePlugin):
             )
 
         # draw the causal diagram
-        for i, (name, juggler) in enumerate(self.juggler.items()):
+        # phase 1: names, circles, empty beats -- also find X_max
+        X_max = 0
+        for name, juggler in self.juggler.items():
             H = juggler["height"]
 
             # the juggler names (A, B, C, ...)
@@ -902,39 +1072,55 @@ class CausalDiagramSVG(ShortcodePlugin):
                     dominant_baseline="middle",
                 )
             )
-            X = 2 * self.margin + self.step_X * (1 + juggler["wait"])
+            beat = 0.0
+            letter_idx = 0
+            letters = juggler["letters"]
+            for tok in juggler["pattern"]:
+                X = self.x_of(juggler["wait"] + beat)
+                if isinstance(tok, dict):
+                    for e in tok["events"]:
+                        ex = self.x_of(juggler["wait"] + beat + e.time)
+                        hand = self.event_circle_hand(e)
+                        if hand is not None:
+                            dwg.add(self.draw_circle(dwg, ex, H, self.radius, hand))
+                    beat += tok["beats"]
+                    letter_idx += int(round(tok["beats"]))
+                elif tok == "-":
+                    dwg.add(self.draw_circle(dwg, X, H, self.radius, "",
+                                             css_class="beat-empty"))
+                    beat += 1
+                    letter_idx += 1
+                else:
+                    dwg.add(self.draw_circle(
+                        dwg, X, H, self.radius,
+                        letters[letter_idx % len(letters)]))
+                    beat += 1
+                    letter_idx += 1
+                X_max = max(X_max, self.x_of(juggler["wait"] + beat))
 
-            # the arrows
-            for p, hand in zip(juggler["pattern"], cycle(juggler["letters"])):
-                if p == "-":
-                    group = self.draw_circle(
-                        dwg, X, H, self.radius, "", css_class="beat-empty"
-                    )
-                    dwg.add(group)
-                    X += self.step_X
-                    X_max = X
-                    continue
-                group = self.draw_circle(dwg, X, H, self.radius, hand)
-                dwg.add(group)
-                p, style = self.get_style(p)
-                try:
-                    p = float(p) - 2
-                    Y = H
-                except ValueError:
-                    target = p[-1]
-                    for k in self.juggler:
-                        if target.lower() == k.lower():
-                            Y = self.juggler[k]["height"]
+        # phase 2: throws -> steals -> arrows
+        throws = self.collect_throws()
+        self.apply_steals(throws)
+        for t in throws:
+            if t.value == 0:
+                continue  # a 0 is an empty hand, no arrow
+            start_x = self.x_of(t.time)
+            start_y = self.juggler[t.juggler]["height"]
+            if t.stolen_by:
+                end_x = self.x_of(t.steal_time)
+                end_y = self.juggler[t.stolen_by]["height"]
+                style = "arrow-steal"
+            else:
+                end_x = self.x_of(t.arrival)
+                end_y = self.juggler[t.target]["height"]
+                style = t.style
+            arrow = self.draw_arrow(dwg, arrow_marker, start_x, start_y,
+                                    end_x, end_y, css_class=style)
+            if arrow:
+                dwg.add(arrow)
 
-                    p = float(p[:-1]) - 2
-                end_x = X + self.step_X * p
-                arrow = self.draw_arrow(
-                    dwg, arrow_marker, X, H, end_x, Y, css_class=style
-                )
-                if arrow and p != -2:
-                    dwg.add(arrow)
-                X += self.step_X
-                X_max = X
+        # phase 3: transfer arrows (hand / take / zip) and hold lines
+        self.draw_causal_events(dwg, arrow_marker, throws)
 
         # Add animated red bar for scrolling sync
         min_offset = min([j["wait"] for j in self.juggler.values()])

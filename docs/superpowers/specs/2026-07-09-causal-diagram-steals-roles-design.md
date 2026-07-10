@@ -37,19 +37,19 @@ Two gaps in the current language:
 
 ### 1. Continuation auto-detection
 
-A logical line continues onto the next physical line when the line so
-far is syntactically unfinished:
+A logical line continues onto the next physical line while it has an
+**unclosed `(`** (an event block spanning lines).
 
-- it has an **unclosed `(`**, or
-- it **ends with `;`** (the separator inside `position` lines and
-  event blocks).
-
-The explicit trailing `\` continues to work. Leading whitespace stays
+The explicit trailing `\` continues to work (and remains the way to
+break up long `position` lines). Leading whitespace stays
 insignificant: existing pages (havana.md, 8-club-PPS.md,
 rotating-torture-chamber.md, 6-count-popcorn.md) indent lines
 cosmetically for column alignment, so indentation must never mean
 continuation. A trailing `,` is **not** a continuation signal because
-`,` is a color suffix (`3p,` = red-thick arrow).
+`,` is a color suffix (`3p,` = red-thick arrow). A trailing `;` is
+**not** one either — complete `position` lines on real pages end with
+`;`, so that rule would merge consecutive declarations (found the
+hard way during implementation).
 
 ### 2. Silent beats: `-`
 

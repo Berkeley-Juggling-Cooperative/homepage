@@ -357,6 +357,35 @@ article h5,
   opacity: 0.35;
 }
 
+/* steal: intercepted pass */
+.arrow-steal {
+  stroke: crimson;
+  fill: none;
+  stroke-width: 2;
+  stroke-dasharray: 6 3;
+}
+
+/* hand-in / take: club placed directly into a hand */
+.arrow-hand {
+  stroke: teal;
+  fill: none;
+  stroke-width: 2;
+}
+
+/* zip: own hand to own hand */
+.arrow-zip {
+  stroke: grey;
+  fill: none;
+  stroke-width: 1.5;
+}
+
+/* carrying a club between a catch and the next release */
+.hold-line {
+  stroke: grey;
+  stroke-width: 1.5;
+  opacity: 0.5;
+}
+
 .arrow-default {
   stroke: black;
 }

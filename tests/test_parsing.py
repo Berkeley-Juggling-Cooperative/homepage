@@ -10,9 +10,14 @@ def test_backslash_continuation_still_works():
     assert logical_lines(text) == ["position A: 0,-100,0,@B;2,-100,0,@C;"]
 
 
-def test_trailing_semicolon_continues():
-    text = "position A: 0,-100,0,@B;\n    2,-100,0,@C;"
-    assert logical_lines(text) == ["position A: 0,-100,0,@B; 2,-100,0,@C;"]
+def test_trailing_semicolon_does_not_continue():
+    # complete position lines end with ';' on real pages -- consecutive
+    # declarations must stay separate (use '\' to continue long ones)
+    text = "position A: 0,-100,0,@B;\nposition B: 0,100,0,@A;"
+    assert logical_lines(text) == [
+        "position A: 0,-100,0,@B;",
+        "position B: 0,100,0,@A;",
+    ]
 
 
 def test_unclosed_paren_continues():
