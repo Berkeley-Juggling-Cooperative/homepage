@@ -525,7 +525,8 @@ class CausalDiagramSVG(ShortcodePlugin):
                 t_0 = t
                 x_0 = x
                 y_0 = y
-        return 0, 0
+        # time is past the last keyframe, hold the last position
+        return x_0, y_0
 
     def get_juggler_position(self, name: str, time: int | float):
         """The X,Y position of a juggler for the position diagram at a given time.
@@ -551,7 +552,8 @@ class CausalDiagramSVG(ShortcodePlugin):
                 x_0 = x
                 y_0 = y
                 angle_0 = angle
-        return 0, 0, 0
+        # time is past the last keyframe, hold the last position
+        return x_0, y_0, angle_0
 
     def get_juggler_hand_position(
         self, name: str, time: int | float, pass_delay: int | float
