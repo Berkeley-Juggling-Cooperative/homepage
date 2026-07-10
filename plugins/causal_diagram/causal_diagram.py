@@ -810,15 +810,13 @@ class CausalDiagramSVG(ShortcodePlugin):
 
         Any delayed start of a juggler is included in pass_delay already.
         """
-        x, y, angle = self.get_juggler_position(name, time)
         hands = self.juggler[name]["letters"]
-        N = len(hands)
+        idx = round(time + pass_delay) % len(hands)
+        return self.get_hand_position(name, time, hands[idx])
 
-        time = round(time + pass_delay)
-        idx = time % N
-
-        hand = hands[idx]
-
+    def get_hand_position(self, name: str, time, hand: str):
+        """X,Y of a specific hand (R/L), relative to the position center."""
+        x, y, angle = self.get_juggler_position(name, time)
         angle = math.radians(angle)
         delta = math.radians(15)
         # y-values have a minus, since the coordinate system is mirrored
@@ -1240,45 +1238,97 @@ class CausalDiagramSVG(ShortcodePlugin):
             dwg.add(pos)
 
         # the arrows in the position diagram
-        for j in self.juggler:
-            if "position" not in self.juggler[j]:
-                continue
-            repeats = int(self.duration_position // self.duration_pattern)
-
-            for r in range(repeats):
-                for i, pat in enumerate(self.juggler[j]["pattern"]):
-                    pat = pat.strip()
-                    if pat == "-":
-                        continue
-                    pat, style = self.get_style(pat)
-                    try:
-                        int(pat)
-                    except ValueError:
-                        # this is a pass
-                        p = float(pat[:-1])
-                        target = pat[-1].upper()
-                        wait_A = self.juggler[j]["wait"]
-                        wait_B = self.juggler[target]["wait"]
-                        start_x, start_y = self.get_juggler_hand_position(
-                            j, r * self.duration_pattern + i, 0
-                        )
-                        end_x, end_y = self.get_juggler_hand_position(
-                            target,
-                            r * self.duration_pattern + i,
-                            p - 2 - wait_B + wait_A,
-                        )
-                        tmp = self.draw_animated_arrow(
-                            dwg,
-                            arrow_marker,
-                            start_x,
-                            start_y,
-                            end_x,
-                            end_y,
-                            r * self.duration_pattern + i,
-                            r * self.duration_pattern + i + p - 2,
-                            css_class=style,
-                        )
-                        dwg.add(tmp)
+        # NOTE on clocks: positions and animation times historically use
+        # the token index without the juggler's wait offset (see the
+        # target-hand delay compensating with wait_B/wait_A). We keep
+        # that clock: t.time - wait gives the token index back, and
+        # event arrows use the initiator's clock the same way.
+        throws = self.collect_throws()
+        self.apply_steals(throws)
+        repeats = max(1, int(self.duration_position // self.duration_pattern))
+        for r in range(repeats):
+            shift = r * self.duration_pattern
+            for t in throws:
+                if t.target == t.juggler and not t.stolen_by:
+                    continue  # selves are not drawn (existing behavior)
+                wait_A = self.juggler[t.juggler]["wait"]
+                i = t.time - wait_A  # token index clock
+                start_x, start_y = self.get_juggler_hand_position(
+                    t.juggler, shift + i, 0
+                )
+                if t.stolen_by:
+                    end_t = shift + i + (t.steal_time - t.time)
+                    hand = self.steal_catch_hand(t)
+                    end_x, end_y = self.get_hand_position(
+                        t.stolen_by, end_t, hand or "L"
+                    )
+                    style = "arrow-steal"
+                else:
+                    end_t = shift + i + t.value - 2
+                    wait_B = self.juggler[t.target]["wait"]
+                    end_x, end_y = self.get_juggler_hand_position(
+                        t.target,
+                        shift + i,
+                        t.value - 2 - wait_B + wait_A,
+                    )
+                    style = t.style
+                tmp = self.draw_animated_arrow(
+                    dwg,
+                    arrow_marker,
+                    start_x,
+                    start_y,
+                    end_x,
+                    end_y,
+                    shift + i,
+                    end_t,
+                    css_class=style,
+                )
+                if tmp:
+                    dwg.add(tmp)
+            for name in self.juggler:
+                for e in self.collect_events(name):
+                    self.draw_position_event(dwg, arrow_marker, name, e, shift)
 
         # Return the SVG
         return self.drawing_to_str(dwg)
+
+    def steal_catch_hand(self, throw) -> str | None:
+        """The hand a stolen throw is caught with (from the steal event)."""
+        for e in self.collect_events(throw.stolen_by):
+            if (
+                e.action == "steal"
+                and e.src[0] == throw.juggler
+                and throw.steal_time is not None
+                and abs(e.time - throw.steal_time) < 1e-9
+            ):
+                return e.dst[1]
+        return None
+
+    def draw_position_event(self, dwg, arrow_marker, name, e, shift):
+        """Animated arrow for hand / take / zip at its absolute time."""
+        # initiator's clock: strip the juggler's own wait (see NOTE above)
+        t = shift + e.time - self.juggler[name]["wait"]
+        window = 0.5  # arrows show for half a beat before the transfer
+        if e.action == "hand":
+            start = self.get_hand_position(name, t, e.src[1] or "R")
+            end = self.get_hand_position(e.dst[0], t, e.dst[1] or "L")
+            style = "arrow-hand"
+        elif e.action == "steal" and e.src[1] is not None:  # take
+            start = self.get_hand_position(e.src[0], t, e.src[1])
+            end = self.get_hand_position(name, t, e.dst[1] or "L")
+            style = "arrow-hand"
+        elif e.action == "zip":
+            start = self.get_hand_position(name, t, e.src[1] or "L")
+            end = self.get_hand_position(name, t, e.dst[1] or "R")
+            style = "arrow-zip"
+        else:
+            return  # steal-from-air via Throw; throw events via collect_throws
+        start_t = max(0, t - window)
+        if t <= start_t:
+            start_t = max(0, t - 0.1)
+        arrow = self.draw_animated_arrow(
+            dwg, arrow_marker, start[0], start[1], end[0], end[1],
+            start_t, t, css_class=style,
+        )
+        if arrow:
+            dwg.add(arrow)

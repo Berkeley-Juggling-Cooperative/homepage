@@ -51,6 +51,24 @@ def test_event_circles_show_explicit_hand():
     assert ">L<" in svg
 
 
+ROUNDABOUT_WITH_POSITIONS = (
+    "3b 3 3 3\n"
+    "3a 3 3 3\n"
+    "(RL 1) (3: 0 steal a>L; 0.25 hand R>bL; 0.5 zip L>R)\n"
+    "position A: -100, 0, @B\n"
+    "position B: 100, 0, @A\n"
+    "position C: 0, 40, @0\n"
+)
+
+
+def test_position_diagram_animates_event_arrows():
+    svg = render(ROUNDABOUT_WITH_POSITIONS)
+    position_part = svg.split("position-diagram-section")[1]
+    assert "arrow-steal" in position_part
+    assert "arrow-hand" in position_part
+    assert "arrow-zip" in position_part
+
+
 def test_no_events_output_identical_shape():
     # regression: a plain diagram has none of the new markup
     svg = render("3 3 3\n3 3 3")
