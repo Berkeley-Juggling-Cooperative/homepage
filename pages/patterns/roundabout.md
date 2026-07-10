@@ -14,15 +14,25 @@ person A and B) in a [4 count](link:///patterns/4-count) and the third
 person (C) is standing in the middle between them with one extra club.
 
 {{% causal_diagram %}}
-title: Roundabout, first rotation (C in the middle)
-3b 3 3"pelf" 3 3b (1: 0.25 steal cR>R) (2: 0.25 hand R>cL)
-3a 3 3 3 3c 3 3 3
-(8: 0.5 steal b>L; 0.75 hand R>aL; 1 zip L>R; 2.5 steal a>L; 5.5 throw 3 L)
-position A: 0,-100,0,@B;    2.5,-100,0,@B;   4,-100,50,@B; \
-            5.5,-100,50,@B; 6.5,0,40,@C;     7,0,40,90;
-position B: 100, 0, @A
-position C: 0,0,40,270;     1.5,0,40,270;    2.5,0,40,@A; \
-            4,-100,-50,@B;  5.5,-100,-50,@B; 7,-100,0,@B;
+title: Roundabout
+# one 16-beat cycle written out (two rotations: C in the middle facing
+# up, then A in the middle facing down); the swap line repeats it with
+# rotated roles: A ends on the right, B in the middle, C on the left
+swap: A->B->C
+bars: 15.5, 31.5
+snapshots: 0.5, 2.5, 5.5, 8.5
+3b 3 3"pelf" 3 3b (1: 0.25 steal cR>R) (2: 0.25 hand R>cL) (8: 0.5 steal c>L; 0.75 hand R>bL; 1 zip L>R; 2.5 steal b>L; 5.5 throw 3 L)
+3a 3 3 3 3c 3 3 3 3c 3 3"pelf" 3 3c (1: 0.25 steal aR>R) (2: 0.25 hand R>aL)
+(8: 0.5 steal b>L; 0.75 hand R>aL; 1 zip L>R; 2.5 steal a>L; 5.5 throw 3 L) 3b 3 3 3 3a 3 3 3
+position A: 0,-100,0,@B;    2.5,-100,0,@B;   4,-100,50,@B;  \
+            5.5,-100,50,@B; 6.5,0,40,@C;     7,0,40,90;     \
+            9.5,0,40,90;    10.5,0,40,@B;    12,100,50,@C;  \
+            15,100,0,@C;
+position B: 0,100,0,@A;     11,100,0,@A;     12,100,-50,@C; \
+            13.5,100,-50,@C; 14.5,0,40,@A;   15,0,40,270;
+position C: 0,0,40,270;     1.5,0,40,270;    2.5,0,40,@A;   \
+            4,-100,-50,@B;  5.5,-100,-50,@B; 7,-100,0,@B;   \
+            15,-100,0,@B;
 {{% /causal_diagram %}}
 
 In a single rotation of the pattern, the person in the middle (C)
