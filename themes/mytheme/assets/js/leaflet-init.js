@@ -7,10 +7,14 @@ document.addEventListener("DOMContentLoaded", function() {
         var lng = parseFloat(container.getAttribute('data-lng'));
         var zoom = parseInt(container.getAttribute('data-zoom') || '13', 10);
         var popup = container.getAttribute('data-popup');
+        var height = container.getAttribute('data-height');
         var width = container.getAttribute('data-width');
         var float = container.getAttribute('data-float');
 
-        // Apply custom width and float if provided
+        // Apply custom size and float if provided
+        if (height) {
+            container.style.height = height;
+        }
         if (width) {
             container.style.width = width;
         }

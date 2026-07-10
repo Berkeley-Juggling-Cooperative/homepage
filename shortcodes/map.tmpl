@@ -1,22 +1,15 @@
 {% set map_id = map_id | default("map") %}
-{% set map_height = height | default("400px") %}
+{% set map_height = height | default("") %}
 {% set map_width = width | default("") %}
 {% set map_float = float | default("") %}
 
-{# Build class list #}
-{% set class_list = ["leaflet-map-container"] %}
-{% if map_height == "500px" %}
-    {% set _ = class_list.append("map-height-500") %}
-{% elif map_height == "400px" %}
-    {% set _ = class_list.append("map-height-400") %}
-{% endif %}
-
 <div id="{{ map_id }}"
-     class="{{ class_list | join(' ') }}"
+     class="leaflet-map-container"
      data-lat="{{ lat }}"
      data-lng="{{ lng }}"
      data-zoom="{{ zoom | default(13) }}"
      {% if popup %}data-popup="{{ popup }}"{% endif %}
+     {% if map_height %}data-height="{{ map_height }}"{% endif %}
      {% if map_width %}data-width="{{ map_width }}"{% endif %}
      {% if map_float %}data-float="{{ map_float }}"{% endif %}
 ></div>
