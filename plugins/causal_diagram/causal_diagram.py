@@ -28,7 +28,7 @@ class CausalDiagramSVG(ShortcodePlugin):
 
     name = "causal_diagram"
 
-    juggler_names = "ABCDEFGHIJKLNM"
+    juggler_names = "ABCDEFGHIJKLMN"
     margin = 10
     radius = 12
 
