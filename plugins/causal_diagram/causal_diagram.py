@@ -399,7 +399,7 @@ class CausalDiagramSVG(ShortcodePlugin):
         # replace @A, @B, etc with actual angles
         self.calc_angle()
 
-    def draw_circle(self, dwg, x, y, r, label, angle=None):
+    def draw_circle(self, dwg, x, y, r, label, angle=None, css_class=None):
         """Draw a circel with a letter in it.
 
         This is used in the causal diagram for each hand and in the
@@ -407,21 +407,26 @@ class CausalDiagramSVG(ShortcodePlugin):
 
         x,y are the position
         r is the radius
-        label the letter (centered in the circle)
+        label the letter (centered in the circle), skipped if empty
         angle the direction the juggler is looking, will be skipped if None
+        css_class an optional class for the circle element
 
         """
         group = dwg.g()
-        group.add(dwg.circle(center=(x, y), r=r, stroke="black", fill="none"))
-        group.add(
-            dwg.text(
-                label,
-                insert=(x, y),
-                fill="black",
-                text_anchor="middle",
-                dominant_baseline="middle",
+        circle_kwargs = {"center": (x, y), "r": r, "stroke": "black", "fill": "none"}
+        if css_class:
+            circle_kwargs["class_"] = css_class
+        group.add(dwg.circle(**circle_kwargs))
+        if label:
+            group.add(
+                dwg.text(
+                    label,
+                    insert=(x, y),
+                    fill="black",
+                    text_anchor="middle",
+                    dominant_baseline="middle",
+                )
             )
-        )
         if angle is not None:
             angle = math.radians(angle)
             delta = math.radians(15)
@@ -808,6 +813,14 @@ class CausalDiagramSVG(ShortcodePlugin):
 
             # the arrows
             for p, hand in zip(juggler["pattern"], cycle(juggler["letters"])):
+                if p == "-":
+                    group = self.draw_circle(
+                        dwg, X, H, self.radius, "", css_class="beat-empty"
+                    )
+                    dwg.add(group)
+                    X += self.step_X
+                    X_max = X
+                    continue
                 group = self.draw_circle(dwg, X, H, self.radius, hand)
                 dwg.add(group)
                 p, style = self.get_style(p)
@@ -956,6 +969,8 @@ class CausalDiagramSVG(ShortcodePlugin):
             for r in range(repeats):
                 for i, pat in enumerate(self.juggler[j]["pattern"]):
                     pat = pat.strip()
+                    if pat == "-":
+                        continue
                     pat, style = self.get_style(pat)
                     try:
                         int(pat)

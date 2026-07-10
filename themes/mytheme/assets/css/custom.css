@@ -351,6 +351,12 @@ article h5,
   fill: black;
 }
 
+/* silent beat (juggler idle / holding) */
+.beat-empty {
+  stroke-dasharray: 3 3;
+  opacity: 0.35;
+}
+
 .arrow-default {
   stroke: black;
 }
