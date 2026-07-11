@@ -359,6 +359,16 @@ class CausalDiagramSVG(ShortcodePlugin):
                 t = [float(t[0]), float(t[1]), float(t[2]), t[3].strip()]
             tmp.append(t)
 
+        # out-of-order keyframes produce invalid SMIL keyTimes, which
+        # silently kills the whole animation in the browser -- fail the
+        # build instead so the author notices
+        for prev, cur in zip(tmp, tmp[1:]):
+            if cur[0] < prev[0]:
+                raise ValueError(
+                    f"position {name}: keyframe times must not decrease "
+                    f"(found {cur[0]} after {prev[0]})"
+                )
+
         self.juggler[name]["position"] = tmp
         if role_label:
             self.juggler[name]["role_label"] = role_label

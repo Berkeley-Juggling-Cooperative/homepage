@@ -38,3 +38,15 @@ def test_trailing_comma_is_not_continuation():
 
 def test_comments_stripped():
     assert logical_lines("3 3 3  # a comment\n3 3 3") == ["3 3 3", "3 3 3"]
+
+
+def test_position_times_must_not_decrease():
+    import pytest
+    from causal_diagram import CausalDiagramSVG
+    d = CausalDiagramSVG()
+    with pytest.raises(ValueError, match="position B.*decrease"):
+        d.parse(
+            "3b 3\n3a 3\n"
+            "position A: 0, -100, 0, 0;\n"
+            "position B: 0, 100, 0, 0; 9, 100, -30, 0; 0.5, 0, 0, 0;\n"
+        )
