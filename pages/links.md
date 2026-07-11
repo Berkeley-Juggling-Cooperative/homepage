@@ -23,6 +23,8 @@
 
 - [Passing Patterns Compendium](https://jugglingedge.com/pdf/passingpatternscompendium.pdf)
 - [The New Highgate Collection](https://jugglingedge.com/pdf/highgate.pdf) by Aidan Burns.
+- [Modern Passing](https://modernpassing.com/)
+- [Passing Zone](https://passing.zone/)
 
 </div>
 <div class="column" markdown="1">
