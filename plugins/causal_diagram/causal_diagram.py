@@ -190,6 +190,9 @@ def parse_event(text: str) -> Event:
         return Event(time=time, action="catch",
                      hand=parts[2] if len(parts) > 2 else None,
                      label=label)
+    if action == "flip":
+        # flip both clubs in place: just a marker, no arrows
+        return Event(time=time, action="flip", label=label)
     if action not in ("steal", "hand", "zip"):
         raise ValueError(f"unknown event action: {action!r}")
     src, dst = parts[2].split(">")
@@ -730,6 +733,8 @@ class CausalDiagramSVG(ShortcodePlugin):
             return e.dst[1]      # club ends up here
         if e.action in ("throw", "catch"):
             return e.hand
+        if e.action == "flip":
+            return "F"
         return None
 
     def pattern_beats(self, juggler: dict) -> float:

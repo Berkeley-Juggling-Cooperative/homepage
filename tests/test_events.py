@@ -86,3 +86,19 @@ def test_catch_draws_receiving_circle():
     assert 'cx="500"' in flat
     i = flat.index('cx="500"')
     assert ">R<" in flat[i:i + 300].replace("\n", "").replace(" ", "")
+
+
+def test_parse_event_flip():
+    e = parse_event("1.5 flip")
+    assert (e.time, e.action) == (1.5, "flip")
+
+
+def test_flip_draws_f_circle_and_no_arrow():
+    d = CausalDiagramSVG()
+    out, _ = d.handler(data="3 3 3\n(3: 1.5 flip)")
+    flat = out.replace(".0", "").replace("\n", "").replace(" ", "")
+    # circle with F at x_of(1.5) = 20 + 80*2.5 = 220 on B's row
+    i = flat.index('cx="220"')
+    assert ">F<" in flat[i:i + 300]
+    # no transfer arrows for a flip
+    assert "arrow-hand" not in out and "arrow-zip" not in out

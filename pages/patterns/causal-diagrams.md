@@ -436,6 +436,7 @@ your own juggler implied when omitted:
 * `throw 3a R` — a normal throw at an off-grid time
 * `catch L` — marks the receiving hand of an incoming pass (only
   needed when the catcher has no grid circle at that beat)
+* `flip` — flip both clubs in place, shown as an F circle (no arrows)
 
 The victim of a steal writes their line as if the pass were normal —
 the steal reroutes the arrow. A thin grey line shows a juggler
