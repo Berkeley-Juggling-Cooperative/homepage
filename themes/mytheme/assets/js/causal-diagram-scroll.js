@@ -29,13 +29,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
             // Only auto-scroll if the SVG is wider than the container
             if (maxScroll > 0) {
-                let startTime = null;
-
-                function updateScroll(timestamp) {
-                    if (!startTime) startTime = timestamp;
-
-                    // Calculate elapsed time in seconds, loop after duration
-                    const elapsed = ((timestamp - startTime) % (duration * 1000)) / 1000;
+                function updateScroll() {
+                    // Follow the SVG's own animation clock, so pausing or
+                    // stepping the animation (diagram-controls.js) moves
+                    // the scroll position along with it
+                    let elapsed = 0;
+                    if (typeof svg.getCurrentTime === "function") {
+                        elapsed = svg.getCurrentTime() % duration;
+                    }
 
                     // Calculate how far along the animation we are (0 to 1)
                     const progress = elapsed / duration;

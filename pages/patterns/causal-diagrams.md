@@ -16,6 +16,10 @@ The basics are taken from [this
 article](https://jugglingedge.com/help/causaldiagrams.php). However,
 we modified this a bit and added more options to it. One of the mains ones is the ability to show and animate positions.
 
+All animated diagrams have play/pause and step buttons; you can also
+click or tab onto a diagram and use the space bar (play/pause) and the
+left/right arrow keys (step one beat).
+
 Currently, the generator can handle the following syntax:
 
 # Simple diagram

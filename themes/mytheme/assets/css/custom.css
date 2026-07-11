@@ -398,6 +398,35 @@ article h5,
   fill: #555;
 }
 
+/* animation controls (play/pause/step) above the diagrams */
+.diagram-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  margin-bottom: 0.5em;
+}
+
+.diagram-controls button {
+  cursor: pointer;
+  border: 1px solid #ccc;
+  background: transparent;
+  color: inherit;
+  border-radius: 4px;
+  padding: 0.1em 0.5em;
+  font-size: 1em;
+}
+
+.diagram-beat {
+  font-size: 0.8em;
+  color: #777;
+  min-width: 5em;
+}
+
+.diagram-sync-container:focus,
+.causal-diagram-container:focus {
+  outline: 1px dashed #aaa;
+}
+
 /* static snapshot row below the animated diagrams */
 .snapshot-row {
   display: flex;
