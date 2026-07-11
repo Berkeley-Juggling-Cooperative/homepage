@@ -1604,11 +1604,23 @@ class CausalDiagramSVG(ShortcodePlugin):
 
     def draw_snapshot_arrow(self, dwg, arrow_marker, start, end, css_class,
                             label=None):
-        """A static arrow in a snapshot, coordinates relative to center."""
+        """A static arrow in a snapshot, coordinates relative to center.
+
+        Long arrows (between two jugglers) are trimmed by the circle
+        radius so they start and stop just outside the circles; an
+        exchange then reads as one double-headed arrow.
+        """
         sx, sy = start[0] + self.pos_center_x, start[1] + self.pos_center_y
         ex, ey = end[0] + self.pos_center_x, end[1] + self.pos_center_y
         if sx == ex and sy == ey:
             return
+        dx, dy = ex - sx, ey - sy
+        length = (dx**2 + dy**2) ** 0.5
+        if length > 2 * self.radius + 4:
+            sx += self.radius * dx / length
+            sy += self.radius * dy / length
+            ex -= self.radius * dx / length
+            ey -= self.radius * dy / length
         line = dwg.line(start=(sx, sy), end=(ex, ey), class_=css_class,
                         marker_end=arrow_marker.get_funciri())
         if not label:
@@ -1677,15 +1689,14 @@ class CausalDiagramSVG(ShortcodePlugin):
                     end_t = start_t + t.value - 2
                 if not start_t <= t_snap <= end_t:
                     continue
-                start = self.get_juggler_hand_position(t.juggler, start_t, 0)
+                # snapshots draw circle center to circle center, at the
+                # positions as drawn at t_snap (no L/R hand offsets)
+                start = self.get_juggler_position(t.juggler, t_snap)[:2]
                 if t.stolen_by:
-                    hand = self.steal_catch_hand(t)
-                    end = self.get_hand_position(t.stolen_by, end_t, hand or "L")
+                    end = self.get_juggler_position(t.stolen_by, t_snap)[:2]
                     style = "arrow-steal"
                 else:
-                    wait_B = self.juggler[t.target]["wait"]
-                    end = self.get_juggler_hand_position(
-                        t.target, start_t, t.value - 2 - wait_B + wait_A)
+                    end = self.get_juggler_position(t.target, t_snap)[:2]
                     style = t.style
                 arrow = self.draw_snapshot_arrow(dwg, arrow_marker, start,
                                                  end, style, t.label)
@@ -1696,10 +1707,23 @@ class CausalDiagramSVG(ShortcodePlugin):
                     te = shift + e.time - self.juggler[name]["wait"]
                     if not te - 0.5 <= t_snap <= te:
                         continue
-                    endpoints = self.position_event_endpoints(name, e, te)
-                    if endpoints is None:
+                    if e.action == "zip":
+                        # a zip stays hand-to-hand: both "centers" are
+                        # the same juggler
+                        endpoints = self.position_event_endpoints(name, e, te)
+                        if endpoints is None:
+                            continue
+                        start, end, style = endpoints
+                    elif e.action == "hand":
+                        start = self.get_juggler_position(name, t_snap)[:2]
+                        end = self.get_juggler_position(e.dst[0], t_snap)[:2]
+                        style = "arrow-hand"
+                    elif e.action == "steal" and e.src[1] is not None:  # take
+                        start = self.get_juggler_position(e.src[0], t_snap)[:2]
+                        end = self.get_juggler_position(name, t_snap)[:2]
+                        style = "arrow-hand"
+                    else:
                         continue
-                    start, end, style = endpoints
                     arrow = self.draw_snapshot_arrow(dwg, arrow_marker, start,
                                                      end, style, e.label)
                     if arrow:

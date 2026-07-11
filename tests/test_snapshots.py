@@ -40,3 +40,23 @@ def test_snapshot_shows_in_flight_pass_only():
 def test_no_snapshots_line_no_section():
     out = render("3b 3\n3a 3\npositions: line")
     assert "Snapshots" not in out
+
+
+def test_snapshot_arrows_are_center_to_center_trimmed():
+    out = render(PATTERN)
+    import re
+    snap = out.split('class="snapshot"')[1]
+    lines = re.findall(r'<line[^>]*class="arrow-default[^>]*>', snap)
+    assert len(lines) == 2
+    # A at (-100,0), B at (100,0), canvas 300x300 -> centers (50,150)
+    # and (250,150); trimmed by the radius (12): 62 and 238
+    coords = set()
+    for ln in lines:
+        x1 = float(re.search(r'x1="([-\d.]+)"', ln).group(1))
+        x2 = float(re.search(r'x2="([-\d.]+)"', ln).group(1))
+        y1 = float(re.search(r'y1="([-\d.]+)"', ln).group(1))
+        y2 = float(re.search(r'y2="([-\d.]+)"', ln).group(1))
+        assert y1 == y2 == 150.0
+        coords.add((x1, x2))
+    # the exchange: same segment, opposite directions
+    assert coords == {(62.0, 238.0), (238.0, 62.0)}
