@@ -1431,25 +1431,29 @@ class CausalDiagramSVG(ShortcodePlugin):
             Y = self.pos_center_y + y
             keyTimes = ";".join([str(x[0]) for x in juggler["position"]])
             values = ";".join([f"{x[1]},{x[2]}" for x in juggler["position"]])
+            # rotation happens inside the translated group, so the
+            # center is the (static) drawing center
             values_rot = ";".join(
                 [
-                    f"{x[3] - angle} {x[1] + self.pos_center_x} {x[2] + self.pos_center_y}"
+                    f"{x[3] - angle} {self.pos_center_x} {self.pos_center_y}"
                     for x in juggler["position"]
                 ]
             )
 
             if len(juggler["position"]) > 1:
                 # start in center, so that all motion is given in relative
-                # coordinates (inlcuding the step at t=0
-                pos = self.draw_circle(
+                # coordinates (including the step at t=0). Circle and
+                # facing triangle rotate in an inner group; the letter
+                # lives in the outer group so it stays upright.
+                body = self.draw_circle(
                     dwg,
                     self.pos_center_x,
                     self.pos_center_y,
                     self.radius,
-                    label=name,
+                    label="",
                     angle=angle,
                 )
-                pos.add(
+                body.add(
                     svgwrite.animate.AnimateTransform(
                         attributeName_="transform",
                         transform="rotate",
@@ -1458,7 +1462,17 @@ class CausalDiagramSVG(ShortcodePlugin):
                         dur=f"{self.duration_position}s",
                         begin="0s",
                         repeatCount="indefinite",
-                        additive="sum",
+                    )
+                )
+                pos = dwg.g()
+                pos.add(body)
+                pos.add(
+                    dwg.text(
+                        name,
+                        insert=(self.pos_center_x, self.pos_center_y),
+                        fill="black",
+                        text_anchor="middle",
+                        dominant_baseline="middle",
                     )
                 )
                 pos.add(

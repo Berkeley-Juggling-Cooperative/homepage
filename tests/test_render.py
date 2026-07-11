@@ -73,3 +73,27 @@ def test_no_events_output_identical_shape():
     # regression: a plain diagram has none of the new markup
     svg = render("3 3 3\n3 3 3")
     assert "arrow-steal" not in svg and "hold-line" not in svg
+
+
+def test_position_letters_do_not_rotate():
+    import xml.etree.ElementTree as ET
+    out = render(
+        "3b 3\n3a 3\n"
+        "position A: 0,-100,0,0; 2,-100,0,180;\n"
+        "position B: 0,100,0,180; 2,100,0,0;\n"
+    )
+    part = out.split("position-diagram-section")[1]
+    svg = part[part.index("<svg"):part.index("</svg>") + 6]
+    root = ET.fromstring(svg)
+    ns = "{http://www.w3.org/2000/svg}"
+    letters = 0
+    for g in root.iter(f"{ns}g"):
+        rotating = any(
+            a.get("type") == "rotate"
+            for a in g.findall(f"{ns}animateTransform")
+        )
+        texts = g.findall(f"{ns}text")
+        if rotating:
+            assert not texts, "juggler letter must not rotate"
+        letters += sum(1 for t in texts if t.text and t.text.strip() in "AB")
+    assert letters == 2  # the upright letters still exist
