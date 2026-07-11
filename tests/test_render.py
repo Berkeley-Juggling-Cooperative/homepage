@@ -124,3 +124,14 @@ def test_zip_spans_half_a_beat():
     # radius -> the arrow runs 192..208; circles L at 180 and R at 220
     assert 'x1="192"' in svg and 'x2="208"' in svg
     assert svg.count('cx="180"') >= 1 and svg.count('cx="220"') >= 1
+
+
+def test_hand_elbow_lands_on_receivers_next_circle():
+    # receiver A's next circle after the 4.5 hand-over is an event
+    # circle at 5.25 (the take), not a grid beat
+    svg = render(
+        "3 3 3 3 3 (1: 0.25 steal bR>R)\n"
+        "(6: 4.5 hand R>aL)"
+    ).replace(".0", "")
+    # x_of(5.25) = 20 + 80*6.25 = 520, minus the radius -> 508
+    assert "L 508,60" in svg
