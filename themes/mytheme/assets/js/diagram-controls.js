@@ -66,13 +66,12 @@ document.addEventListener("DOMContentLoaded", function() {
                         // span: show while it overlaps [t, t+1)
                         visible = b > t + 1e-6 && a < t + 1 - 1e-6;
                     }
-                    if (visible) {
-                        // SMIL animates opacity as a CSS property, which
-                        // outranks plain inline style; only !important wins
-                        el.style.setProperty('opacity', '1', 'important');
-                    } else {
-                        el.style.removeProperty('opacity');
-                    }
+                    // SMIL animates opacity as a CSS property, which
+                    // outranks plain inline style; only !important wins.
+                    // Also force invisible ones to 0: frozen exactly on
+                    // a window edge, SMIL may hold the pre-jump value
+                    el.style.setProperty('opacity', visible ? '1' : '0',
+                                         'important');
                 });
             });
         }
