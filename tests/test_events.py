@@ -71,3 +71,18 @@ def test_block_as_first_token_is_not_hands_prefix():
     A = d.juggler["A"]
     assert A["letters"] == "RL"       # default, prefix not consumed
     assert isinstance(A["pattern"][0], dict)
+
+
+def test_parse_event_catch():
+    e = parse_event("5 catch R")
+    assert (e.time, e.action, e.hand) == (5.0, "catch", "R")
+
+
+def test_catch_draws_receiving_circle():
+    d = CausalDiagramSVG()
+    out, _ = d.handler(data="3 3 3 3 3b 3 3 3\n(8: 5 catch R)")
+    # a circle labeled R at x_of(5) = 20 + 80*6 = 500 on B's row (y=160)
+    flat = out.replace(".0", "")
+    assert 'cx="500"' in flat
+    i = flat.index('cx="500"')
+    assert ">R<" in flat[i:i + 300].replace("\n", "").replace(" ", "")

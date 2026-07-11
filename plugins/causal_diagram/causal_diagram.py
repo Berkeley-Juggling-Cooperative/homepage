@@ -184,6 +184,12 @@ def parse_event(text: str) -> Event:
         return Event(time=time, action="throw", value=parts[2],
                      hand=parts[3] if len(parts) > 3 else None,
                      label=label)
+    if action == "catch":
+        # marks the receiving hand of an incoming pass (only needed for
+        # jugglers without grid circles at that beat)
+        return Event(time=time, action="catch",
+                     hand=parts[2] if len(parts) > 2 else None,
+                     label=label)
     if action not in ("steal", "hand", "zip"):
         raise ValueError(f"unknown event action: {action!r}")
     src, dst = parts[2].split(">")
@@ -712,7 +718,7 @@ class CausalDiagramSVG(ShortcodePlugin):
             return e.src[1]      # giving hand
         if e.action == "zip":
             return e.dst[1]      # club ends up here
-        if e.action == "throw":
+        if e.action in ("throw", "catch"):
             return e.hand
         return None
 
@@ -1290,6 +1296,8 @@ class CausalDiagramSVG(ShortcodePlugin):
                         dwg.add(arr)
                 elif e.action == "throw":
                     releases[name].append(e.time)
+                elif e.action == "catch":
+                    catches[name].append(e.time)
         # stolen clubs are catches too
         for t in throws:
             if t.stolen_by:

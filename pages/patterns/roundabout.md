@@ -13,28 +13,6 @@ The Roundabout is a 3 person pattern where two people are passing (say
 person A and B) in a [4 count](link:///patterns/4-count) and the third
 person (C) is standing in the middle between them with one extra club.
 
-{{% causal_diagram %}}
-title: Roundabout
-# one 16-beat cycle written out (two rotations: C in the middle facing
-# up, then A in the middle facing down); the swap line repeats it with
-# rotated roles: A ends on the right, B in the middle, C on the left
-swap: A->B->C
-bars: 15.5, 31.5
-snapshots: 0.5, 2.5, 5.5, 8.5
-3b 3 3"pelf" 3 3b (1: 0.25 steal cR>R) (2: 0.25 hand R>cL) (8: 0.5 steal c>L; 0.75 hand R>bL; 1 zip L>R; 2.5 steal b>L; 5.5 throw 3 L)
-3a 3 3 3 3c 3 3 3 3c 3 3"pelf" 3 3c (1: 0.25 steal aR>R) (2: 0.25 hand R>aL)
-(8: 0.5 steal b>L; 0.75 hand R>aL; 1 zip L>R; 2.5 steal a>L; 5.5 throw 3 L) 3b 3 3 3 3a 3 3 3
-position A: 0,-100,0,@B;    2.5,-100,0,@B;   4,-100,50,@B;  \
-            5.5,-100,50,@B; 6.5,0,40,@C;     7,0,40,90;     \
-            9.5,0,40,90;    10.5,0,40,@B;    12,100,50,@C;  \
-            15,100,0,@C;
-position B: 0,100,0,@A;     11,100,0,@A;     12,100,-50,@C; \
-            13.5,100,-50,@C; 14.5,0,40,@A;   15,0,40,270;
-position C: 0,0,40,270;     1.5,0,40,270;    2.5,0,40,@A;   \
-            4,-100,-50,@B;  5.5,-100,-50,@B; 7,-100,0,@B;   \
-            15,-100,0,@B;
-{{% /causal_diagram %}}
-
 In a single rotation of the pattern, the person in the middle (C)
 swaps with one of the outside person (say A).
 
@@ -64,13 +42,55 @@ catching the self. Person A intercepts the pass right away and carries
 this club over and gives it to B. This clubs is the same as the first
 steal in the above description, so B immediately throws the self, etc.
 
-Simpler version of this:
+
+{{% causal_diagram %}}
+title: Roundabout
+# one 16-beat cycle written out (two rotations: C in the middle facing
+# up, then A in the middle facing down); the swap line repeats it with
+# rotated roles: A ends on the right, B in the middle, C on the left
+swap: A->B->C
+bars: 15.5, 31.5
+# 0  1 2       3 4  5 6 7 8
+  3b 3 3"pelf" 3 3b (1: 0.25 steal cR>R) (2: 0.25 hand R>cL) (8: 0.5 steal c>L; 0.75 hand R>bL; 1.25 zip L>R; 2.5 steal b>L; 5.5 throw 3 L)
+  3a 3 3       3 3c 3 3 3 3c 3 3"pelf" 3 3c (1: 0.25 steal aR>R) (2: 0.25 hand R>aL)
+  (8: 0.5 steal b>L; 0.75 hand R>aL; 1.25 zip L>R; 2.5 steal a>L; 4.5 hand R>aL; 5 catch L) 3b 3 3 3 3a 3 3 3
+position A: 0,  -100, 0,@B;\
+            2.5,-100, 0,@B;\
+			4,  -100,30,@B;\
+            5.5,-100,30,@B;\
+			6.5,   0, 0,@C;\
+			7,     0, 0,90;\
+            9.5,   0, 0,90;\
+			10.5, 50, 0,@B;\
+			12,  100,30,@C!;\
+            15,  100, 0,@C;
+position B: 0,   100, 0,@A;\
+            11,  100, 0,@A;\
+			12,  100,-30,@C;\
+            13.5,100,-30,@C;\
+			14.5,  0, 0,@A;\
+			15,    0, 0,270;
+position C: 0,     0,  0,270;\
+            1.5,   0,  0,270;\
+			2.5, -50,  0,@A;\
+            4,  -100,-30,@B!;\
+			5.5,-100,-30,@B;\
+			7,  -100,  0,@B;\
+            15 ,-100,  0,@B;
+{{% /causal_diagram %}}
+
+# Similar Patterns
+
+## Simpler version of this:
+
 - California cool
 
-More complex patterns with 3 people:
+## More complex patterns with 3 people:
+
 - [Dropabout](link:///patterns/dropabout)
 - [Chopabout](link:///patterns/chopabout)
 
-More complex patterns with more people:
+## More complex patterns with more people:
+
 - [Scrambled B on Toast](link:///patterns/scrambled-b-on-toast)
 

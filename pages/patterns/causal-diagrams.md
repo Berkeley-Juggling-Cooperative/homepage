@@ -434,6 +434,8 @@ your own juggler implied when omitted:
 * `hand R>cL` — place your right-hand club into C's left hand
 * `zip L>R` — hand-across, own left to own right
 * `throw 3a R` — a normal throw at an off-grid time
+* `catch L` — marks the receiving hand of an incoming pass (only
+  needed when the catcher has no grid circle at that beat)
 
 The victim of a steal writes their line as if the pass were normal —
 the steal reroutes the arrow. A thin grey line shows a juggler
