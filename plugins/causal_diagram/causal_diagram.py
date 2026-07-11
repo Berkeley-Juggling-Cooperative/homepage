@@ -829,7 +829,8 @@ class CausalDiagramSVG(ShortcodePlugin):
         # replace @A, @B, etc with actual angles
         self.calc_angle()
 
-    def draw_circle(self, dwg, x, y, r, label, angle=None, css_class=None):
+    def draw_circle(self, dwg, x, y, r, label, angle=None, css_class=None,
+                    font_size=None):
         """Draw a circel with a letter in it.
 
         This is used in the causal diagram for each hand and in the
@@ -848,15 +849,15 @@ class CausalDiagramSVG(ShortcodePlugin):
             circle_kwargs["class_"] = css_class
         group.add(dwg.circle(**circle_kwargs))
         if label:
-            group.add(
-                dwg.text(
-                    label,
-                    insert=(x, y),
-                    fill="black",
-                    text_anchor="middle",
-                    dominant_baseline="middle",
-                )
-            )
+            text_kwargs = {
+                "insert": (x, y),
+                "fill": "black",
+                "text_anchor": "middle",
+                "dominant_baseline": "middle",
+            }
+            if font_size:
+                text_kwargs["font_size"] = font_size
+            group.add(dwg.text(label, **text_kwargs))
         if angle is not None:
             angle = math.radians(angle)
             delta = math.radians(15)
@@ -1272,15 +1273,26 @@ class CausalDiagramSVG(ShortcodePlugin):
                     wait_t = self.juggler[tgt]["wait"]
                     t_land = wait_t + math.ceil(e.time - wait_t - 1e-9)
                     # if the receiver has no circle at the landing beat,
-                    # draw one showing the receiving hand
+                    # draw one showing the receiving hand; if the beat's
+                    # circle shows the other hand, add a smaller circle
+                    # for the receiving hand below it and land there
                     near = [c for c in self.circles
                             if c.juggler == tgt and abs(c.time - t_land) < 0.25]
+                    receiving = e.dst[1] or ""
+                    land_y = tgt_h
                     if not near:
                         dwg.add(self.draw_circle(
                             dwg, self.x_of(t_land), tgt_h, self.radius,
-                            e.dst[1] or ""))
+                            receiving))
+                    elif receiving and all(c.label != receiving for c in near):
+                        small_r = 0.7 * self.radius
+                        land_y = tgt_h + self.radius + small_r
+                        dwg.add(self.draw_circle(
+                            dwg, self.x_of(t_land), land_y, small_r,
+                            receiving, css_class="hand-secondary",
+                            font_size="0.75em"))
                     arr = self.draw_elbow_arrow(
-                        dwg, arrow_marker, x, H, tgt_h,
+                        dwg, arrow_marker, x, H, land_y,
                         self.x_of(t_land), css_class="arrow-hand")
                     if arr:
                         dwg.add(arr)

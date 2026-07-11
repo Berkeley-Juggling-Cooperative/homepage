@@ -150,3 +150,18 @@ def test_animated_arrows_carry_time_window_attributes():
     # every animated arrow knows its window, for the paused-stepping UI
     assert 'data-start="0"' in pos.replace('"0.0"', '"0"')
     assert pos.count("data-start") == pos.count("data-end") >= 2
+
+
+def test_hand_landing_on_wrong_hand_gets_secondary_circle():
+    # A's beat-6 grid circle shows R (RL cycle); the hand-in goes to L,
+    # so a smaller L circle appears below the row and the elbow lands
+    # on it: x_of(6)=580, y = 60 + 12 + 8.4 = 80.4
+    svg = render("3 3 3 3 3 3 3 3\n(8: 5.5 hand R>aL)").replace(".0,", ",")
+    assert 'r="8.4"' in svg
+    assert "L 568,80.4" in svg
+
+
+def test_hand_landing_on_matching_hand_uses_main_circle():
+    # beat-6 circle is R and the club arrives in R: no extra circle
+    svg = render("3 3 3 3 3 3 3 3\n(8: 5.5 hand L>aR)")
+    assert 'r="8.4"' not in svg
