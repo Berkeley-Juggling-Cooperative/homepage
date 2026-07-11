@@ -49,7 +49,7 @@ swap: A->B->C
 bars: 8,16
   3b 3 3"pelf" 3 (4: 0 throw 3b R; 1 steal c>L; 2 flip;  2.75 hand R>cL; 3.25 zip L>R) (4: 0.25 steal c>L; 0.65 hand R>bL; 1.25 zip L>R; 3 steal b>L) 3b 3 3 3
   3a 3 3 3 3c 3 3 3 3c 3 3"pelf" 3 (4: 0 throw 3c R; 1 steal a>L; 2 flip;  2.75 hand R>aL; 3.25 zip L>R)
-  (4: 0.25 steal b>L; 0.65 hand R>aL; 1.25 zip L>R; 3 steal a>L) 3a 3 3 3 3b 3 3 3 3a 3 3 3
+  (4: 0.25 steal b>L; 0.65 hand R>aL; 1.25 zip L>R; 3 steal a>L) 3a 3 0 3 3b 3 3 3 3a 3 3 3
 position A: 0,  -100,  0,@B;\
             2.5,-100,  0,@B;\
 			4,  -100, 30,@B;\
