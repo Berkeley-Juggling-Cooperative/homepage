@@ -1401,8 +1401,7 @@ class CausalDiagramSVG(ShortcodePlugin):
             )
 
         # draw the causal diagram
-        # phase 1: names, circles, empty beats -- also find X_max
-        X_max = 0
+        # phase 1: names, circles, empty beats
         for name, juggler in self.juggler.items():
             H = juggler["height"]
 
@@ -1421,7 +1420,6 @@ class CausalDiagramSVG(ShortcodePlugin):
                 dwg.add(self.draw_circle(dwg, self.x_of(c.time), H,
                                          self.radius, c.label,
                                          css_class=c.css_class))
-                X_max = max(X_max, self.x_of(c.time + 1))
 
         # phase 2: arrows from the precomputed throws (steals applied)
         throws = self.throws
@@ -1448,11 +1446,13 @@ class CausalDiagramSVG(ShortcodePlugin):
         # phase 3: transfer arrows (hand / take / zip) and hold lines
         self.draw_causal_events(dwg, arrow_marker, throws)
 
-        # Add animated red bar for scrolling sync
+        # Add animated red bar for scrolling sync; it must travel
+        # exactly one step_X per beat to stay aligned with the circles
         min_offset = min([j["wait"] for j in self.juggler.values()])
         y_min = min([j["height"] for j in self.juggler.values()]) - self.step_Y * 0.3
         y_max = max([j["height"] for j in self.juggler.values()]) + self.step_Y * 0.3
         X_min = 2 * self.margin + self.step_X * (1 + min_offset)
+        bar_travel = self.step_X * self.duration_pattern
 
         bar = dwg.line(
             start=(X_min, y_min),
@@ -1466,7 +1466,7 @@ class CausalDiagramSVG(ShortcodePlugin):
                 transform="translate",
                 attributeName_="transform",
                 from_="0",
-                to=f"{X_max - X_min}",
+                to=f"{bar_travel}",
                 dur=f"{self.duration_pattern}s",
                 begin="0s",
                 repeatCount="indefinite",
@@ -1476,7 +1476,7 @@ class CausalDiagramSVG(ShortcodePlugin):
 
         svg_str = self.drawing_to_str(dwg)
         return self.add_scroll_data_attributes(
-            svg_str, width, X_min, X_max, self.duration_pattern
+            svg_str, width, X_min, X_min + bar_travel, self.duration_pattern
         )
 
     def generate_position_diagram_svg(self):

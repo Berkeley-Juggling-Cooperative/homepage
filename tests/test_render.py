@@ -165,3 +165,11 @@ def test_hand_landing_on_matching_hand_uses_main_circle():
     # beat-6 circle is R and the club arrives in R: no extra circle
     svg = render("3 3 3 3 3 3 3 3\n(8: 5.5 hand L>aR)")
     assert 'r="8.4"' not in svg
+
+
+def test_red_bar_travels_exactly_one_step_per_beat():
+    # last circle (zip tail at 1.85) lies past duration-1; the bar must
+    # still travel step_X * duration = 160, ending at X_min + 160 = 260
+    svg = render("(2: 1.35 zip L>R)\n3 3").replace(".0", "")
+    assert 'to="160"' in svg
+    assert 'data-x-max="260"' in svg
