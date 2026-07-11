@@ -1616,11 +1616,12 @@ class CausalDiagramSVG(ShortcodePlugin):
             return
         dx, dy = ex - sx, ey - sy
         length = (dx**2 + dy**2) ** 0.5
-        if length > 2 * self.radius + 4:
-            sx += self.radius * dx / length
-            sy += self.radius * dy / length
-            ex -= self.radius * dx / length
-            ey -= self.radius * dy / length
+        gap = self.radius + 6  # a small gap between arrow and circle
+        if length > 2 * gap + 4:
+            sx += gap * dx / length
+            sy += gap * dy / length
+            ex -= gap * dx / length
+            ey -= gap * dy / length
         line = dwg.line(start=(sx, sy), end=(ex, ey), class_=css_class,
                         marker_end=arrow_marker.get_funciri())
         if not label:
@@ -1649,10 +1650,11 @@ class CausalDiagramSVG(ShortcodePlugin):
             dwg.rect(insert=(0, 0), size=(width, height), fill="none",
                      stroke="black")
         )
+        # larger arrow heads than in the animated diagrams
         arrow_marker = dwg.marker(
-            id="arrowhead-snap", insert=(5, 2.5), size=(5, 5), orient="auto"
+            id="arrowhead-snap", insert=(9, 4.5), size=(9, 9), orient="auto"
         )
-        arrow_marker.add(dwg.path(d="M 0 0 L 5 2.5 L 0 5 z", class_="arrow-marker"))
+        arrow_marker.add(dwg.path(d="M 0 0 L 9 4.5 L 0 9 z", class_="arrow-marker"))
         dwg.defs.add(arrow_marker)
 
         # jugglers at their interpolated positions
