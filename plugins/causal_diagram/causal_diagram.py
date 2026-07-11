@@ -1262,15 +1262,17 @@ class CausalDiagramSVG(ShortcodePlugin):
                     catches[tgt].append(e.time)
                     tgt_h = self.juggler[tgt]["height"]
                     # elbow: up to the receiver's row, then along it to
-                    # their next drawn circle (grid beat or event),
-                    # where the club gets used
-                    upcoming = [c.time for c in self.circles
-                                if c.juggler == tgt and c.time >= e.time - 1e-9]
-                    if upcoming:
-                        t_land = min(upcoming)
-                    else:
-                        wait_t = self.juggler[tgt]["wait"]
-                        t_land = wait_t + math.ceil(e.time - wait_t - 1e-9)
+                    # their next full beat, where the club gets used
+                    wait_t = self.juggler[tgt]["wait"]
+                    t_land = wait_t + math.ceil(e.time - wait_t - 1e-9)
+                    # if the receiver has no circle at the landing beat,
+                    # draw one showing the receiving hand
+                    near = [c for c in self.circles
+                            if c.juggler == tgt and abs(c.time - t_land) < 0.25]
+                    if not near:
+                        dwg.add(self.draw_circle(
+                            dwg, self.x_of(t_land), tgt_h, self.radius,
+                            e.dst[1] or ""))
                     arr = self.draw_elbow_arrow(
                         dwg, arrow_marker, x, H, tgt_h,
                         self.x_of(t_land), css_class="arrow-hand")

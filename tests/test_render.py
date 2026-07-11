@@ -126,12 +126,16 @@ def test_zip_spans_half_a_beat():
     assert svg.count('cx="180"') >= 1 and svg.count('cx="220"') >= 1
 
 
-def test_hand_elbow_lands_on_receivers_next_circle():
-    # receiver A's next circle after the 4.5 hand-over is an event
-    # circle at 5.25 (the take), not a grid beat
+def test_hand_elbow_lands_on_the_next_beat_with_receiving_circle():
+    # the hand-over lands on the receiver's next full beat (5), not on
+    # some nearby event circle; since A has no circle at beat 5, one is
+    # drawn automatically showing the receiving hand (L)
     svg = render(
         "3 3 3 3 3 (1: 0.25 steal bR>R)\n"
         "(6: 4.5 hand R>aL)"
     ).replace(".0", "")
-    # x_of(5.25) = 20 + 80*6.25 = 520, minus the radius -> 508
-    assert "L 508,60" in svg
+    # x_of(5) = 20 + 80*6 = 500, minus the radius -> 488
+    assert "L 488,60" in svg
+    i = svg.index('cx="500" cy="60"')
+    group = svg[i:svg.index("</g>", i)]
+    assert ">L<" in group.replace("\n", "").replace(" ", "")
