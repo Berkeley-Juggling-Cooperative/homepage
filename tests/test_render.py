@@ -97,3 +97,30 @@ def test_position_letters_do_not_rotate():
             assert not texts, "juggler letter must not rotate"
         letters += sum(1 for t in texts if t.text and t.text.strip() in "AB")
     assert letters == 2  # the upright letters still exist
+
+
+def test_hand_arrow_is_elbow_to_next_beat():
+    svg = render("3b 3 3\n3a 3 3\n(3: 0.75 hand R>aL)")
+    # C at x_of(0.75)=160 hands to A (row y=60); the arrow goes up and
+    # then right, ending one radius before A's beat-1 circle (x=180)
+    assert "M 160,248 L 160,60 L 168,60" in svg.replace(".0", "")
+
+
+def test_no_hold_line_for_long_holds():
+    # catch at 0.5, next release at 3 -> gap 2.5 beats, no hold line
+    svg = render("3 3 3 3\n(4: 0.5 steal a>L; 3 throw 3 L)")
+    assert "hold-line" not in svg
+
+
+def test_hold_line_for_short_holds():
+    # catch at 0.5, release at 1 -> genuine short carry, line drawn
+    svg = render("3 3 3 3\n(4: 0.5 steal a>L; 1 throw 3 L)")
+    assert "hold-line" in svg
+
+
+def test_zip_spans_half_a_beat():
+    svg = render("3 3 3\n(3: 1 zip L>R)").replace(".0", "")
+    # zip at beat 1: from x_of(1)=180 to x_of(1.5)=220, trimmed by the
+    # radius -> the arrow runs 192..208; circles L at 180 and R at 220
+    assert 'x1="192"' in svg and 'x2="208"' in svg
+    assert svg.count('cx="180"') >= 1 and svg.count('cx="220"') >= 1

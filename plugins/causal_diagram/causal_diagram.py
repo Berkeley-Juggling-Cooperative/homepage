@@ -223,6 +223,10 @@ class CausalDiagramSVG(ShortcodePlugin):
 
     title_height = 25
 
+    # hold lines only mark short carries (catch to release); longer
+    # holds would clutter the diagram
+    hold_line_max = 1.5
+
     def __init__(self):
         super().__init__()
         self.juggler = {}
@@ -555,6 +559,13 @@ class CausalDiagramSVG(ShortcodePlugin):
                 t = juggler["wait"] + beat
                 if isinstance(tok, dict):
                     for e in tok["events"]:
+                        if e.action == "zip":
+                            # half a beat from one hand to the other
+                            circles.append(
+                                Circle(name, t + e.time, e.src[1] or "L"))
+                            circles.append(
+                                Circle(name, t + e.time + 0.5, e.dst[1] or "R"))
+                            continue
                         hand = self.event_circle_hand(e)
                         if hand is not None:
                             circles.append(Circle(name, t + e.time, hand))
@@ -1208,6 +1219,28 @@ class CausalDiagramSVG(ShortcodePlugin):
         causal_svg = self.generate_causal_diagram_svg()
         return causal_svg
 
+    def draw_elbow_arrow(self, dwg, arrow_marker, x, y_from, y_to, x_end,
+                         css_class, label=None):
+        """A hand-over in the causal diagram: vertical from the giver at
+        the transfer moment, then along the receiver's row, ending at
+        the beat where the club gets used."""
+        end_x = x_end - self.radius
+        if end_x <= x + 2 or y_from == y_to:
+            # no room for the elbow: plain vertical transfer
+            return self.draw_arrow(dwg, arrow_marker, x, y_from, x, y_to,
+                                   css_class, label=label)
+        start_y = y_from - self.radius if y_to < y_from else y_from + self.radius
+        d = f"M {x},{start_y} L {x},{y_to} L {end_x},{y_to}"
+        element = dwg.path(d=d, fill="none", class_=css_class,
+                           marker_end=arrow_marker.get_funciri())
+        if not label:
+            return element
+        group = dwg.g()
+        group.add(element)
+        group.add(dwg.text(label, insert=((x + end_x) / 2, y_to - 6),
+                           class_="arrow-label", text_anchor="middle"))
+        return group
+
     def draw_causal_events(self, dwg, arrow_marker, throws):
         """Transfer arrows (hand / take / zip) and hold lines.
 
@@ -1235,17 +1268,23 @@ class CausalDiagramSVG(ShortcodePlugin):
                     tgt = e.dst[0]
                     catches[tgt].append(e.time)
                     tgt_h = self.juggler[tgt]["height"]
-                    arr = self.draw_arrow(dwg, arrow_marker, x, H,
-                                          x, tgt_h, css_class="arrow-hand",
-                                          label=e.label)
+                    # elbow: up to the receiver's row, then along it to
+                    # their next full beat, where the club gets used
+                    wait_t = self.juggler[tgt]["wait"]
+                    t_land = wait_t + math.ceil(e.time - wait_t - 1e-9)
+                    arr = self.draw_elbow_arrow(
+                        dwg, arrow_marker, x, H, tgt_h,
+                        self.x_of(t_land), css_class="arrow-hand",
+                        label=e.label)
                     if arr:
                         dwg.add(arr)
                 elif e.action == "zip":
+                    # a zip takes half a beat: hand at t, other hand at t+0.5
                     releases[name].append(e.time)
-                    catches[name].append(e.time)
+                    catches[name].append(e.time + 0.5)
                     arr = self.draw_arrow(
                         dwg, arrow_marker,
-                        x - 0.2 * self.step_X, H, x + 0.2 * self.step_X, H,
+                        x, H, self.x_of(e.time + 0.5), H,
                         css_class="arrow-zip", label=e.label)
                     if arr:
                         dwg.add(arr)
@@ -1255,13 +1294,14 @@ class CausalDiagramSVG(ShortcodePlugin):
         for t in throws:
             if t.stolen_by:
                 catches[t.stolen_by].append(t.steal_time)
-        # hold lines: from each catch to the juggler's next release
+        # hold lines: from each catch to the juggler's next release, but
+        # only for short carries -- long holds would clutter the diagram
         for name in self.juggler:
             H = self.juggler[name]["height"]
             rel = sorted(releases[name])
-            for c in sorted(catches[name]):
+            for c in sorted(set(catches[name])):
                 nxt = [r for r in rel if r > c + 1e-9]
-                if not nxt:
+                if not nxt or nxt[0] - c > self.hold_line_max:
                     continue
                 dwg.add(dwg.line(
                     start=(self.x_of(c) + self.radius, H),
@@ -1707,7 +1747,11 @@ class CausalDiagramSVG(ShortcodePlugin):
             for name in self.juggler:
                 for e in self.events.get(name, []):
                     te = shift + e.time - self.juggler[name]["wait"]
-                    if not te - 0.5 <= t_snap <= te:
+                    if e.action == "zip":
+                        visible = te <= t_snap <= te + 0.5
+                    else:
+                        visible = te - 0.5 <= t_snap <= te
+                    if not visible:
                         continue
                     if e.action == "zip":
                         # a zip stays hand-to-hand: both "centers" are
@@ -1774,12 +1818,16 @@ class CausalDiagramSVG(ShortcodePlugin):
         if endpoints is None:
             return
         start, end, style = endpoints
-        start_t = max(0, t - window)
-        if t <= start_t:
-            start_t = max(0, t - 0.1)
+        if e.action == "zip":
+            # a zip takes half a beat, starting at its event time
+            start_t, end_t = t, t + 0.5
+        else:
+            start_t, end_t = max(0, t - window), t
+            if end_t <= start_t:
+                start_t = max(0, end_t - 0.1)
         arrow = self.draw_animated_arrow(
             dwg, arrow_marker, start[0], start[1], end[0], end[1],
-            start_t, t, css_class=style, label=e.label,
+            start_t, end_t, css_class=style, label=e.label,
         )
         if arrow:
             dwg.add(arrow)
