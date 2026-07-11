@@ -139,3 +139,14 @@ def test_hand_elbow_lands_on_the_next_beat_with_receiving_circle():
     i = svg.index('cx="500" cy="60"')
     group = svg[i:svg.index("</g>", i)]
     assert ">L<" in group.replace("\n", "").replace(" ", "")
+
+
+def test_animated_arrows_carry_time_window_attributes():
+    svg = render(
+        "3b 3 3 3\n3a 3 3 3\n"
+        "position A: -100, 0, @B\nposition B: 100, 0, @A\n"
+    )
+    pos = svg.split("position-diagram-section")[1]
+    # every animated arrow knows its window, for the paused-stepping UI
+    assert 'data-start="0"' in pos.replace('"0.0"', '"0"')
+    assert pos.count("data-start") == pos.count("data-end") >= 2

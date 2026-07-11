@@ -982,6 +982,10 @@ class CausalDiagramSVG(ShortcodePlugin):
             class_=css_class,
             marker_end=arrow_marker.get_funciri(),
         )
+        # the visibility window in beats, so the paused/stepping UI can
+        # force arrows of the current beat visible (diagram-controls.js)
+        line["data-start"] = start_time
+        line["data-end"] = end_time
         line.add(opacity_animation())
         if not label:
             return line
@@ -993,6 +997,8 @@ class CausalDiagramSVG(ShortcodePlugin):
             class_="arrow-label",
             text_anchor="middle",
         )
+        text["data-start"] = start_time
+        text["data-end"] = end_time
         text.add(opacity_animation())
         group = dwg.g()
         group.add(line)
@@ -1454,8 +1460,9 @@ class CausalDiagramSVG(ShortcodePlugin):
         self.pos_center_x = width / 2
         self.pos_center_y = height / 2
 
-        # Create SVG (no scaling - use natural coordinates)
-        dwg = svgwrite.Drawing(size=(width, height))
+        # Create SVG (no scaling - use natural coordinates); debug off
+        # so we can attach data-* attributes to the animated arrows
+        dwg = svgwrite.Drawing(size=(width, height), debug=False)
         dwg.add(
             dwg.rect(insert=(0, 0), size=(width, height), fill="none", stroke="black")
         )

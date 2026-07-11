@@ -46,6 +46,39 @@ document.addEventListener("DOMContentLoaded", function() {
 
         var paused = false;
 
+        // while paused, the SMIL opacity windows hide most arrows when
+        // standing exactly on a beat; force everything belonging to the
+        // current beat visible (inline style wins over SMIL attributes)
+        function updateOverrides() {
+            var t = svgs[0].getCurrentTime();
+            if (duration > 0) {
+                t = t % duration;
+            }
+            svgs.forEach(function(s) {
+                s.querySelectorAll('[data-start]').forEach(function(el) {
+                    var a = parseFloat(el.getAttribute('data-start'));
+                    var b = parseFloat(el.getAttribute('data-end'));
+                    var visible;
+                    if (b - a < 1e-6) {
+                        // instantaneous event: show during its beat
+                        visible = a >= t - 1e-6 && a < t + 1 - 1e-6;
+                    } else {
+                        // span: show while it overlaps [t, t+1)
+                        visible = b > t + 1e-6 && a < t + 1 - 1e-6;
+                    }
+                    el.style.opacity = visible ? '1' : '';
+                });
+            });
+        }
+
+        function clearOverrides() {
+            svgs.forEach(function(s) {
+                s.querySelectorAll('[data-start]').forEach(function(el) {
+                    el.style.opacity = '';
+                });
+            });
+        }
+
         function setPaused(p) {
             paused = p;
             svgs.forEach(function(s) {
@@ -56,6 +89,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             });
             play.textContent = p ? '⏵' : '⏸';
+            if (p) {
+                updateOverrides();
+            } else {
+                clearOverrides();
+            }
         }
 
         function step(delta) {
@@ -69,6 +107,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 t = 0;
             }
             svgs.forEach(function(s) { s.setCurrentTime(t); });
+            updateOverrides();
         }
 
         play.addEventListener('click', function() { setPaused(!paused); });
