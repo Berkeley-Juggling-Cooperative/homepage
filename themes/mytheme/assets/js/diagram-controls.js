@@ -66,7 +66,13 @@ document.addEventListener("DOMContentLoaded", function() {
                         // span: show while it overlaps [t, t+1)
                         visible = b > t + 1e-6 && a < t + 1 - 1e-6;
                     }
-                    el.style.opacity = visible ? '1' : '';
+                    if (visible) {
+                        // SMIL animates opacity as a CSS property, which
+                        // outranks plain inline style; only !important wins
+                        el.style.setProperty('opacity', '1', 'important');
+                    } else {
+                        el.style.removeProperty('opacity');
+                    }
                 });
             });
         }
@@ -74,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function() {
         function clearOverrides() {
             svgs.forEach(function(s) {
                 s.querySelectorAll('[data-start]').forEach(function(el) {
-                    el.style.opacity = '';
+                    el.style.removeProperty('opacity');
                 });
             });
         }
