@@ -9,7 +9,12 @@
 .. type: text
 -->
 
-Both jugglers start with 4 clubs each. Juggler A throughs PSP (all passes are crossings) and juggler B does PPS (all passes are straights).
+Both jugglers start with 4 clubs each. Juggler A throughs PSP (all
+passes are crossings) and juggler B does PPS (all passes are
+straights).
+
+B starts half a beat later.
+
 
 {{% causal_diagram %}}
           4.5p$ 3     4.5p@ 4.5p$ 3      4.5p@  4.5p$ 3     4.5p@

@@ -2,7 +2,7 @@
 .. title: Dropabout
 .. slug: dropabout
 .. date: 2025-07-21 19:23:02 UTC-07:00
-.. tags: roundabouts, 3-person, walking
+.. tags: takeouts, 3-person, walking
 .. category: patterns
 .. link: 
 .. description: Dropabout

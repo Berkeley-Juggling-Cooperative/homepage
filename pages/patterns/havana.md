@@ -12,10 +12,12 @@
 A walking pattern where you always turn left in Havana;) 5 beat pattern with changing feeder.
 The person feeding is doing a 2 count, all other three positions a 6 count.
 
+It helps if people can do a normal weave.
+
+Everybody starts with 3 clubs: 2 clubs in their right and 1 club in their left.
+
+
 {{% causal_diagram %}}
-# one 10-beat cycle written per role (A = feeder); the swap line
-# unrolls the full 40 beats: after each cycle the feeder (A) takes
-# role D, D takes C, and C takes B, who becomes the new feeder
 swap: A->D->C->B
   3d 3 3c 3 3b 3 3d 3 3c 3
   3  3 3  3 3a 3 3  3 3  3

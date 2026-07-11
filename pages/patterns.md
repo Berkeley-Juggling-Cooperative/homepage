@@ -58,7 +58,7 @@ If you want to submit your own, have a look at [the syntax we use](causal-diagra
 
 # Type
 
-- [Roundabouts](link://tag/roundabouts)
+- [Takeouts](link://tag/takeouts)
 - [Torture Chambers](link://tag/torture-chamber)
 - [Walking](link://tag/walking)
 </div>

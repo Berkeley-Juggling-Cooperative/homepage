@@ -81,21 +81,11 @@ the `uv.lock` file and pyproject.toml to git.
 
 ## TODO
 
-- add juggling patterns and organize them using tags
+- add more juggling patterns
 - add old patterns from original web page
-- Causal diagrams:
-  - Try adding Havanna and Scrambled Ivy to test new system
-  - add option to plot passes at a certain time in position diagram
-    (think the different beat in torture chamber), instead or additional to animation
 - page layout:
   - modify tag page to not say "Posts about 3-count", but "Patterns
 	involving 3-count"
-  - remove categories from tag overview and don't generate the category
-	pages (or delete them before deploying?)
 - 3d Animations:
   - add 3d animation of patterns (see https://github.com/helbling/passist/blob/main/src/lib/animation.mjs)
   - can we do 3d animation of moving patterns?
-- use the browser built-in error checker (F12 in firefox) and fix any issues
-- handle images and videos: Figure out how to do this using git
-  without committing all the images to git. Probably:
-  * we might commit certain files there though, e.g. subtitles or other yaml files that nikola uses

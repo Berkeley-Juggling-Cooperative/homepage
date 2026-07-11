@@ -2,7 +2,7 @@
 .. title: Roundabout
 .. slug: roundabout
 .. date: 2025-07-21 19:22:28 UTC-07:00
-.. tags: roundabouts, 3-person, walking
+.. tags: takeouts, 3-person, walking
 .. category: patterns
 .. link: 
 .. description: Roundabout
@@ -47,7 +47,7 @@ steal in the above description, so B immediately throws the self, etc.
 title: Roundabout
 swap: A->B->C
 bars: 8,16
-  3b 3 3"pelf" 3 (4: 0 throw 3b R; 1 steal c>L; 2 flip;  2.75 hand R>cL; 3.25 zip L>R) (4: 0.25 steal c>L; 0.65 hand R>bL; 1.25 zip L>R; 3 steal b>L) 3b 3 3 3
+  3b 3 3"pelf" 3 (4: 0 throw 3b R; 1 steal c>L; 2 flip;  2.75 hand R>cL; 3.25 zip L>R) (4: 0.25 steal c>L; 0.65 hand R>bL; 1.25 zip L>R; 3 steal b>L) 3b 3 0 3
   3a 3 3 3 3c 3 3 3 3c 3 3"pelf" 3 (4: 0 throw 3c R; 1 steal a>L; 2 flip;  2.75 hand R>aL; 3.25 zip L>R)
   (4: 0.25 steal b>L; 0.65 hand R>aL; 1.25 zip L>R; 3 steal a>L) 3a 3 0 3 3b 3 3 3 3a 3 3 3
 position A: 0,  -100,  0,@B;\
@@ -92,5 +92,6 @@ position C: 0,     0,  0,270;\
 
 ## More complex patterns with more people:
 
+- [Wankel Engine](link:///patterns/wankel-engine)
 - [Scrambled B on Toast](link:///patterns/scrambled-b-on-toast)
 
