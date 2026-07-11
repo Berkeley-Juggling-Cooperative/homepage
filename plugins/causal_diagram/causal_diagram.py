@@ -878,15 +878,13 @@ class CausalDiagramSVG(ShortcodePlugin):
         return group
 
     def draw_arrow(self, dwg, arrow_marker, start_x, start_y, end_x, end_y,
-                   css_class, label=None):
+                   css_class):
         """Draw an arrow in the diagram.
 
         These start and stop at the circle.
 
         If doubles and other longer throughs that are selves, are drawn
         using an arc.
-
-        An optional label is placed next to the arrow's midpoint.
         """
 
         dx = end_x - start_x
@@ -912,34 +910,28 @@ class CausalDiagramSVG(ShortcodePlugin):
             path_data = (
                 f"M {start_x},{start_y} Q {control_x},{control_y} {end_x},{end_y}"
             )
-            element = dwg.path(
+            return dwg.path(
                 d=path_data,
                 fill="none",
                 class_=css_class,
                 marker_end=arrow_marker.get_funciri(),
             )
 
-        else:
-            element = dwg.line(
-                start=(start_x, start_y),
-                end=(end_x, end_y),
-                class_=css_class,
-                marker_end=arrow_marker.get_funciri(),
-            )
+        return dwg.line(
+            start=(start_x, start_y),
+            end=(end_x, end_y),
+            class_=css_class,
+            marker_end=arrow_marker.get_funciri(),
+        )
 
-        if not label:
-            return element
-
-        mid_x = (start_x + end_x) / 2
-        mid_y = (start_y + end_y) / 2 - 6
-        if is_arc:
-            # quadratic bezier at t=0.5 sits halfway to the control point
-            mid_y -= self.step_Y / 4
-        group = dwg.g()
-        group.add(element)
-        group.add(dwg.text(label, insert=(mid_x, mid_y),
-                           class_="arrow-label", text_anchor="middle"))
-        return group
+    def draw_causal_label(self, dwg, time, row_y, text):
+        """A label above the circle where the throw/transfer starts."""
+        return dwg.text(
+            text,
+            insert=(self.x_of(time), row_y - self.radius - 6),
+            class_="arrow-label causal-label",
+            text_anchor="middle",
+        )
 
     def draw_animated_arrow(
         self,
@@ -1226,7 +1218,7 @@ class CausalDiagramSVG(ShortcodePlugin):
         return causal_svg
 
     def draw_elbow_arrow(self, dwg, arrow_marker, x, y_from, y_to, x_end,
-                         css_class, label=None):
+                         css_class):
         """A hand-over in the causal diagram: vertical from the giver at
         the transfer moment, then along the receiver's row, ending at
         the beat where the club gets used."""
@@ -1234,18 +1226,11 @@ class CausalDiagramSVG(ShortcodePlugin):
         if end_x <= x + 2 or y_from == y_to:
             # no room for the elbow: plain vertical transfer
             return self.draw_arrow(dwg, arrow_marker, x, y_from, x, y_to,
-                                   css_class, label=label)
+                                   css_class)
         start_y = y_from - self.radius if y_to < y_from else y_from + self.radius
         d = f"M {x},{start_y} L {x},{y_to} L {end_x},{y_to}"
-        element = dwg.path(d=d, fill="none", class_=css_class,
-                           marker_end=arrow_marker.get_funciri())
-        if not label:
-            return element
-        group = dwg.g()
-        group.add(element)
-        group.add(dwg.text(label, insert=((x + end_x) / 2, y_to - 6),
-                           class_="arrow-label", text_anchor="middle"))
-        return group
+        return dwg.path(d=d, fill="none", class_=css_class,
+                        marker_end=arrow_marker.get_funciri())
 
     def draw_causal_events(self, dwg, arrow_marker, throws):
         """Transfer arrows (hand / take / zip) and hold lines.
@@ -1264,10 +1249,12 @@ class CausalDiagramSVG(ShortcodePlugin):
                         src_h = self.juggler[e.src[0]]["height"]
                         arr = self.draw_arrow(dwg, arrow_marker,
                                               x, src_h, x, H,
-                                              css_class="arrow-hand",
-                                              label=e.label)
+                                              css_class="arrow-hand")
                         if arr:
                             dwg.add(arr)
+                        if e.label:
+                            dwg.add(self.draw_causal_label(
+                                dwg, e.time, src_h, e.label))
                         releases[e.src[0]].append(e.time)
                 elif e.action == "hand":
                     releases[name].append(e.time)
@@ -1286,10 +1273,11 @@ class CausalDiagramSVG(ShortcodePlugin):
                         t_land = wait_t + math.ceil(e.time - wait_t - 1e-9)
                     arr = self.draw_elbow_arrow(
                         dwg, arrow_marker, x, H, tgt_h,
-                        self.x_of(t_land), css_class="arrow-hand",
-                        label=e.label)
+                        self.x_of(t_land), css_class="arrow-hand")
                     if arr:
                         dwg.add(arr)
+                    if e.label:
+                        dwg.add(self.draw_causal_label(dwg, e.time, H, e.label))
                 elif e.action == "zip":
                     # a zip takes half a beat: hand at t, other hand at t+0.5
                     releases[name].append(e.time)
@@ -1297,9 +1285,11 @@ class CausalDiagramSVG(ShortcodePlugin):
                     arr = self.draw_arrow(
                         dwg, arrow_marker,
                         x, H, self.x_of(e.time + 0.5), H,
-                        css_class="arrow-zip", label=e.label)
+                        css_class="arrow-zip")
                     if arr:
                         dwg.add(arr)
+                    if e.label:
+                        dwg.add(self.draw_causal_label(dwg, e.time, H, e.label))
                 elif e.action == "throw":
                     releases[name].append(e.time)
                 elif e.action == "catch":
@@ -1414,10 +1404,11 @@ class CausalDiagramSVG(ShortcodePlugin):
                 end_y = self.juggler[t.target]["height"]
                 style = t.style
             arrow = self.draw_arrow(dwg, arrow_marker, start_x, start_y,
-                                    end_x, end_y, css_class=style,
-                                    label=t.label)
+                                    end_x, end_y, css_class=style)
             if arrow:
                 dwg.add(arrow)
+            if t.label:
+                dwg.add(self.draw_causal_label(dwg, t.time, start_y, t.label))
 
         # phase 3: transfer arrows (hand / take / zip) and hold lines
         self.draw_causal_events(dwg, arrow_marker, throws)

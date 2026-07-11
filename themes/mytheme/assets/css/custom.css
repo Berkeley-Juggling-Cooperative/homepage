@@ -392,6 +392,19 @@ article h5,
   fill: #555;
 }
 
+/* in the causal diagram the label sits above the start circle and
+   gets more contrast */
+.causal-label {
+  fill: #111;
+  font-weight: 600;
+}
+
+@media (prefers-color-scheme: dark) {
+  .causal-label {
+    fill: #f0f0f0;
+  }
+}
+
 /* role name below a juggler in the position diagram */
 .role-label {
   font-size: 0.7em;

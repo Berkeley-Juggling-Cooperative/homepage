@@ -65,3 +65,11 @@ def test_steal_event_label_lands_on_rerouted_arrow():
     stolen = [t for t in d.throws if t.stolen_by]
     assert len(stolen) == 1
     assert stolen[0].label == "snatch"
+
+
+def test_causal_label_sits_above_the_start_circle():
+    svg = render('3b"lofty" 3 3\n3a 3 3').replace(".0", "")
+    # throw at beat 0: circle at (100, 60); label centered above it
+    i = svg.index("causal-label")
+    tag = svg[svg.rindex("<text", 0, i):svg.index(">", i)]
+    assert 'x="100"' in tag and 'y="42"' in tag
