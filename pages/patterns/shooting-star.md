@@ -22,7 +22,7 @@ Showing the version below where you walk with 2 clubs in your hand.
   3d 3 3 3 3d 0 0 0  0 3  3  3  3d  3  3  3
    0 3 3 3 3c 3 3 3 3c 3  3  3  3c  0  0  0
   3a 0 0 0  0 3 3 3 3a 3  3  3  3a  3  3  3
-  3b 0 3 3 3b 3 3 3 3b 0  0  0   0  3  3  3
+  3b 3 3 3 3b 3 3 3 3b 0  0  0   0  3  3  3
 title: 4-count Shooting Star
 position A: 0, -100,   0, @0;\
             4, -100,   0, @0;\
