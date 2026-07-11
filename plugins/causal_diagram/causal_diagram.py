@@ -1616,7 +1616,7 @@ class CausalDiagramSVG(ShortcodePlugin):
             return
         dx, dy = ex - sx, ey - sy
         length = (dx**2 + dy**2) ** 0.5
-        gap = self.radius + 6  # a small gap between arrow and circle
+        gap = self.radius + 12  # a small gap between arrow and circle
         if length > 2 * gap + 4:
             sx += gap * dx / length
             sy += gap * dy / length

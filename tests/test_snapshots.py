@@ -49,7 +49,7 @@ def test_snapshot_arrows_are_center_to_center_trimmed():
     lines = re.findall(r'<line[^>]*class="arrow-default[^>]*>', snap)
     assert len(lines) == 2
     # A at (-100,0), B at (100,0), canvas 300x300 -> centers (50,150)
-    # and (250,150); trimmed by radius + gap (12 + 6): 68 and 232
+    # and (250,150); trimmed by radius + gap (12 + 12): 74 and 226
     coords = set()
     for ln in lines:
         x1 = float(re.search(r'x1="([-\d.]+)"', ln).group(1))
@@ -59,4 +59,4 @@ def test_snapshot_arrows_are_center_to_center_trimmed():
         assert y1 == y2 == 150.0
         coords.add((x1, x2))
     # the exchange: same segment, opposite directions
-    assert coords == {(68.0, 232.0), (232.0, 68.0)}
+    assert coords == {(74.0, 226.0), (226.0, 74.0)}
