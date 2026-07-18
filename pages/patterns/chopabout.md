@@ -72,11 +72,16 @@ Juggler C:
 - throws a half-chop
 - starts passing to A, who now steps out of the middle
 
+# Combinations
 
-Similar patterns
+One can also combine this with [Dropabout](link:///patterns/dropabout) and [Chopabout](link:///patterns/chopabout)
+
+{{% video src="/videos/roundabout-dropabout-chopabout.mp4" %}}
+
+# Similar patterns
+
 - [Roundabout](link:///patterns/roundabout)
 - [Dropabout](link:///patterns/dropabout)
 
-
-More complex patterns with more people:
+## More complex patterns with more people:
 - [Scrambled B on Toast](link:///patterns/scrambled-b-on-toast)

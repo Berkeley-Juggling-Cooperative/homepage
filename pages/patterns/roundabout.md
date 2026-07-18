@@ -79,6 +79,12 @@ position C: 0,     0,  0,270;\
             15 ,-100,  0,@B;
 {{% /causal_diagram %}}
 
+# Combinations
+
+One can also combine this with [Dropabout](link:///patterns/dropabout) and [Chopabout](link:///patterns/chopabout)
+
+{{% video src="/videos/roundabout-dropabout-chopabout.mp4" %}}
+
 # Similar Patterns
 
 ## Simpler version of this:

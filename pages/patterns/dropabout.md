@@ -74,9 +74,16 @@ Juggler C:
   the multiplex
 - starts passing to A, who now steps out of the middle
 
-Similar patterns:
+# Combinations
+
+One can also combine this with [Dropabout](link:///patterns/dropabout) and [Chopabout](link:///patterns/chopabout)
+
+{{% video src="/videos/roundabout-dropabout-chopabout.mp4" %}}
+
+
+# Similar patterns:
 - [Roundabout](link:///patterns/roundabout)
 - [Chopabout](link:///patterns/chopabout)
 
-More complex patterns with more people:
+# More complex patterns with more people:
 - [Scrambled B on Toast](link:///patterns/scrambled-b-on-toast)
