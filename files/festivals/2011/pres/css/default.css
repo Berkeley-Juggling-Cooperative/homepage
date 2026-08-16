@@ -1,0 +1,236 @@
+/*------------------------------------------
+    Reset (from the Yahoo UI Library)
+------------------------------------------*/
+
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td  {margin:0;padding:0;}
+table {border-collapse:collapse;border-spacing:0;}
+fieldset,img {border:0;}
+address,caption,cite,code,dfn,em,strong,th,var {font-style:normal;font-weight:normal;}
+ol,ul {list-style:none;}
+caption,th {text-align:left;}
+h1,h2,h3,h4,h5,h6 {font-size:100%;font-weight:normal;}
+q:before,q:after {content:'';}
+abbr,acronym {border:0;}
+
+/*------------------------------------------
+  Base
+------------------------------------------*/
+
+a,
+label {
+	border-bottom:		#000 2px solid;
+	color: 				inherit;
+    outline: 			none;
+    padding-bottom: 	2px;
+    text-decoration: 	none;
+    text-shadow: rgba(255,255,255,0) 0 1px 10px;
+    -webkit-transition: color .2s linear, border-bottom-color .2s linear, text-shadow .2s linear;
+}
+html:hover a,
+html:hover label {
+	border-color:		#ecff4f;
+    color: 				#ecff4f;
+}
+html:hover a:hover,
+html:hover label:hover {
+	border-color: 		#fff;
+    color: 				#fff;
+    text-shadow: rgba(255,255,255,.8) 0 1px 15px;
+}
+strong {font-weight: bold;}
+section {display:block;}
+
+/*------------------------------------------
+  Global Reusable Classes
+------------------------------------------*/
+
+.hide {display: none !important;}
+
+/*------------------------------------------
+    Structure
+------------------------------------------*/
+html {
+    background: 		#000000 url(../img/pmm-hands-bw.jpg) right 60px no-repeat;
+/*	background-attachment: fixed;*/
+}
+
+body {
+/*	background: 		url(../img/background_repeat.jpg) repeat-x;*/
+    border-top: 		12px solid #1c1c1c;
+    color: 				#b6b6b6;
+    font-family: 		"CartoGothicStdBook", "helvetica neue", helvetica, arial, sans-serif;
+    min-width: 			320px;
+}
+
+section {display: block;}
+
+#wrap {
+    padding: 			50px 0 0 140px;
+    width: 				580px;
+    min-width: 			320px;
+    max-width: 			580px;
+    margin-bottom: 		60px;
+/*
+	width: 600px;
+	padding: 0;
+	margin: 280px 516px auto auto;*/
+}
+
+header {
+    font-size: 			24px;
+	font-weight:		300;
+    line-height: 		1.2em;
+	padding-top: 		32px;
+    text-shadow: 		#000 0 -1px 0;
+    text-transform: 	uppercase;
+    -webkit-text-stroke: .5px transparent;
+    -webkit-transition: color .2s linear;
+}
+
+header h1 {
+    color: 				#fff;
+	font:				52px 'ChunkFive';
+	line-height:		1.1em;
+	margin-bottom: 		1.2em;
+	text-transform: 	lowercase;
+}
+
+header a.mail {
+	background:			transparent url(../img/18-envelope.png) left center no-repeat;
+	padding-left:		28px;
+}
+
+header p {
+	color: 				#b0b0b0;
+	line-height:		1.5em;
+	margin-bottom: 		1.2em;
+
+}
+
+header span.s  {
+	color: 				#fff;
+	font-size:			100%;
+	font-weight:		normal;
+}
+
+header em {
+    text-shadow: rgba(255,255,255,0) 0 1px 20px;
+    -webkit-transition: color .2s linear, text-shadow .2s linear;
+}
+
+header em:hover {
+    color: #fff;
+    text-shadow: rgba(255,255,255,.5) 0 1px 20px;
+}
+
+header strong  {
+	font-weight: 500;
+}
+
+#web {
+	border-bottom: 		12px solid #ecff4f;
+    color: 				#9ccbff;
+    font-size: 			16px;
+    line-height: 		2em;
+    margin-bottom: 		.4em;
+	padding-bottom: 	.8em;	
+    text-transform: 	uppercase;
+    -webkit-text-stroke: .5px transparent;
+}
+
+#web p {
+	line-height:		1.7em;
+}
+
+#forms  {
+	font-size:				15px;
+	padding: 				1em 0;
+}
+
+#forms input[type='email']  {
+	background:				#666;
+	border:					#ccc 2px solid;
+	color:					#fff;
+	font-size:				18px;
+	margin:					.8em 0;
+	padding:				.4em .6em;
+	width:					400px;
+	-webkit-border-radius:	5px;
+	-moz-border-radius: 	5px; 
+	-0-border-radius: 		5px;
+	border-radius:			5px;
+    -webkit-transition: color .2s linear, border-color .2s linear;
+    -moz-transition: color .2s linear, border-color .2s linear;
+    -o-transition: color .2s linear, border-color .2s linear;
+}
+
+#forms input[type='email']:focus  {
+	background:				#555;
+	border:					#00a0dd 2px solid;
+	outline:				none;
+}
+
+#forms div.message p {
+	background:				transparent url(../img/29-heart.png) 3px left no-repeat;
+	font-size:				16px;
+	color:					#fff;
+	line-height:			1.6em;
+	margin:					.7em;
+	padding-left:			30px;
+	text-transform:			uppercase;
+}
+
+#forms div.message p.error {
+	background:				transparent url(../img/184-warning.png) center left no-repeat;
+}
+
+/*	honeypot captka		*/
+#forms div.pleaseComment {
+	height:				0;
+	text-indent:		-200em;
+}
+
+/*	blue button; from 		http://www.webdesignerwall.com/demo/css-buttons.html */
+#forms button {
+	display: 				inline-block;
+	zoom: 					1; /* zoom and *display = ie7 hack for display:inline-block */
+	*display: 				inline;
+	cursor: 				pointer;
+	text-align: 			center;
+	text-decoration: 		none;
+	font-size: 				16px;
+	margin-left:			12px;
+	padding: 				.5em 2em .55em;
+	text-shadow: 			0 1px 1px rgba(0,0,0,.3);
+	vertical-align: 		baseline;
+	-webkit-border-radius: 	.5em; 
+	-moz-border-radius: 	.5em; 
+	-0-border-radius: 		.5em;
+	border-radius: 			.5em;
+	-webkit-box-shadow: 	0 1px 2px rgba(0,0,0,.2);
+	-moz-box-shadow: 		0 1px 2px rgba(0,0,0,.2);
+	-0-box-shadow: 			0 1px 2px rgba(0,0,0,.2);
+	box-shadow:				0 1px 2px rgba(0,0,0,.2);
+
+	
+	color: #d9eef7;
+	border: solid 1px #0076a3;
+	background: #0095cd;
+	background: -webkit-gradient(linear, left top, left bottom, from(#00adee), to(#0078a5));
+	background: -moz-linear-gradient(top,  #00adee,  #0078a5);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#00adee', endColorstr='#0078a5');
+}
+
+#forms button:hover {
+	background: #007ead;
+	background: -webkit-gradient(linear, left top, left bottom, from(#0095cc), to(#00678e));
+	background: -moz-linear-gradient(top,  #0095cc,  #00678e);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0095cc', endColorstr='#00678e');
+}
+
+#forms button:active {
+	color: #80bed6;
+	background: -webkit-gradient(linear, left top, left bottom, from(#0078a5), to(#00adee));
+	background: -moz-linear-gradient(top,  #0078a5,  #00adee);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0078a5', endColorstr='#00adee');
+}

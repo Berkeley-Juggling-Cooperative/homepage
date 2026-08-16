@@ -1,0 +1,5 @@
+# finish design
+# cross-browser support
+# email signup form
+	- js to highlight form
+	- 

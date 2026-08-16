@@ -1,0 +1,134 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+	<title>Thank You</title>
+	
+	<script type="text/javascript" src="jquery.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("p#screed a").click(function() {
+				event.preventDefault();
+			});
+			
+			$("p#screed a").mouseover(function() {
+				App.highlight($(this).attr('rel'));
+			});
+			
+			$("p#screed a").mouseout(function() {
+				App.clear();
+			});
+		});
+		
+		var App = {
+			highlight: function(type) {
+				$("ul#credits li." + type).addClass('boosh');
+			},
+			
+			clear: function() {
+				$("ul#credits li").removeClass('boosh');
+			}
+		}
+	</script>
+	
+	<style type="text/css">
+		html {
+			background:				#fafaff;
+		}
+		body {
+			color:					#111;
+			font:					12px 'Lucida Grande', Verdana, sans-serif;
+			margin:					5em auto;
+			width:					44em;
+		}
+		h1 {
+			font-family:			'Times New Roman', Times, Georgia, serif;
+			font-size:				9em;
+			font-weight:			normal;
+			margin:					0 0 .1em 0;
+			text-align:				left;
+			text-align:				center;
+		}
+		a {
+			color:					#be2121;
+			font-weight:			bold;
+			text-decoration:		none;
+		}
+		a:hover {
+			text-decoration:		underline;
+		}
+		p#screed {
+			border-bottom:			#999 1px solid;
+			font-size:				1.1em;
+			padding-bottom:			.6em;
+			text-align:				justify;
+		}
+		ul#credits {
+			list-style:				none;
+			margin:					2.4em 0;
+			padding:				0;
+			text-align:				center;
+		}
+		ul#credits li {
+			color:					#999;
+			display:				inline;
+			font-family:			'Times New Roman', Times, Georgia, serif;
+			font-size: 				1.8em;
+			margin-right: 			1em;
+		}
+		ul#credits li.boosh {
+			color:					#00f;
+		}
+		ul#credits li:after {
+			content:				" ";
+		}
+		p#close {
+			border-bottom:				#999 1px solid;
+			color:					#999;
+			font-size:				.9em;
+			padding-bottom:			.8em;
+		}
+	</style>
+	
+</head>
+
+<body>
+
+<h1>Thank You!</h1>
+
+<p id="screed">
+	The 2008 Berkeley Juggling and Unicycling Festival was a tremendous success that 
+	would not be possible without the contributions of our organizing <a href="index.html#organizers" rel="organizer">
+	committee</a>, public show <a href="index.html#performers" rel="performer">performers</a>, 
+	renegade show <a href="index.html#renegades" rel="renegade">performers</a>, <a href="index.html#workshops" rel="workshop">
+	workshop</a> leaders, <a href="index.html#vendors" rel="vendor">vendors</a>, <a href="index.html#sponsors" rel="sponsor">sponsors</a>, friends at the 
+	Berkeley Unified <a href="index.html#busd" rel="busd">School</a> District, and you, our wonderful attendees, whose 
+	smiles and good will make all the effort worthwhile.
+</p>
+
+<p id="close">
+	Lost something? Found something? Have good pictures? Ready to help with next year? Need the phone 
+	number of that cute guy at the front table? By all means 
+	email us.
+</p>
+
+<ul id="credits">
+	<li class="organizer">Lance</li><li class="organizer">Erika</li><li class="organizer">Dylan</li><li class="organizer">Joe</li><li class="organizer">Josh</li><li class="organizer">Tom</li><li class="organizer">Cindy</li><li class="organizer">Frazer</li><li class="organizer">Peter</li><li class="organizer">Marc</li><li class="organizer">Jeff</li><li class="organizer">Arun</li><li class="organizer">Corey</li><li class="organizer">Jo Andrea</li><li class="organizer">Bri</li><li class="busd">Agatha</li><li class="busd">Kaschiev</li><li class="busd">David</li><li class="busd">Mr. Singh</li><li class="renegade">Curt Carlyle</li><li class="renegade">Screwy Louie</li><li class="renegade">Dan Chan</li><li class="renegade">Jerim</li><li class="renegade">Jeremy Shaffer</li><li class="renegade">Heart</li><li class="renegade">Humboldt Burlesque</li><li class="performer">Kevin Axtell</li><li class="performer">Baby Doll</li><li class="performer">Curtis Carlyle</li><li class="performer">John Foss</li><li class="performer">Ashley Foster</li><li class="performer">Matt Hall</li><li class="performer">Bob Hartman</li><li class="performer">Dan Holzman</li><li class="performer">Iman Lizarazu</li><li class="performer">Poetic Motion Machine</li><li class="performer">Stanford Juggling Research Institute</li><li class="performer">Pinkman</li><li class="performer">Noah Malone</li><li class="performer">Chris Garcia</li><li class="vendor">Neon Husky</li><li class="vendor">Serious Juggling</li><li class="sponsor">Dube Juggling Equipment</li><li class="sponsor">Higgins Brothers</li><li class="sponsor">Duncan Yo-Yo</li><li class="sponsor">Unicycle.com</li></ul>
+<!-- Piwik -->
+<script type=\"text/javascript\">
+try {
+var piwikTracker = Piwik.getTracker(pkBaseURL + \"piwik.php\", 6);
+piwikTracker.trackPageView();
+piwikTracker.enableLinkTracking();
+} catch( err ) {}
+</script>
+<!-- End Piwik Tracking Code -->
+
+
+</body>
+</html>

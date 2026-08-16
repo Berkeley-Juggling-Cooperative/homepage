@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Berkeley Juggling &amp; Unicycling Festival</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="./bootstrap/css/bootstrap.css" rel="stylesheet">
+    <!-- Google fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Bree+Serif' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+    <style>
+      body {
+        background: #f9f8f3;
+        font-size: 15px;
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      a {
+        color: #ED5456;
+      }
+      div.navbar-inner {
+        background: #f9f8f3 url(./pres/img/linen-tile-brn.png);
+      }
+      div.nav-collapse {
+        float: right;
+      }
+      .navbar .brand {
+        background: transparent url(./pres/img/peacebag.png) 18px center no-repeat;
+        color: #fafafa;
+        font: 16px 'Bree Serif', Georgia, serif;
+        padding-left: 54px;
+        text-transform: uppercase;
+      }
+      div.well {
+        background: transparent url(./pres/img/grid.png);
+      }
+      .container p {
+        margin-bottom: 18px;
+      }
+      .row {
+        margin-bottom: 40px;
+      }
+      .center {
+        text-align: center;
+      }
+
+      strong {
+        color: #4993ec;
+        font-weight: bold;
+      }
+
+      footer {
+        margin-top: 100px;
+      }
+
+      /* hero */
+      .hero-unit {
+        background: #000 url(./pres/img/pmm-hands-bw.jpg) bottom right no-repeat;
+        color: #74b61f;
+      }
+      .hero-unit h1 {
+        color: #fff;
+        font: 400 28px/1.3 'Bree Serif', Georgia, serif;
+        margin-top: 180px;
+      }
+
+      /* show specifics */
+      #performers img {
+        margin-bottom: 20px;
+      }
+
+      #performers h4 {
+        margin-bottom: 6px;
+      }
+
+      /* subscribe form */
+      div.pleaseComment {
+        display: none;
+        visibility: hidden;
+      }
+
+      /* workshop table */
+      table.table {
+        font-size: .9em;
+        margin-top: 12px;
+	border-collapse: separate;
+	border-spacing: 1px; 
+      }
+
+      table.table thead td {
+        background: #efefef;
+        font-weight: bold;
+      }
+
+      table.table td {
+        width: 32%;
+      }
+
+      table.table td:first-child {
+        width: 4%;
+      }
+
+      table.table tbody tr td:first-child {
+        background: #efefef;
+      }
+
+      table.table tbody td span {
+        color: #4993ec;
+        padding-left: 6px;
+      }
+      
+
+      /* google fonts */
+      body  {
+        font: 400 14px/1.6 'Open Sans', Verdana, Helvetica, sans-serif;
+      }
+      h2 {
+         font: 400 24px/1.3 'Bree Serif', Georgia, serif;
+      }
+      h3 {
+         font: 400 20px/1.3 'Bree Serif', Georgia, serif;
+      }
+      h4 {
+         font: 400 16px/1.3 'Bree Serif', Georgia, serif;
+      }
+
+    </style>
+    <link href="./bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="../assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body data-spy="scroll">
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">
+            bjuf
+          </a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li class="active"><a href="#">Top</a></li>
+              <li><a href="#show" class="show">Public Show</a></li>
+              <li><a href="#at" class="at">At The Festival</a></li>
+              <li><a href="#logistics" class="logistics">Logistics</a></li>
+              <li class="dropdown" id="menu1">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#menu1">
+                  Contact 
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>General Questions</li>
+                  <li>Show Coordinator</li>
+                  <li>Workshop Coordinator</li>
+                  <li class="divider"></li>
+                  <li><a data-toggle="modal" href="#myModal">Mailing List</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <!-- Main hero unit for a primary marketing message or call to action -->
+      <div class="hero-unit">
+        <h1>Berkeley Juggling &amp; Unicycling Festival</h1>
+        <p>Friday, August 17th - Sunday, August 19th, 2012</p>
+      </div>
+
+
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="span4">
+          <h2>Schedule</h2>
+          <h4>Open Gym</h4>
+           <ul class="unstyled">
+              <li>Friday,   August 17th: <span class="time">3pm to midnight</span></li>
+              <li>Saturday, August 18th: <span class="time">9am to midnight</span></li>
+              <li>Sunday,   August 19th: <span class="time"><strong>10am</strong> to 5pm</span></li>
+            </ul>
+            <h4>Show</h4>
+            <ul class="unstyled">
+              <li><span class="time"><a href="#show">Variety Show</a> Saturday, August 18th at 7:30pm</span> (tickets $15, $5 kids 12 and under)</li>
+            </ul>
+            <h4>Renegade Show</h4>
+            <ul class="unstyled">
+              <li><span class="time"><a href="#show">Renegade Show</a> Friday, August 17th at 10:30pm</span> (free, but perhaps not family friendly!)</li>
+            </ul>
+            <h4>Unicycle Rides</h4>
+            <ul class="unstyled">
+              <li>Big wheel party ride: Saturday 10am</li>
+      	      <li>"My First" MUni ride: Saturday 3pm</li>
+      	      <li>MUni fun ride: Sunday 1pm</li>
+            </ul>
+            <h4>Games and Competitions</h4>
+            <ul class="unstyled">
+              <li>Unicycle Basketball Tournament: Friday 7pm</li>
+              <li>Unicycle Games: Sunday 1pm <br>(tug of war, pickup and more)</li>
+              <li>Juggling Games: Sunday 2pm <br>(endurance, simon says and more)</li>
+            </ul>
+        </div>
+        <div class="span4">
+          <h2>Location</h2>
+            <address>
+              Berkeley High School <br>
+              1980 Allston Way <br>
+              Berkeley, CA 94704
+            </address>
+           <p>
+              We are gathering again this year in the Jacket Gym at Berkeley High School, with plenty of indoor and outdoor space for jugglers and 
+              unicyclists alike. The <a href="#show">Variety Show</a> will be right next door in the Florence Schwimley Theater at Allston Way on the same campus.
+           </p>
+          <p><a class="btn" href="#logistics">More logistics &raquo;</a></p>
+       </div>
+        <div class="span4">
+          <h2>&nbsp;</h2>
+          <p>
+            <a href="http://bit.ly/dcPZnb" title="venue map on google; milvia at durant in berkeley, ca">
+              <img src="./pres/img/bhs-map-color.png" alt="map">
+            </a>
+          </p>
+          <p>
+            <a class="btn" href="http://bit.ly/dcPZnb" target="blank">Google map &raquo;</a>
+            <a class="btn" href="http://bhs.berkeleyschools.net/information/campus-map/" target="blank">Campus map &raquo;</a>
+          </p>
+        </div>
+      </div>
+
+      <div id="info" class="row">
+        <div class="span12">
+          <h2>A Free Festival of the Circus Arts</h2>
+          <p>
+            Now in our seventh year, the Berkeley Juggling and Unicycling Festival is the San Francisco Bay Area's premier gathering for jugglers, unicyclists, spinners, twirlers, diaboloists, hoopers, slackliners and anyone fascinated by feats of dexterity! The gym space, workshops and games are all <strong>free and open to the public and family friendly</strong>. Our amazing, low-cost Variety Show has been called the best entertainment bargain in the East Bay! Whether you are mastering a five club pirouette, play on an internation unicycle basketball team or are just learning to toss and ride, the Berkeley Juggling and Unicycling Festival is the place for you! <strong>Join us August 17th - 19th at Berkeley High School</strong>.
+          </p>
+        </div>
+      </div>
+
+      <hr>
+
+
+      <!-- Public show -->
+      <div id="show" class="row">
+        <div class="span12">
+          <h2>Public Variety Show</h2>
+          <p>
+            The Berkeley Festival's public variety show has become a community event, attracting over 
+            500 attendees last year! We work hard to provide a show with a variety of acts from 
+            the full spectrum of circus arts, assembled a 
+            selection of performers from the incredible pool of talent here in the Bay Area and amongst our many attendees.
+          </p>
+          <p>
+            The show is family friendly, fun for all ages and the best entertainment value you can possibly imagine! 
+            All show proceeds go directly to funding the Berkeley Juggling and Unicycling Festival and supporting 
+            circus arts in our community. Aside from arriving with your props and positive spirit, attending the show (and 
+            convincing your friends to join you!) is the best way to support our efforts.
+          </p>
+          <p>
+            <strong>Show tickets</strong> are $15 for adults, $5 for children 12 and under and are available exclusively at the festival anytime or at the theater door one half hour before opening.
+          </p>
+        </div>
+      </div>
+
+        <!-- performers start here -->
+      <div id="performers">
+        <div class="row">
+          <div class="span4">
+            <img src="pres/img/performers/dan-holzman.png" alt="dan holzman">
+            <h4>Dan Holzman - <span>Emcee</span></h4>
+            <p>
+              Juggler, comedian, Raspyni Brother. Dan has the strangest bag of juggling props you've ever seen, and he's invented more tricks with each item than you've forgotten. We're proud once again to feature Dan and his well-pressed pants as our emcee for this year's show! More information (and bookings, don't forget bookings) at <a href="http://www.raspyni.com">www.raspyni.com</a>.
+            </p>
+          </div>
+
+          <div class="span4">
+            <img src="pres/img/performers/kyle-johnson.png" alt="kyle johnson">
+            <h4>Kyle Johnson - <span>Solo Juggling</span></h4>
+            <p>
+              In his last 9 years Kyle has studied and performed juggling around the world. He was voted "Most Inspirational Juggler" at the Humboldt Juggling Festival in 2009 and The Damento Juggling Festival in 2010, certified by the International Juggler's Association for Y.E.P. (Youth Education Program) for teaching juggling to children in 2010, and has been giving private lessons as well as larger workshops at international festivals for the past three years. Kyle is currently focusing on mixing contact juggling with conventional toss juggling and smooth movement.
+            </p>
+          </div>
+
+          <div class="span4">
+            <img src="pres/img/performers/something-ridiculous.png" alt="something ridiculous">
+            <h4>Something Ridiculous - <span>Juggling and Acrobatics</span></h4>
+            <p>
+              Something Ridiculous is the high-energy juggling and acrobatic act performed by slapstick stuntmen Mark Wilder and VonJon. Juggling everything from machetes to bowling balls, the comic duo climbs up free-standing ladders, onto tall unicycles or atop shoulders in a wildly entertaining, dynamic show.  Contact them at <a href="mailto:ridiculousjugglers@gmail.com">ridiculousjugglers@gmail.com</a> or find them on Facebook.
+            </p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="span4">
+            <img src="pres/img/performers/corbin-dunn.png" alt="corbin dunn">
+            <h4>Corbin Dunn - <span>Unicycle and Cyr Wheel</span></h4>
+            <p>
+              Corbin Dunn is a world champion unicyclist, skilled at long distance racing, mountain unicycling and trials. He picked up the Cyr Wheel last year when he discovered that he could be the hub and spokes of the unicycle.
+            </p>
+          </div>
+
+          <div class="span4">
+            <img src="pres/img/performers/jeff-raz.png" alt="jeff raz">
+            <h4>Jeff Raz - <span>Acrobatics</span></h4>
+            <p>
+              For the last 40 years, Jeff Raz has performed nationally and internationally with circuses and theaters including Cirque du Soleil, The Pickle Family Circus, Lincoln Center Theater, Vaudeville Nouveau, Dell'Arte Players, Berkeley Repertory Theatre, Marin and S.F. Shakespeare Festivals, TheatreWorks and Marin Theater Company.  He has written 15 plays and directed numerous others. In 2000, Jeff founded The Clown Conservatory, the only comprehensive professional clown training in the U.S. with graduates currently performing in circuses and theaters around the world.   Jeff continues to perform, write and teach as well as working with Cirque du Soleil's casting department, with the global consulting firm Stand & Deliver and as the Artistic Director of the Medical Clown Project.
+            </p>
+          </div>
+
+          <div class="span4">
+            <img src="pres/img/performers/ninja-hoops.png" alt="ninja hoops">
+            <h4>Ninja Hoops - <span>Partner Acrobatics</span></h4>
+            <p>
+              Ninja Hoops is a Bay Area based hooping duo. They perform and teach workshops to all ages. They incorporate elements of martial arts, classical acrobatics, and silly clowns into their hooping.
+            </p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="span4">
+            <img src="pres/img/performers/david-pham.png" alt="david pham">
+            <h4>David Pham - <span>Solo Juggling</span></h4>
+            <p>
+              David Pham is a juggler from San Jose, CA. He began juggling 7 years ago in High school under the guidance of &quot;The Juggle Sensei&quot; Matt Hall. After learning the basics of toss juggling and diabolo, he moved onto cigar boxes. David is currently performing a routine that incorporates ball juggling and cigar boxes.
+            </p>
+          </div>
+
+          <div class="span4">
+            <img src="pres/img/performers/comedy-industries.png" alt="comedy industries">
+            <h4>Comedy Industries - <span>Comedy &amp; Juggling, Unicycling &amp; Bad Judgment</span></h4>
+            <p>
+              The only thing that keeps Scott Meltzer and Katrine Spang-Hanssen (aka Comedy Industries, aka Scotty &amp; Trink) working is that their act is good enough to make up for their stupid names.  You can see what they love to do at at the BJF public show and at <a href="http://comedyindustries.com/act">comedyindustries.com/act</a>. You can see what they're paid to do at <a href="http://comedyindustries.com/presentations">comedyindustries.com/presentations</a>.
+            </p>
+          </div>
+
+          <div class="span4">
+            <img src="pres/img/performers/coventry-kaluza.png" alt="Coventry & Kaluza">
+            <h4>Coventry &amp; Kaluza - <span>Comedy &amp; Variety</span></h4>
+            <p>
+              Jamie Coventry & Natasha Kaluza were clown school sweethearts and are graduates of both the first and second year programs of the Clown Conservatory at the San Francisco Circus Center. Coventry & Kaluza won Best Comedy/Clown Act in the American Circus Festival two years in a row and have performed with the New Pickle Circus, Sweet Can Productions, Circus Bella, Flynn Creek Circus, Circus of Sound and many others. <a href="www.youtube.com/coventryandkaluza">YouTube Videos</a>
+            </p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="span4">
+            <img src="pres/img/performers/kai-heartlife.png" alt="Kai Heartlife">
+            <h4>Kai Heartlife - <span>The Future</span></h4>
+            <p>
+              Kai Heartlife, age 5, has been picking up props and doing cool things with them since before he could walk. Almost completely self-taught, he never fails to amaze with the manipulations and tricks he comes up with. He often performs with his parents as a part of EarthCapades Environmental Theater and always steals the show. He recently began his solo career busking to raise money for charity at the Oregon Country Fair.
+            </p>
+          </div>
+
+          <div class="span8">
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="span12">
+          <h3>Performers</h3>
+          <p>
+            <strong>Want to join our show next year?</strong> Contact us! The BJUF public show packs the house every year and is the 
+            perfect place to strut your stuff or try out new material. Please note that tech is limited to sound and basic lighting, and we can only afford to pay you in good karma and a few slices of Cheeseboard pizza.
+          </p>
+        </div>
+      </div>
+
+      <hr>
+
+      <!-- At the festival -->
+      <div id="at" class="row">
+        <div class="span4">
+          <h2>Workshops</h2>
+          <p>
+            You're never too old to learn something new! No circus arts festival would be complete without an assortment of workshops, 
+            and we have something for everyone again this year, from complex passing patterns and whip cracking to mountain unicycling 
+            and good old fashion balloon tying (just don't put your local clown out of business!)
+          </p>
+          <p>
+            Please see the schedule below for workshop offerings, teachers and times, but please note these are subject to change! 
+            <strong>If you'd like to run a workshop</strong>, contact us and we'll work with you to find a time. 
+          </p>
+          <p>
+            We generally announce workshops to the gym as they begin, but please check with the front desk throughout the day for updates, since times may change. 
+          </p>
+        </div>
+        <div class="span4">
+          <h2>Introductory Workshops</h2>
+            <p>
+              At the BJUF, we firmly believe everyone can, and should, learn to juggle and ride a unicycle. A festival is the perfect place to do just that, whether the thought just came to you or you've been wanting to learn for years. In years past, our festival has featured a somewhat neglected area set aside for folks new to the circus arts, but this year we've decided to step up our game and give you newbies the attention you deserve. We will be running basic <strong>Introduction to Juggling</strong> and <strong>Introduction to Unicycling</strong> workshops throughout the day on Saturday and Sunday where you can move quickly from your initial drops right into that thrilling first cascade and from your first shoulder-assisted ride to, well, your first wall-assisted ride! Please see us at the front table for the introductory workshop schedule.
+            </p>
+            <p>
+              <strong>Jugglers and Unicyclists:</strong> volunteering for these intro workshops is a great way to meet people and give back to the juggling community. Do you remember how exciting it was to get that first exchange? To finally get a cascade running? Now you can help others find the joy of juggling. Please see us at the front desk if you're interested in helping us staff the introductory workshops.
+            </p>
+       </div>
+        <div class="span4">
+          <h2>Renegade Show</h2>
+          <p>
+            Renegade Shows are an old juggling festival tradition, one we're looking to revive with our Friday night open stage. Low on tech, heavy on humor and drops, and not guaranteed to be family friendly, the Renegade Stage (such as it is) is open to all <strong>short</strong> acts. Talk to us at the front table Friday before 10pm to join the program!
+          </p>
+          <h2>
+            <!-- <i class="icon-shopping-cart"></i> -->
+            Vendors
+          </h2>
+          <p>
+            As in previous years, <a href="http://www.seriousjuggling.com" title="you can't have too many props">Serious Juggling</a> may attend (not confirmed yet). A little thin for vendors this year, so bring extra props!
+          </p>
+          <p>
+            Supporting our 
+            vendors is another great way to show your support for the Berkeley Festival; buy props for that new 
+            juggler in your life today!
+          </p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="span12">
+          <h3> Workshop Schedule (subject to change onsite)</h3>
+          <a href="./workshops.html" target="blank" title="printable schedule">printable logistics &amp; workshop schedule</a>
+          <table class="table">
+            <thead>
+              <tr>
+                <td>Time</td>
+                <td>Friday</td>
+                <td>Saturday</td>
+                <td>Sunday</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>10am</td>
+                <td></td>
+                <td>Big Wheel Unicycle Party Ride  <span>Tom Holub</span></td>
+                <td>
+                  Introduction to Unicycling <span>BJUF</span><br>
+                </td>
+              </tr>
+              <tr>
+                <td>11am</td>
+                <td></td>
+                <td>
+                  Learning and Teaching Club Passing <span>Louis Kruk</span><br>
+                  IJA State of the Union (Discussion) <span>Dave Pawson</span>
+                </td>
+                <td>
+                  Passing Scrambled-B on Toast <span>BJUF</span><br>
+                  Beginning Cyr Wheel <span>Corbin Dunn</span>
+                </td>
+              </tr>
+              <tr>
+                <td>Noon</td>
+                <td></td>
+                <td>
+                  Introduction to Unicycling <span>BJUF</span><br>
+                  Juggling &amp; Entertainment Business Roundtable <span>Heart</span><br>
+                  Contact Juggling, Isolation and Body Manipulation <span>Involute Conduit</span>
+                </td>
+                <td>
+                  Unicycle Games<br>
+                  Organic Dance Juggling <span>Involute Conduit</span>
+                </td>
+              </tr>
+              <tr>
+                <td>1pm</td>
+                <td></td>
+                <td>
+                  Introduction to Cigar Boxes <span>David Pham</span> <br>
+                  Fun and Simple Passing Patterns for 3 - 6 Jugglers <span>Louis Kruk</span>
+                </td>
+                <td>
+                  MUni Fun Ride <span>Tom Holub</span><br>
+                  Juggling / Hooping Games
+                </td>
+              </tr>
+              <tr>
+                <td>2pm</td>
+                <td></td>
+                <td>
+                  Introduction to Juggling <span>BJUF</span><br>
+                  Diabolo Fundamentals <span>Chris Garcia</span><br>
+                  Learning 4 and 5 Clubs <span>Isaac Shivvers</span><br>
+		              Beginning Mountain Unicycling <span>Tom Holub</span><br>
+                  Staff Workshop <span>Noel Yee</span>
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>3pm</td>
+                <td></td>
+                <td>
+                  Introduction to Balloon Twisting <span>James Johnson and Becca Noonan</span><br>
+                  Hooping <span>Nicole Wong</span><br>
+		              "My First" MUni Ride <span>Tom Holub</span>
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>4pm</td>
+                <td></td>
+                <td>
+                  Introduction to Unicycling <span>Jim Sowers</span><br>
+                  Introduction to Poi <span>Matthew Porter</span>
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>5pm</td>
+                <td></td>
+                <td>
+                  Beginning Hat Manipulation <span>James Johnson</span><br>
+                  Introduction to Juggling <span>BJUF</span>
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>6pm</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>7pm</td>
+                <td>Introduction to Rope Dart <span>Chris Garcia</span><br>
+		3-on-3 Unicycle Basketball Tournament</td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>8pm</td>
+                <td>
+                  Open Unicycle Basketball<br>
+                  Walk|Drop|Chop-About Patterns <span>Berkeley Juggling Coop</span>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>9pm</td>
+                <td>Open Unicycle Basketball</td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>10pm</td>
+                <td>Open Unicycle Basketball</td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <hr>
+
+      <div id="logistics" class="row">
+        <div class="span4">
+          <h2>
+            <!-- <i class="icon-wrench"></i> -->
+            Parking
+          </h2>
+          <p>
+            Parking at our festival can be a challenge, so we strongly recommend you carpool and investigate public transportation options. If you do drive, we have limited free parking in the tennis courts across Milvia St. from the High School. Limited two hour parking is available on streets surrounding the festival; <strong>read the signs!</strong> The nearest longer duration parking is roughly three blocks south or west of the High School.
+          </p>
+          <p>
+            Parking limits in downtown Berkeley are strictly enforced!
+          </p>
+          <h3>Bicycles &amp; Alternative Transit</h3>
+          <p>
+            We love to see attendees arrive by bicycle and plenty of bike parking is available right by the gym entrance. You will need to bring a lock as we cannot provide valet bike parking this year. Obviously, the best way to arrive is on your unicycle, but feet, skateboards, rollerblades, tricycles and parachutes are welcome, but you will need locks for them too.
+          </p>
+        </div>
+        <div class="span4">
+          <h2>Public Transit</h2>
+          <p>
+            Downtown Berkeley boasts considerable public transit options and it's a great way to arrive at the festival.
+          </p>
+          <h4>BART</h4>
+          <p>
+            Our venue is just two blocks from the Downtown Berkeley <a href="http://www.bart.gov">BART</a> station, less than five minutes away, making public transit a fantastic option for Bay Area locals. BART riders should exit the station on the west side of Shattuck Avenue, walk south to Allston Way, walk one block west across Milvia and onto the Berkeley High campus.
+          </p>
+          <h4>AC Transit</h4>
+          <p>
+            Many <a href="http://ow.ly/boOiz">AC Transit</a> bus routes also pass near Berkeley High School. The 1, 12, 18, 25, 52 and F all pass within walking distance of the festival.
+          </p>
+        </div>
+        <div class="span4">
+          <h2>Downtown Berkeley</h2>
+          <p>
+            Our festival is directly adjacent to vibrant downtown Berkeley and just a few blocks from UC Berkeley, providing ample opportunities to go for a walk, do some shopping, catch a movie or just indulge in some of Berkeley's reknown food culture. Please ask at the front table for specific recommendations.
+          </p>
+          <h4>Farmers Market</h4>
+          <p>
+            Saturday mornings the Civic Plaza hosts the <a href="http://www.ecologycenter.org/bfm/">Berkeley Farmers Market</a>, directly across Allston Way from the festival. The farmers market brims over every weekend with local produce, delicious food and a festive atmosphere and can be a great way to escape the gym for a rest from passing clubs or working on that new trick. The plaza also has a large grassy area suitable for outdoor juggling; drum up support for the festival and tell passers-by to come check it out!
+          </p>
+        </div>
+      </div>
+
+      <hr>
+
+      <div id="contact"></div>
+
+      <div class="modal hide" id="myModal">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">×</button>
+          <h3>Mailing List</h3>
+        </div>
+        <div class="modal-body">
+          <p>Enter your email below to signup for our low-traffic festival announcements list:</p>
+          <form id="sub-form" action="./signup.php" method="post"> 
+            <div class="pleaseComment">
+              <label for="pleaseComment-text">Please Comment</label>
+              <span>Humans, if you read or hear this, please do not enter text in this field</span>
+              <input id="pleaseComment-text" type="text" name="pleaseComment-text" value="" size="24">
+            </div>
+            <input placeholder="Your Email" id="subscribe_email" type="email" name="email">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <a href="#" class="btn" data-dismiss="modal">Close</a>
+          <button class="btn btn-primary" type="submit">Signup</button>
+        </div>
+      </div>
+
+      <footer class="center">
+        <p>&copy;Berkeley Juggling Cooperative 2012; come check out our <a href="http://www.berkeleyjuggling.org">weekly meeting</a>, y'all</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="./js/jquery-1.7.2.min.js"></script>
+    <script src="./bootstrap/js/bootstrap.js"></script>
+    <script>
+      $(document).ready(function() {
+        $('#navbar').scrollspy();
+      });
+    </script>
+
+  </body>
+</html>

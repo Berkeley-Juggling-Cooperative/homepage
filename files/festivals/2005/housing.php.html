@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Berkeley Juggling Festival</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script type="text/JavaScript" src="/festivals/2005/_behavior/stub.js" ></script>
+	<style type="text/css" media="screen" title="currentStyle">
+		@import "_presentation/css/screen.css";
+	</style>
+	<style type="text/css" media="print" title="currentStyle">
+		@import "_presentation/css/print.css";
+	</style>
+	<script src="http://maps.google.com/maps?file=api&v=1&key=ABQIAAAADqNKYrRR_pXhxEO61ZL5BBTNRuaXzSeQfty9jn63rf7XObbD5hQxGPWg2UnwN2lOmjHlzkjYoLytXA" type="text/javascript">
+	</script>
+
+</head>
+
+<body id="">
+<div style="background:#AA000 ;padding:1em;margin:1em;border:1px solid black ;text-align:center;font-size:large">
+These are pages from an old festival, please visit <a href="/festivals/2005/festival"> for information about this year's festival</a>
+</div>	<div class="container">
+		<div class="header">
+			<img src="_presentation/images/wide_header.gif" alt="header graphic" />
+<h1>Berkeley Juggling Festival</h1>
+<p><strong>October 7 - 9th, 2005<br />
+King Middle School, 1781 Rose St. Berkeley, CA</strong></p>
+<div class="nav">
+	<ul>
+		<li><a href="index.php.html" title="festival homepage" class="first ">home</a></li>
+		<li><a href="schedule.php.html" title="general info and schedule" class="">general info</a></li>
+		<li><a href="show.php.html" title="the marquee event" class="">public show</a></li>
+		<li><a href="workshops.php.html" title="workshops" class="">workshops schedule</a></li>
+		<li><a href="history.php.html" title="background and history" class="">history</a></li>
+		<li><a href="map.php.html" title="maps and directions" class="">maps &amp; directions</a></li>
+		<li><a href="housing.php.html" title="housing information" class="here">housing</a></li>
+		<li><a href="berkeley.php.html" title="berkeley information" class="">visiting berkeley</a></li>
+		<li><a href="contact.php.html" title="contact the festival organizers" class="">contact us</a></li>
+		<li><a href="guestbook.php.html" title="sign and read the guestbook" class="">guestbook</a></li>
+	</ul>
+</div>
+		</div>
+		<div class="content">
+
+<div id="map" style=" height: 400px"></div>
+<script type="text/javascript">
+//<![CDATA[
+  
+var map = new GMap(document.getElementById("map"));
+map.addControl(new GMapTypeControl());
+map.addControl(new GLargeMapControl());
+map.centerAndZoom(new GPoint(-122.2768, 37.8816), 6);
+					  
+// Create our "tiny" marker icon
+var icon_red = new GIcon();
+icon_red.image = "http://labs.google.com/ridefinder/images/mm_20_red.png";
+icon_red.shadow = "http://labs.google.com/ridefinder/images/mm_20_shadow.png";
+icon_red.iconSize = new GSize(12, 20);
+icon_red.shadowSize = new GSize(22, 20);
+icon_red.iconAnchor = new GPoint(6, 20);
+icon_red.infoWindowAnchor = new GPoint(5, 1);
+
+var icon_green = new GIcon();
+icon_green.image = "http://labs.google.com/ridefinder/images/mm_20_green.png";
+icon_green.shadow = "http://labs.google.com/ridefinder/images/mm_20_shadow.png";
+icon_green.iconSize = new GSize(12, 20);
+icon_green.shadowSize = new GSize(22, 20);
+icon_green.iconAnchor = new GPoint(6, 20);
+icon_green.infoWindowAnchor = new GPoint(5, 1);
+
+var icon_blue = new GIcon();
+icon_blue.image = "http://labs.google.com/ridefinder/images/mm_20_blue.png";
+icon_blue.shadow = "http://labs.google.com/ridefinder/images/mm_20_shadow.png";
+icon_blue.iconSize = new GSize(12, 20);
+icon_blue.shadowSize = new GSize(22, 20);
+icon_blue.iconAnchor = new GPoint(6, 20);
+icon_blue.infoWindowAnchor = new GPoint(5, 1);
+
+// Create the marker and corresponding information window
+function createInfoMarker(point, address, icon) {
+ var marker = new GMarker(point,icon);
+ GEvent.addListener(marker, "click",
+   function() { marker.openInfoWindowHtml(address); }  
+ );
+ return marker;
+}
+
+// King Middle School
+var point = new GPoint(-122.277443,37.880983);
+address = "Festival Site<br /> King Middle School<br /> 1781 Rose St.<br /> Berkeley, CA 94703";
+var marker_MLK = createInfoMarker(point, address, icon_blue);
+map.addOverlay(marker_MLK);
+
+
+
+// the french hotel
+var point = new GPoint(-122.27,37.879);
+address = "The French Hotel<br>1538 Shattuck Ave<br>Berkeley, CA 94709<br>(510) 548-9930<br>A bit more expensive than average,<br> but the cafe on the first floor<br> serves up the best espresso in the East Bay!";
+
+var marker_FH_high = createInfoMarker(point, address,icon_green);
+var marker_FH_norm = createInfoMarker(point, address,icon_red);
+map.addOverlay(marker_FH_norm);
+
+function high_FH(){ map.addOverlay(marker_FH_high); map.removeOverlay(marker_FH_norm); return;}
+function norm_FH(){ map.addOverlay(marker_FH_norm); map.removeOverlay(marker_FH_high); return;}
+
+
+//Super 8 motel
+var point = new GPoint(-122.317,37.9214);
+address = "Super 8 Motel<br>(510) 232-0900<br>6009 Potrero Ave<br>El Cerrito, CA 94530"
+
+var marker_S8_high = createInfoMarker(point, address,icon_green);
+var marker_S8_norm = createInfoMarker(point, address,icon_red);
+map.addOverlay(marker_S8_norm);
+
+function high_S8(){ map.addOverlay(marker_S8_high); map.removeOverlay(marker_S8_norm); return;}
+function norm_S8(){ map.addOverlay(marker_S8_norm); map.removeOverlay(marker_S8_high); return;}
+
+// YMCA
+var point = new GPoint(-122.27,37.8692);
+address = "YMCA<br>(510) 848-6800<br>2001 Allston Way<br>Berkeley, CA 94704";
+
+var marker_YMCA_high = createInfoMarker(point, address,icon_green);
+var marker_YMCA_norm = createInfoMarker(point, address,icon_red);
+map.addOverlay(marker_YMCA_norm);
+
+function high_YMCA(){ map.addOverlay(marker_YMCA_high); map.removeOverlay(marker_YMCA_norm); return;}
+function norm_YMCA(){ map.addOverlay(marker_YMCA_norm); map.removeOverlay(marker_YMCA_high); return;}
+
+
+//]]>
+</script>
+			<h2>Housing and Accomodations</h2>
+			<p>
+				Members of the Berkeley juggling community have generously offered &quot;crash-space&quot; 
+				(either indoor or outdoor) for attendees traveling to Berkeley for the Festival. There will be room for everyone who wants housing, but they'd prefer advance notice: if you'd like 
+				to take them up on that hospitality, please <a href="contact.php.html" title="contact page">contact us</a>. 
+				Those looking for slightly more luxurious accomodations than floor space might be interesed in one 
+				of the following hotels:
+			</p>
+			<ul>
+				<li onMouseOver="high_FH();" onMouseOut="norm_FH();"><a href="http://maps.google.com/local?q=French+Hotel&near=berkeley,+ca&latlng=37871667,-122271667,40570459470590">The French Hotel</a></li>
+				<li onMouseOver="high_S8();" onMouseOut="norm_S8();"><a href="http://www.elcerritosuper8.com/index.html"> Super 8 Motel</a> </li>
+
+				<li onMouseOver="high_YMCA();" onMouseOut="norm_YMCA();"><a href="http://www.baymca.org/index.php/d_hotel.html">YMCA</a></li>
+			</ul>
+
+			<h2>Camping</h2>
+		        <p> Since the festival will be in Berkeley there won't be any camping grounds right
+                            next to the festival venue. But if you don't mind driving a bit, here
+			    are a list of camp grounds relatively near Berkeley: </p>
+			<ul> 
+			     <li> <a  href="http://www.ebparks.org/parks/anchabot.htm"> Anthony Chabot
+                                  Regional Park</a> A bit far from Berkeley, but a beautiful place to
+                                  visit and camp.  </li>
+                        </ul>
+
+		</div>
+		<div class="footer">
+			<div class="footer_content">  
+        <div class="sponsor"> sponsored by: <a href="http://clifbar.com">Clif Bar</a>, <a href="http://www.lafarine.com">La Farine</a>,  <a href="http://www.higginsbrothers.com/">Higgins Brothers</a> 
+        </div
+	<span>&copy;2005 Berkeley Juggling Cooperative</span><br />
+</div>
+		</div>
+	</div>
+</body>
+</html>

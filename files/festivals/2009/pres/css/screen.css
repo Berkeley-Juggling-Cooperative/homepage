@@ -1,0 +1,236 @@
+body {
+	background:			#fafafa;
+	border-top:			#44474d 10px solid;
+	color:				#232934;
+	font:				13px 'Helvetica', 'Lucida Grande', Arial, Verdana, sans-serif;
+}
+
+
+div#container {
+/*	background:			#bdb8b2;
+	border:				#ddd7d0 5px solid;*/
+}
+
+a, 
+a:visited {
+	color:				#e16879;
+	font-weight:		bold;
+	text-decoration:	none;
+}
+
+a:hover {
+	text-decoration:	underline;
+}
+
+/*
+	NAV
+*/
+div.header {
+	left:				1em;
+	position:			fixed;
+	top:				2em;
+	width:				17em;
+}
+
+div.header img {
+	margin:				0 auto;
+}
+
+div.nav ul {
+	border-bottom:		#9299a6 2px solid;
+	border-top:			#9299a6 2px solid;
+	margin-top:			2em;
+	padding:			1px 1px 0 1px;
+}
+
+div.nav ul li {
+	margin-bottom:		2px;
+}
+
+div.nav ul li a {
+	background:			#d6dde5;
+	color:				#111;
+	display:			block;
+	font-size:			1.1em;
+	padding:			.5em .8em
+}
+
+div.nav ul li a:hover {
+	background:			#bdc3cb;
+	text-decoration:	none;
+}
+
+
+/*
+	CONTENT
+*/
+div.content {
+	margin-left:		20em;
+	position:			relative;
+	width:				50em;
+}
+
+div.content strong {
+/*	color:				#90c04b;*/
+}
+
+div.content div.section {
+	border-top:			#dedede 2px solid;
+	margin-bottom:		6em;
+	padding-top:		.6em;
+}
+
+div.content div.section.top {
+	border-top:			none;
+}
+
+div.content div.section.top h2 {
+	font-size:			1.7em;
+}
+
+div.content div.ws {
+	font-size:			1.1em;
+	margin:				1em 0;
+}
+
+div.content h2 {
+	color:				#30343a;
+	font-size:			1.5em;
+/*	margin-bottom:		.6em;*/
+}
+
+div.content p {
+	margin-bottom:		1em;
+}
+
+/*	stupid jeff should've used child-selectors :(		*/
+div.content p.headline {
+	color:				#454545;
+	font-size:			1.3em;
+}
+
+div.content p.sub-headline {
+	color:				#888;
+	font-size:			1.2em;
+}
+
+div.content div.section:hover p {
+	color:				#222;
+} 
+
+div.content p.desc,
+div.content div.section:hover p.desc {
+	color:				#999;
+	font-size:			.9em;
+}
+
+div.halfish {
+	float:				left;
+	width:				40%;
+}
+
+div#info div.halfish {
+	border-left:		#90c04b 2px solid;
+	padding-left:		.6em;
+}
+
+div#info h3 {
+	margin-bottom:		.3em;
+}
+
+div.dates ul li {
+	margin-bottom:		.6em;
+}
+
+div.dates ul li span.time {
+	display:			block;
+}
+
+/*	info is bigger, bigger, bigger!		
+div#info {
+	font-size:			1.3em;
+}
+*/
+
+div.maps div.halfish {
+	padding:			1px;
+	margin-right:		2em;
+}
+
+div.maps img {
+	border:				#dedede 1px solid;
+	margin-bottom:		.8em;
+	width:				100%;
+}
+
+div.maps p {
+	font-size:			1.1em;
+}
+
+
+/*	artists		*/
+div.artists div.artist {
+	float:				left;
+	margin:				1em 1em 0 0;
+	min-height:			20em;
+	position:			relative;
+	width:				30%;
+}
+
+div.artist div.img-wrap {
+	background:			#efefef;
+	border:				#dedede 1px solid;
+	height:				18em;
+	margin-bottom:		.8em;
+	min-height:			14em;
+	overflow:			hidden;
+}
+
+div.artist span.name {
+	display:			block;
+	font-weight:		bold;
+}
+
+div.artist span.title {
+	display:			block;
+	color:				#757a85;
+	margin-bottom:		.8em;
+}
+
+div.artist p.details {
+	min-height:			10em;
+}
+
+
+/*	workshops		*/
+div.schedule h3 {
+	margin-bottom:		.8em;
+}
+
+div.schedule table {
+	margin-bottom:		1em;
+}
+
+div.schedule table tr td {
+	padding:			.3em 0;
+}
+
+div.schedule table tr td:first-child {
+	width:				8em;
+}
+
+
+
+/*
+	FOOTER
+*/
+div.footer {
+	border-top:			#dedede 1px solid;
+	color:				#aaa;
+	margin-bottom:		4em;
+	padding-top:		.5em;
+}
+
+div.footer p.copy {
+	color:				#bbb;
+}

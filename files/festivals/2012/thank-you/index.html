@@ -1,0 +1,145 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+	<title>Thank You for a Triumphant 2012 Festival</title>
+	
+	<script type="text/javascript" src="jquery.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("p#screed a").click(function() {
+				event.preventDefault();
+			});
+			
+			$("p.screed a").mouseover(function() {
+				App.highlight($(this).attr('rel'));
+			});
+			
+			$("p.screed a").mouseout(function() {
+				App.clear();
+			});
+		});
+		
+		var App = {
+			highlight: function(type) {
+				$("ul#credits li." + type).addClass('boosh');
+			},
+			
+			clear: function() {
+				$("ul#credits li").removeClass('boosh');
+			}
+		}
+	</script>
+	
+	<style type="text/css">
+		html {
+			background:				#fafaff;
+		}
+		body {
+			color:					#111;
+			font:					12px 'Lucida Grande', Verdana, sans-serif;
+			margin:					5em auto;
+			width:					44em;
+		}
+		h1 {
+			font-family:			'Times New Roman', Times, Georgia, serif;
+			font-size:				9em;
+			font-weight:			normal;
+			margin:					0 0 .1em 0;
+			text-align:				left;
+			text-align:				center;
+		}
+		a {
+			color:					#be2121;
+			font-weight:			bold;
+			text-decoration:		none;
+		}
+		a:hover {
+			text-decoration:		underline;
+		}
+		p.screed {
+			font-size:				1.1em;
+			padding-bottom:			.6em;
+			text-align:				justify;
+		}
+		ul#credits {
+			border-top:				#999 1px solid;
+			list-style:				none;
+			margin:					1.4em 0;
+			padding:				1em 0;
+			text-align:				center;
+		}
+		ul#credits li {
+			color:					#999;
+			display:				inline;
+			font-family:			'Times New Roman', Times, Georgia, serif;
+			font-size: 				1.8em;
+			margin-right: 			1em;
+		}
+		ul#credits li.boosh {
+			color:					#00f;
+		}
+		ul#credits li:after {
+			content:				" ";
+		}
+		p#close {
+			border-top:				#999 1px solid;
+			color:					#999;
+			font-size:				.9em;
+			padding-top:			.6em;
+		}
+	</style>
+	
+</head>
+
+<body>
+
+<h1>Thank You!</h1>
+
+<p class="screed">
+	Once again, the 2012 Berkeley Juggling and Unicycling Festival was a tremendous success. 
+	We're loving the new venue and what a fantastic show! We had another big year: more than 300 
+	people contributed to the playful atmosphere in Jacket Gym, with nearly 400 people packing into 
+	the Florence Schwimley Little Theater for Saturday night's Variety Show.
+</p>
+<p class="screed">
+	The Festival would not be possible without the contributions of our organizing <a href="index.html#organizers" rel="organizer">
+	committee</a>, public show <a href="index.html#performers" rel="performer">performers</a>, 
+	<a href="index.html#workshops" rel="workshop">
+	workshop</a> leaders, <a href="index.html#vendors" rel="vendor">vendors</a>, raffle <a href="index.html#sponsors" rel="sponsor">sponsors</a>, friends at the 
+	Berkeley Unified <a href="index.html#busd" rel="busd">School</a> District, and you, our loyal attendees, whose 
+	smiles and goodwill make all the effort worthwhile. We would also like to extend a very special thank you 
+	to <a href="http://www.campwinnarainbow.com">Camp Winnarainbow</a>, for non-profit assistance. 
+	See you next year!
+</p>
+
+<ul id="credits">
+	<li class="performer">Dan Holzman</li><li class="performer">Josh Horton</li><li class="organizer">Lance</li><li class="organizer">Dragon</li><li class="busd">Rafael</li><li class="organizer">Ian</li><li class="organizer">Bri</li><li class="organizer">Marc</li><li class="organizer">Joe</li><li class="performer">Jeff Raz</li><li class="busd">Michael</li><li class="performer">Kai Hearthlife</li><li class="organizer">Brian</li><li class="busd">Tonya</li><li class="performer">The Johnson Brothers</li><li class="performer">Kyle Johnson</li><li class="busd">Al</li><li class="busd">BHS Theater Crew</li><li class="sponsor">Neon Husky</li><li class="performer">Frank Olivier</li><li class="busd">Adrian</li><li class="organizer">Arun</li><li class="organizer">Tom</li><li class="performer">David Phams</li><li class="vendor">Serious Juggling</li><li class="performer">Something Ridiculous</li><li class="performer">Ninja Hoops</li><li class="organizer">Jeff</li><li class="performer">Coventry and Kaluza</li><li class="performer">Corbin Dunn</li><li class="organizer">Corey</li></ul>
+
+<p id="close">
+	Lost something? Found something? Ready to help with next year? Need the phone 
+	number of that cute gal at the front table? By all means 
+	email us. And please, if you have photos or short videos from the Festival you would like to share, post them to our 
+	<a href="http://www.flickr.com/groups/bjuf/" title="BJUF Flickr group">Flickr group</a>. If you post photos or videos 
+	on another site (e.g. YouTube, Vimeo, Picasa, et. al.) please send us
+	 a link. Should you need 
+	to reference the old festival site, you can find it <a href="/festival2012/" title="old festival page">here</a>.
+</p>
+
+<!-- Piwik -->
+<script type=\"text/javascript\">
+try {
+var piwikTracker = Piwik.getTracker(pkBaseURL + \"piwik.php\", 6);
+piwikTracker.trackPageView();
+piwikTracker.enableLinkTracking();
+} catch( err ) {}
+</script>
+<!-- End Piwik Tracking Code -->
+
+</body>
+</html>

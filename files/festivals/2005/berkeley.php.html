@@ -1,0 +1,279 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Berkeley Juggling Festival</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script type="text/JavaScript" src="/festivals/2005/_behavior/stub.js"></script>
+	<style type="text/css" media="screen" title="currentStyle">
+		@import "_presentation/css/screen.css";
+	</style>
+	<style type="text/css" media="print" title="currentStyle">
+		@import "_presentation/css/print.css";
+	</style>
+	<script src="http://maps.google.com/maps?file=api&v=1&key=ABQIAAAADqNKYrRR_pXhxEO61ZL5BBTNRuaXzSeQfty9jn63rf7XObbD5hQxGPWg2UnwN2lOmjHlzkjYoLytXA" type="text/javascript">
+	</script>
+</head>
+
+<body id="">
+<div style="background:#AA000 ;padding:1em;margin:1em;border:1px solid black ;text-align:center;font-size:large">
+These are pages from an old festival, please visit <a href="/festivals/2005/festival"> for information about this year's festival</a>
+</div>	<div class="container">
+		<div class="header">
+			<img src="_presentation/images/wide_header.gif" alt="header graphic" />
+<h1>Berkeley Juggling Festival</h1>
+<p><strong>October 7 - 9th, 2005<br />
+King Middle School, 1781 Rose St. Berkeley, CA</strong></p>
+<div class="nav">
+	<ul>
+		<li><a href="index.php.html" title="festival homepage" class="first ">home</a></li>
+		<li><a href="schedule.php.html" title="general info and schedule" class="">general info</a></li>
+		<li><a href="show.php.html" title="the marquee event" class="">public show</a></li>
+		<li><a href="workshops.php.html" title="workshops" class="">workshops schedule</a></li>
+		<li><a href="history.php.html" title="background and history" class="">history</a></li>
+		<li><a href="map.php.html" title="maps and directions" class="">maps &amp; directions</a></li>
+		<li><a href="housing.php.html" title="housing information" class="">housing</a></li>
+		<li><a href="berkeley.php.html" title="berkeley information" class="here">visiting berkeley</a></li>
+		<li><a href="contact.php.html" title="contact the festival organizers" class="">contact us</a></li>
+		<li><a href="guestbook.php.html" title="sign and read the guestbook" class="">guestbook</a></li>
+	</ul>
+</div>
+		</div>
+		<div class="content">
+<div id="map" style=" height: 400px"></div>
+<script type="text/javascript">
+//<![CDATA[
+  
+var map = new GMap(document.getElementById("map"));
+map.addControl(new GMapTypeControl());
+map.addControl(new GLargeMapControl());
+map.centerAndZoom(new GPoint(-122.2768, 37.8816), 4);
+					  
+// Create our "tiny" marker icon
+var icon_red = new GIcon();
+icon_red.image = "http://labs.google.com/ridefinder/images/mm_20_red.png";
+icon_red.shadow = "http://labs.google.com/ridefinder/images/mm_20_shadow.png";
+icon_red.iconSize = new GSize(12, 20);
+icon_red.shadowSize = new GSize(22, 20);
+icon_red.iconAnchor = new GPoint(6, 20);
+icon_red.infoWindowAnchor = new GPoint(5, 1);
+
+var icon_green = new GIcon();
+icon_green.image = "http://labs.google.com/ridefinder/images/mm_20_green.png";
+icon_green.shadow = "http://labs.google.com/ridefinder/images/mm_20_shadow.png";
+icon_green.iconSize = new GSize(12, 20);
+icon_green.shadowSize = new GSize(22, 20);
+icon_green.iconAnchor = new GPoint(6, 20);
+icon_green.infoWindowAnchor = new GPoint(5, 1);
+
+var icon_blue = new GIcon();
+icon_blue.image = "http://labs.google.com/ridefinder/images/mm_20_blue.png";
+icon_blue.shadow = "http://labs.google.com/ridefinder/images/mm_20_shadow.png";
+icon_blue.iconSize = new GSize(12, 20);
+icon_blue.shadowSize = new GSize(22, 20);
+icon_blue.iconAnchor = new GPoint(6, 20);
+icon_blue.infoWindowAnchor = new GPoint(5, 1);
+
+// Create the marker and corresponding information window
+function createInfoMarker(point, address, icon) {
+ var marker = new GMarker(point,icon);
+ GEvent.addListener(marker, "click",
+   function() { marker.openInfoWindowHtml(address); }  
+ );
+ return marker;
+}
+
+// King Middle School
+var point = new GPoint(-122.277443,37.880983);
+address = "Festival Site<br /> King Middle School<br /> 1781 Rose St.<br /> Berkeley, CA 94703";
+var marker_MLK = createInfoMarker(point, address, icon_blue);
+map.addOverlay(marker_MLK);
+
+
+
+// La Farine French Bakery
+var point = new GPoint(-122.279930,37.891450);
+address = "<a href="/festivals/2005/\&quot;http://www.lafarine.com\&quot;">La Farine French Bakery</a><br> Best Croissants this side of the Atlantic!<br> 1820 Solano Ave.<br> Albany, CA 94707<br>510-528-2208";
+var marker_LF_high = createInfoMarker(point, address,icon_green);
+var marker_LF_norm = createInfoMarker(point, address,icon_red);
+map.addOverlay(marker_LF_norm);
+
+function high_LF(){ map.addOverlay(marker_LF_high); map.removeOverlay(marker_LF_norm); return;}
+function norm_LF(){ map.addOverlay(marker_LF_norm); map.removeOverlay(marker_LF_high); return;}
+
+
+// Monterey Market
+var point = new GPoint(-122.282000,37.881050);
+address = "Monterey Market<br> 1550 Hopkins St.<br> Berkeley, CA 94707<br>510-526-6042";
+var marker_MM_high = createInfoMarker(point, address,icon_green);
+var marker_MM_norm = createInfoMarker(point, address,icon_red);
+map.addOverlay(marker_MM_norm);
+
+function high_MM(){ map.addOverlay(marker_MM_high); map.removeOverlay(marker_MM_norm); return;}
+function norm_MM(){ map.addOverlay(marker_MM_norm); map.removeOverlay(marker_MM_high); return;}
+
+
+// Cheeseboard Pizza
+var point = new GPoint(-122.269656,37.879905);
+address = "Cheeseboard Pizza Collective <br> Only one item on he menu, but that<br> one is good ;) check opening hours!<br> 1512 Shattuck Ave.<br> Berkeley, CA 94709<br>510-549-3055";
+var marker_CB_high = createInfoMarker(point, address,icon_green);
+var marker_CB_norm = createInfoMarker(point, address,icon_red);
+map.addOverlay(marker_CB_norm);
+
+function high_CB(){ map.addOverlay(marker_CB_high); map.removeOverlay(marker_CB_norm); return;}
+function norm_CB(){ map.addOverlay(marker_CB_norm); map.removeOverlay(marker_CB_high); return;}
+
+
+// Espresso Roma
+var point = new GPoint(-122.282517,37.881575);
+address = "Espresso Roma Cafe<br> 1549 Hopkins St.<br> Berkeley, CA 94709<br>510-528-8010";
+var marker_ER_high = createInfoMarker(point, address,icon_green);
+var marker_ER_norm = createInfoMarker(point, address,icon_red);
+map.addOverlay(marker_ER_norm);
+
+function high_ER(){ map.addOverlay(marker_ER_high); map.removeOverlay(marker_ER_norm); return;}
+function norm_ER(){ map.addOverlay(marker_ER_norm); map.removeOverlay(marker_ER_high); return;}
+
+
+// Tuk Tuk Thai
+var point = new GPoint(-122.26753,37.8645);
+address = "Tuk Tuk Thai Cafe<br>good thai food, open late (1:30am)<br> 2466 Shattuck Ave.<br> Berkeley, CA 94704<br>510-540-6360";
+var marker_TT_high = createInfoMarker(point, address, icon_green);
+var marker_TT_norm = createInfoMarker(point, address, icon_red);
+map.addOverlay(marker_TT_norm);
+
+function high_TT(){ map.addOverlay(marker_TT_high); map.removeOverlay(marker_TT_norm); return;}
+function norm_TT(){ map.addOverlay(marker_TT_norm); map.removeOverlay(marker_TT_high); return;}
+
+
+//Chaat Cafe
+var point = new GPoint(-122.272,37.871);
+address = "<a href="/festivals/2005/\&quot;http://www.themenupage.com/chaatcafe.html\&quot;">Chaat Cafe</a><br> Nice, moderately priced Indian food<br>  1902 University <br> Berkeley, CA 94704<br> (510) 845-1431";
+var marker_CC_high = createInfoMarker(point, address, icon_green);
+var marker_CC_norm = createInfoMarker(point, address, icon_red);
+map.addOverlay(marker_CC_norm);
+
+function high_TT(){ map.addOverlay(marker_TT_high); map.removeOverlay(marker_TT_norm); return;}
+function norm_TT(){ map.addOverlay(marker_TT_norm); map.removeOverlay(marker_TT_high); return;}
+
+
+//Cha Am
+var point = new GPoint(-122.2685,37.879);
+address = "<a href="/festivals/2005/\&quot;http://www.eastbayexpress.com/products/2116/index.html\&quot;">Cha Am</a><br>Excellent Thai food, not too expensive<br>1543 Shattuck<br> Berkeley, CA 94709<br>(510) 848-9664";
+var marker_CA_high = createInfoMarker(point, address, icon_green);
+var marker_CA_norm = createInfoMarker(point, address, icon_red);
+map.addOverlay(marker_CA_norm);
+
+function high_CA(){ map.addOverlay(marker_CA_high); map.removeOverlay(marker_CA_norm); return;}
+function norm_CA(){ map.addOverlay(marker_CA_norm); map.removeOverlay(marker_CA_high); return;}
+
+/*******************/
+
+function high_Food()
+{
+ high_LF();
+ high_MM();
+ high_CB();
+ high_ER();
+ high_TT();
+ high_CC();
+ high_CA();
+ return;
+}
+function norm_Food()
+{
+  norm_LF();
+  norm_MM();
+  norm_CB();
+  norm_ER();
+  norm_TT();
+  norm_CC();
+  norm_CA();
+  return;
+}
+
+/*****************/
+
+//]]>
+</script>
+<p> To highlight move mouse over: <span onMouseOver="high_Food();" onMouseOut="norm_Food();">Food</span></p>
+<p> Click on the marker on the map to get more information.</p>
+
+<h2>Food</h2>
+<p>There is some food on Hopkins Street right next to the festival (in walkable distance).
+Solano Ave to the north is pretty close and has several dozen restaurants of all kinds.
+University and Shattuck Avenues to the south, slightly farther away, also have a good selection.
+Some highlights:
+</p>
+<h3> North of the festival </h3>
+	<strong>La Farine French Bakery</strong> 1820 Solano Ave. Albany, 510-528-2208<br>
+		Best Croissants this side of the Atlantic!
+	<br>
+	<strong>Monterey Market</strong> 1550 Hopkins St. Berkeley, 510-526-6042
+	<br>
+	<strong>Espresso Roma Cafe</strong> 1549 Hopkins St. Berkeley, 510-528-8010
+	<br>
+	<strong>Cafe Raj</strong> Solano Ave., Albany, (510) 524-5667 <br>
+		One of the best Indian food places around! Very reasonable prices. Open till 10:30pm.
+	<br>
+	<strong>Zachary's Chicago Pizza</strong> 1853 Solano Ave, Berkeley, (510) 525-5950 <br>
+		Small. Excellent deep dish pizza, but sometimes the wait is long (but worth it).
+	<br>
+	<strong>Bualuang</strong> 1166 Solano Ave, Albany, 510-527-8288 <br>
+		Good Thai restaurant.
+	<br>
+<h3> South of the festival </h3>
+	<strong>Cheeseboard Pizza Collective</strong> 1512 Shattuck Ave. Berkeley, CA 94709, 510-549-3055<br>
+		Only one item on he menu, but that one is good ;) check opening hours!
+	<br>
+	<strong>Tuk Tuk Thai Cafe</strong> 2466 Shattuck Ave. Berkeley, CA 94704, 510-540-6360<br>
+		good thai food, open late (1:30am)
+	<br>
+	<strong>Chaat Cafe</strong> 1902 University, Berkeley, CA 94704, (510) 845-1431<br>
+		Nice, moderately priced Indian food
+	<br>
+	<strong>Cha Am</strong> 1543 Shattuck, Berkeley, CA 94709, (510) 848-9664<br>
+		Excellent Thai food, not too expensive
+	<br>
+
+
+			<h2>Visiting Berkeley</h2>
+			<p>
+				For the juggler and non-juggler alike, Berkeley offers a wealth of distractions far 
+				outweighing its reputation as a good place to buy tie-dye anything and throw bottles at riot 
+				police. We don't have enough space here for an exhaustive list, but we can highly 
+				recommend the following:
+			</p>
+			<p class="blockquote">
+				Check back soon for a listing.
+			</p>
+			<!-- 
+<ul>
+				<li>The Lawrence Hall of Science</li>
+				<li>Shattuck Ave.</li>
+				<li>
+					Perfect for the juggling family; loads of interesting, educational exhibits here 
+					and a multi-million dollar view from the patio to boot!
+				</li>
+			</ul>
+			<ul>
+				<li>The Chabot Space Center</li>
+				<li>Shattuck Ave.</li>
+				<li>
+					Perfect for the juggling family; loads of interesting, educational exhibits here 
+					and a multi-million dollar view from the patio to boot!
+				</li>
+			</ul>
+ -->
+		</div>
+		<div class="footer">
+			<div class="footer_content">  
+        <div class="sponsor"> sponsored by: <a href="http://clifbar.com">Clif Bar</a>, <a href="http://www.lafarine.com">La Farine</a>,  <a href="http://www.higginsbrothers.com/">Higgins Brothers</a> 
+        </div
+	<span>&copy;2005 Berkeley Juggling Cooperative</span><br />
+</div>
+		</div>
+	</div>
+</body>
+</html>
