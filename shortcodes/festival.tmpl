@@ -1,0 +1,52 @@
+{#
+  One card in the past-events grid, using Bulma's card component so it matches
+  home.tmpl rather than introducing bespoke CSS.
+
+  Usage, inside <div class="columns is-multiline"> in a page:
+
+    {{% festival year="2012" title="7th Berkeley Juggling & Unicycling Festival"
+                 url="/festivals/2012/" thumb="/images/festivals/2012.png"
+                 thank_you="/festivals/2012/thank-you/" %}}
+
+  Every argument except year/label is optional:
+    thumb      omit for a card showing a large year numeral instead, keeping
+               the same grid footprint
+    url        omit for a card that links nowhere - used for events we know
+               happened but have no surviving page for
+    thank_you  the post-event page, where one exists
+    note       a short line under the title, e.g. to say where material lives
+    label      overrides the heading when the event is not a plain year
+#}
+{% set label = label | default(year) %}
+{% set width = width | default("is-one-third") %}
+<div class="column {{ width }}">
+  <div class="card">
+    {% if url %}<a href="{{ url }}">{% endif %}
+      <div class="card-image">
+        {% if thumb %}
+          <figure class="image is-4by3">
+            <img src="{{ thumb }}" alt="{{ title }}" loading="lazy"
+                 style="object-fit: contain; background: #f5f5f5;">
+          </figure>
+        {% else %}
+          <figure class="image is-4by3 has-background-light">
+            <span class="title is-1 has-text-grey-light"
+                  style="position:absolute; inset:0; display:flex;
+                         align-items:center; justify-content:center;"
+                  aria-hidden="true">{{ label }}</span>
+          </figure>
+        {% endif %}
+      </div>
+    {% if url %}</a>{% endif %}
+    <div class="card-content has-text-centered">
+      <h3 class="title is-4">
+        {% if url %}<a href="{{ url }}">{{ label }}</a>{% else %}{{ label }}{% endif %}
+      </h3>
+      <p class="subtitle is-6">{{ title }}</p>
+      {% if note %}<p class="is-size-7 has-text-grey">{{ note }}</p>{% endif %}
+      {% if thank_you %}
+        <p><a class="is-size-7" href="{{ thank_you }}">Thank-you page</a></p>
+      {% endif %}
+    </div>
+  </div>
+</div>

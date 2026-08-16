@@ -144,6 +144,7 @@ NAVIGATION_LINKS = {
     DEFAULT_LANG: (
         ("/meetup", "Weekly Meeting"),
         ("/news", "News and Events"),
+        ("/festivals", "Past Events"),
         ("/galleries", "Galleries"),
         ("/patterns", "Juggling Patterns"),
         ("/links", "Links"),
