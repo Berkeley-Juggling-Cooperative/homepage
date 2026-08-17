@@ -1,0 +1,13 @@
+# In-site redirects for Cloudflare Pages.
+#
+# Redirects from the retired festival subdomains are not here: they cross
+# origins, so they belong in Cloudflare Redirect Rules or Bulk Redirects at
+# cutover, not in this file.
+#
+# /festival was the club's recurring "this year's festival" page.  It was
+# deleted in e933ac6 when the site moved to Bulma, so the path has 404'd ever
+# since - including for the old festival.berkeleyjuggling.org subdomain, which
+# redirected to it.  Point it at the archive instead.
+
+/festival     /festivals/  301
+/festival/*   /festivals/  301

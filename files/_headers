@@ -1,0 +1,32 @@
+# Response headers for Cloudflare Pages, replacing the Apache `htaccess` that
+# Dreamhost used.  Pages ignores .htaccess entirely.
+#
+# Two rules from htaccess are deliberately absent: the HTTPS redirect and
+# `Options -Indexes`.  Pages does both natively - it serves HTTPS only, and it
+# never lists a directory.
+#
+# Note that when a request matches several blocks, Pages *joins* the values of
+# a repeated header with a comma rather than letting the narrower rule win.  So
+# Cache-Control must be set in at most one matching block per path, which is
+# why the long-lived caching below is scoped to directories that contain no
+# HTML.
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data: https://*.openstreetmap.org https://media.berkeleyjuggling.org; form-action 'self'; media-src 'self' https://media.berkeleyjuggling.org; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; font-src 'self';
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=(), usb=(), fullscreen=(self)
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+
+# Generated images and theme assets only - no HTML lives under either path, so
+# a long immutable cache is safe.  /galleries/ is deliberately left on Pages'
+# defaults because it mixes gallery index.html files in with the photos, and a
+# single glob cannot tell them apart.
+/images/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
