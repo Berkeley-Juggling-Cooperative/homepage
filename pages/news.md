@@ -26,7 +26,7 @@ Join us as we celebrate the last day of summer before the Autumn Equinox! Whethe
 {{% map map_id="jam" lat=37.861 lng=-122.2565 zoom=17 popup="Meeting location " height="400px" %}}
 
 
-Interested in teaching a workshop? We’d love to have you! Please reach out at festival.info@berkeleyjuggling.org.
+Interested in teaching a workshop? We’d love to have you! Please reach out at festival@berkeleyjuggling.org.
 
 More details to come, but for now, save the date!
 
@@ -43,5 +43,5 @@ We're already looking forward to organizing another event in the near future. To
 
 ## Share Your Photos!
 
-Were you there? We'd love to see your photos from the event! Please send them to us at [festival.info@berkeleyjuggling.org](mailto:festival.info@berkeleyjuggling.org) and we'll add them to our gallery.
+Were you there? We'd love to see your photos from the event! Please send them to us at [festival@berkeleyjuggling.org](mailto:festival@berkeleyjuggling.org) and we'll add them to our gallery.
 
