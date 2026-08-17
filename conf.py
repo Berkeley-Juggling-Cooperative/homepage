@@ -675,31 +675,36 @@ REDIRECTIONS = []
 #         "rsync -rav --delete --delete-after output/ joe@my.site:/srv/www/site",
 #     ]
 # }
+# The site deploys to Cloudflare Pages and its media of record lives in the
+# R2 bucket bjc-media, reached through the rclone remote named bjc-r2.  Both
+# need credentials that are deliberately not in this repo: rclone's are in
+# ~/.config/rclone/rclone.conf, and wrangler reads CLOUDFLARE_API_TOKEN from
+# the environment.
 DEPLOY_COMMANDS = {
     "default": [
-        # refuse to deploy when the local media folders are empty or
-        # missing (e.g. a fresh checkout before 'nikola deploy
-        # download'): the output sync below deletes remote files that
-        # are absent locally, so deploying without media would wipe
-        # all images/galleries/videos from the live site
+        # Refuse to deploy when a local media folder is empty or missing, as
+        # in a fresh checkout before 'nikola deploy download'.  Without this,
+        # the upload below would push an empty tree over the media in R2.
         'for d in images galleries videos; do [ -n "$(ls -A $d 2>/dev/null)" ] || { echo "$d is empty or missing -- run nikola deploy download, then nikola build, then deploy"; exit 1; }; done',
-        # --delete-after keeps old files alive until the new ones are
-        # fully uploaded (no window of 404s on the live site); the
-        # excluded *_orig folders and .htaccess are protected from
-        # deletion by the excludes
-        "rsync -av --delete-after --exclude='/.htaccess' --exclude='/images_orig' --exclude='/galleries_orig' --exclude='/.dh-diag' --exclude='/videos_orig' output/ berkeleyjuggling@ssh.berkeleyjuggling.org:berkeleyjuggling.org/",
-        "rsync -av htaccess berkeleyjuggling@ssh.berkeleyjuggling.org:berkeleyjuggling.org/.htaccess",
-        # originals are kept on the server (outside git) so they can be
-        # re-downloaded; deliberately no --delete here: removing an
-        # original is a manual, on-server decision
-        "rsync -av images/ berkeleyjuggling@ssh.berkeleyjuggling.org:berkeleyjuggling.org/images_orig/",
-        "rsync -av videos/ berkeleyjuggling@ssh.berkeleyjuggling.org:berkeleyjuggling.org/videos_orig/",
-        "rsync -av galleries/ berkeleyjuggling@ssh.berkeleyjuggling.org:berkeleyjuggling.org/galleries_orig/",
+        # Back the media of record up to R2 before publishing.  'copy' rather
+        # than 'sync' on purpose: it never deletes, so a file removed locally
+        # survives in R2 until someone removes it there deliberately.  This
+        # mirrors what the old rsync to the *_orig folders did.
+        "rclone copy images/    bjc-r2:bjc-media/images/    --progress",
+        "rclone copy galleries/ bjc-r2:bjc-media/galleries/ --progress",
+        "rclone copy videos/    bjc-r2:bjc-media/videos/    --progress",
+        # Publish the built site.  Video is not in output/ at all -- it is
+        # served straight from R2 by the video shortcode, because
+        # roundabout.mp4 alone is 79 MiB against Pages' 25 MiB per-file cap.
+        "npx wrangler pages deploy output --project-name=berkeleyjuggling",
     ],
     "download": [
-        "rsync -av --exclude='*.thumbnail.*' --exclude='*xml' berkeleyjuggling@ssh.berkeleyjuggling.org:berkeleyjuggling.org/images_orig/ images/",
-        "rsync -av --exclude='*.thumbnail.*' --exclude='*xml' berkeleyjuggling@ssh.berkeleyjuggling.org:berkeleyjuggling.org/videos_orig/ videos/",
-        "rsync -av --exclude='*.thumbnail.*' --exclude='*xml' berkeleyjuggling@ssh.berkeleyjuggling.org:berkeleyjuggling.org/galleries_orig/ galleries/",
+        # Populate a fresh checkout from R2.  'copy' again, so that local work
+        # not yet uploaded is never destroyed by pulling; the cost is that a
+        # file deleted from R2 has to be removed locally by hand.
+        "rclone copy bjc-r2:bjc-media/images/    images/    --progress",
+        "rclone copy bjc-r2:bjc-media/galleries/ galleries/ --progress",
+        "rclone copy bjc-r2:bjc-media/videos/    videos/    --progress",
     ],
 }
 
