@@ -139,7 +139,7 @@ div.content p.desc-pop {
 }
 
 div.hotbox {
-	background:			#dafc7c url(../img/logos/minkey-see.png) bottom right no-repeat;
+	background:			#dafc7c url(/images/festivals/2010/pres/img/logos/minkey-see.png) bottom right no-repeat;
 	border:				#aacc58 1px solid;
 	padding:			1em;
 	-moz-border-radius:		.7em;
@@ -175,11 +175,11 @@ div#info p.headline {
 }
 
 div.dates h3 {
-	background:			transparent url(../img/icons/clock.png) center left no-repeat;
+	background:			transparent url(/images/festivals/2010/pres/img/icons/clock.png) center left no-repeat;
 }
 
 div.loci h3 {
-	background:			transparent url(../img/icons/map.png) center left no-repeat;
+	background:			transparent url(/images/festivals/2010/pres/img/icons/map.png) center left no-repeat;
 }
 
 div.dates ul li {
@@ -204,7 +204,7 @@ div#info h2 {
 	text-transform:		uppercase;
 	*/
 	
-	background:			transparent url(../img/logos/header.png) center top no-repeat;
+	background:			transparent url(/images/festivals/2010/pres/img/logos/header.png) center top no-repeat;
 	height:				90px;
 	margin-bottom:		.3em;
 	text-indent:		-300em;

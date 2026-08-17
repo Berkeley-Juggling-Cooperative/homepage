@@ -28,7 +28,7 @@ ul {
 	margin: 60px auto;
 	width: 416px;
 	padding: 0 11px 0 11px;
-	background: transparent url(../images/frontpage_container.gif) top left repeat-y;
+	background: transparent url(/images/festivals/2005/_presentation/images/frontpage_container.gif) top left repeat-y;
 	}
 
 
@@ -37,11 +37,11 @@ ul {
 .header {
 	margin: 0 -11px 0 -11px;
 	padding: 11px 11px 0 11px;
-	background: transparent url(../images/frontpage_topshadow.gif) top left no-repeat;
+	background: transparent url(/images/festivals/2005/_presentation/images/frontpage_topshadow.gif) top left no-repeat;
  	}
 	
 h1 {
-	background: #171717 url(../images/prop_silhouette_middle.gif) left bottom no-repeat;
+	background: #171717 url(/images/festivals/2005/_presentation/images/prop_silhouette_middle.gif) left bottom no-repeat;
 	color: #fff;
 	margin: 0;
 	height: 0;
@@ -53,7 +53,7 @@ h1 {
 .nav {
 	margin-top: 1px;
 	padding: 0 0 12px 0;
-	background: #061798 url(../images/splash.gif) top left no-repeat;
+	background: #061798 url(/images/festivals/2005/_presentation/images/splash.gif) top left no-repeat;
 	text-align: center;
 	}
 	
@@ -88,7 +88,7 @@ h1 {
 ---------------------------------------------- */
 .content {
 	border-top: 1px solid #2A3DBB;
-	background: #061798 url(../images/menu_shadow_small.png) top left repeat-x;
+	background: #061798 url(/images/festivals/2005/_presentation/images/menu_shadow_small.png) top left repeat-x;
 	color: #7D88D9;
 	text-align: left;
 	font-size: .9em;
@@ -125,7 +125,7 @@ h1 {
 .spread li {
 	margin: 8px 0;
 	padding-left: 13px;
-	background: transparent url(../images/nav_roll.gif) 2px 5px no-repeat;
+	background: transparent url(/images/festivals/2005/_presentation/images/nav_roll.gif) 2px 5px no-repeat;
 	}
 /*	
 #map {
@@ -142,7 +142,7 @@ h1 {
 .guestbook .entry {
 	margin: 30px 0;
 	padding-left: 18px;
-	background: transparent url(../images/notes_bubble.gif) 0 2px no-repeat;
+	background: transparent url(/images/festivals/2005/_presentation/images/notes_bubble.gif) 0 2px no-repeat;
 	}
 	
 .entry .cite {
@@ -191,7 +191,7 @@ div.form label {
 .footer {
 	margin: 0 -11px 0 -11px;
 	padding: 0 11px 11px 11px;
-	background: transparent url(../images/frontpage_bottomshadow.gif) bottom left no-repeat;
+	background: transparent url(/images/festivals/2005/_presentation/images/frontpage_bottomshadow.gif) bottom left no-repeat;
 	}
 	
 .footer_content {
@@ -204,7 +204,7 @@ div.form label {
 	}
 	
 #frontpage .footer_content {
-	background: #061798 url(../images/menu_shadow.png) top left repeat-x;
+	background: #061798 url(/images/festivals/2005/_presentation/images/menu_shadow.png) top left repeat-x;
 	border-top: 1px solid #2A3DBB;
 	}
 	
