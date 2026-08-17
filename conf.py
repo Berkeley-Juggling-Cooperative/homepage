@@ -682,7 +682,7 @@ DEPLOY_COMMANDS = {
         # download'): the output sync below deletes remote files that
         # are absent locally, so deploying without media would wipe
         # all images/galleries/videos from the live site
-        'for d in images galleries files/videos; do [ -n "$(ls -A $d 2>/dev/null)" ] || { echo "$d is empty or missing -- run nikola deploy download, then nikola build, then deploy"; exit 1; }; done',
+        'for d in images galleries videos; do [ -n "$(ls -A $d 2>/dev/null)" ] || { echo "$d is empty or missing -- run nikola deploy download, then nikola build, then deploy"; exit 1; }; done',
         # --delete-after keeps old files alive until the new ones are
         # fully uploaded (no window of 404s on the live site); the
         # excluded *_orig folders and .htaccess are protected from
@@ -693,12 +693,12 @@ DEPLOY_COMMANDS = {
         # re-downloaded; deliberately no --delete here: removing an
         # original is a manual, on-server decision
         "rsync -av images/ berkeleyjuggling@ssh.berkeleyjuggling.org:berkeleyjuggling.org/images_orig/",
-        "rsync -av files/videos/ berkeleyjuggling@ssh.berkeleyjuggling.org:berkeleyjuggling.org/videos_orig/",
+        "rsync -av videos/ berkeleyjuggling@ssh.berkeleyjuggling.org:berkeleyjuggling.org/videos_orig/",
         "rsync -av galleries/ berkeleyjuggling@ssh.berkeleyjuggling.org:berkeleyjuggling.org/galleries_orig/",
     ],
     "download": [
         "rsync -av --exclude='*.thumbnail.*' --exclude='*xml' berkeleyjuggling@ssh.berkeleyjuggling.org:berkeleyjuggling.org/images_orig/ images/",
-        "rsync -av --exclude='*.thumbnail.*' --exclude='*xml' berkeleyjuggling@ssh.berkeleyjuggling.org:berkeleyjuggling.org/videos_orig/ files/videos/",
+        "rsync -av --exclude='*.thumbnail.*' --exclude='*xml' berkeleyjuggling@ssh.berkeleyjuggling.org:berkeleyjuggling.org/videos_orig/ videos/",
         "rsync -av --exclude='*.thumbnail.*' --exclude='*xml' berkeleyjuggling@ssh.berkeleyjuggling.org:berkeleyjuggling.org/galleries_orig/ galleries/",
     ],
 }

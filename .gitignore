@@ -11,7 +11,7 @@ state_data.json
 # (they live on the server in *_orig/, use 'nikola deploy download')
 galleries
 images
-files/videos
+videos
 # festival media lives in R2 (bjc-r2:bjc-media/festivals), never in git.
 # Restored to these paths at build time, so the archived HTML is never rewritten.
 files/festivals/**/*.png

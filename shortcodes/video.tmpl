@@ -1,6 +1,18 @@
+{#
+  Video is served from R2, not from the site itself: Cloudflare Pages caps a
+  single file at 25 MiB and roundabout.mp4 is 79 MiB.  Callers pass a
+  site-relative src such as "/videos/roundabout.mp4" and the media host is
+  prepended here.
+
+  This is the r2.dev development hostname, which Cloudflare rate-limits and
+  does not serve through its cache.  Replace it with
+  https://media.berkeleyjuggling.org once the domain is on Cloudflare and the
+  bucket has a custom domain; the CSP media-src in files/_headers already
+  allows that name and will need the r2.dev entry removed at the same time.
+#}
 <div>
   <video
-    src="{{ src }}"
+    src="https://pub-835042b2da02413291ffc0d6cf813129.r2.dev{{ src }}"
     controls
     preload="metadata"
     playsinline
