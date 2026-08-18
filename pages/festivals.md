@@ -18,7 +18,7 @@ with jams and one-off events (which we started again). These pages are an archiv
 
 {{% festival year="2025" label="2025" title="Berkeley Jam" url="/festivals/2025/jam/" thumb="/images/festivals/2025.png" %}}
 
-{{% festival year="2018" label="2018" title="East Bay Jam" url="/festivals/2018/" %}}
+{{% festival year="2018" label="2018" title="East Bay Jam" url="/festivals/2018/" thumb="/images/festivals/2018.png" %}}
 
 {{% festival year="2014" label="2014" title="9th Bay Area Circus Arts Festival" url="/festivals/2014/" thumb="/images/festivals/2014.png" %}}
 
