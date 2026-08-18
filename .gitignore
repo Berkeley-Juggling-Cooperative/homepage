@@ -19,5 +19,8 @@ files/festivals/**/*.jpg
 files/festivals/**/*.jpeg
 files/festivals/**/*.gif
 files/festivals/**/*.pdf
+# ...except the 2008 flyer, which the page links to and is only 0.26 MB.
+# Nothing syncs files/ to R2, so anything excluded here has no backup.
+!files/festivals/2008/bjuf_flyer.pdf
 files/festivals/**/*.webm
 files/festivals/**/*.mp4
