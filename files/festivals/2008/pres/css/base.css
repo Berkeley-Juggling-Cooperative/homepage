@@ -1,0 +1,186 @@
+html, body {
+	background:				#2B2B2B url(../img/back.gif);
+}
+
+div#container {
+	background:				#F8F0C9;
+	border:					#1E1E1E 1px solid;
+	color:					#2B2B2B;
+	font:					13px 'Lucida Grande', Verdana, sans-serif;
+	margin:					4em auto;
+	margin-bottom:			8em;
+	width:					64em;
+}
+
+/* layout */
+div#masthead {
+	background:				#363636 url(../img/peacebag.png) 10px 15px no-repeat;
+	border-bottom:			#242424 1px solid;
+	padding:				2.3em;
+	padding-left:			92px;
+}
+
+div.col.left {
+	float:					left;
+	width:					18em;
+}
+
+div.col.right {
+	margin-left:			20em;
+}
+
+/* formatting */
+a, a:visited {
+	color:					#2B3D9C;
+	font-weight:			bold;
+	text-decoration:		underline;
+}
+
+a:hover {
+	background:				#8391DD;
+}
+
+h1 {
+	color:					#fff;
+	font-size:				1.1em;
+	font-weight:			bold;
+}
+
+h2 {
+	background:				transparent url(../img/icons/star.png) center left no-repeat;
+	font-size:				1.2em;
+	font-weight:			bold;
+	margin:					2em 0 .8em 0;
+	padding-left:			1.4em;
+}
+
+h2:first-child {
+	margin-top:				0;
+}
+
+div#masthead p.motto {
+	color:					#777;
+	font-size:				.9em;
+	margin-top:				.5em;
+}
+
+#leader {
+	margin-bottom:			2em;
+	padding:				3em 1.5em 3em 1.5em;
+}
+
+#leader img {
+	border:					#fff 1px solid;
+	float:					right;
+	margin-left:			1.3em;
+	padding:				1px;
+}
+
+#leader p {
+	color:					#000;
+	font-family:			Helvetica, sans-serif;
+	font-size:				2.6em;
+	line-height:			1.2em;
+}
+
+div#content {
+	border-bottom:			#fefefe 1px solid;
+	line-height:			1.5em;
+	padding:				1.3em;
+	padding-bottom:			4em;
+}
+
+#content p {
+	line-height:			1.4em;
+	margin-bottom:			1.6em;
+}
+
+div.col.left h2 {
+	clear:					left;
+}
+
+div.col.left ul li {
+	color:					#000;
+	font-size:				.9em;
+	font-weight:			bold;
+	margin-bottom:			1.1em;
+}
+
+div.col.left ul li span {
+	color:					#797979;
+	display:				block;
+	font-weight:			normal;
+	margin-top:				.4em;
+}
+
+div.col.left img {
+	border:					#999 1px solid;
+	float:					left;
+	margin:					.6em 0 0 .5em;
+	padding:				1px;
+}
+
+div.col.left a:hover {
+	background:				transparent;
+}
+
+div.col.left a:hover img {
+	border:					#008408 1px solid;
+}
+
+/* main content */
+
+#content p.marquee {
+	background:				#E0D79F url(../img/icons/calendar_view_day.png) 1em 1.3em no-repeat;
+	border:					#D7C984 1px solid;
+	font-size:				1em;
+	font-weight:			bold;
+	padding:				1em 0 1em 3em;
+}
+
+#content dl {
+	line-height:			1.4em;
+	margin-bottom:			2em;
+}
+
+#content dl dt {
+	float:					left;
+	font-weight:			bold;
+	padding-bottom:			.6em;
+	width:					13em;
+}
+
+#content dl dd {
+	margin-left:			14em;
+	padding-bottom:			.6em;
+}
+
+/*	table */
+#content table {
+	font-size:				.9em;
+	margin-bottom:			1.3em;
+}
+
+#content table tr:first-child td {
+	font-weight:			bold;
+}
+
+#content table td {
+	padding:				.3em 1em .4em .4em;
+}
+
+#content table tr.even td {
+	background:				#E0D79F;
+}
+
+
+/* form */
+#content div.col.left form label {
+	font-weight:			bold;
+	display:				block;
+	margin:					0 0 .6em 0;
+}
+
+#content div.col.left form input[type=text] {
+	margin-bottom:			1.3em;
+}

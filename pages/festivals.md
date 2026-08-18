@@ -32,7 +32,7 @@ with jams and one-off events (which we started again). These pages are an archiv
 
 {{% festival year="2009" title="5th Berkeley Juggling &amp; Unicycling Festival" url="/festivals/2009/" thumb="/images/festivals/2009.png" thank_you="/festivals/2009/thank-you/" %}}
 
-{{% festival year="2008" title="4th Berkeley Juggling &amp; Unicycling Festival" url="/festivals/2008/" thumb="/images/festivals/2008.png" %}}
+{{% festival year="2008" title="4th Berkeley Juggling &amp; Unicycling Festival" url="/festivals/2008/" thumb="/images/festivals/2008.png" thank_you="/festivals/2008/thank-you/" %}}
 
 {{% festival year="2007" title="3rd Berkeley Juggling &amp; Unicycling Festival" url="/festivals/2007/" thumb="/images/festivals/2007.png" %}}
 

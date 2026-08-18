@@ -1,0 +1,11 @@
+/* stub import file for css */
+
+/* whitespace reset */
+@import url('./reset.css');
+
+/* basics */
+@import url('base.css');
+/*@import url('content.css');*/
+
+/* basic layout */
+/*@import url('layout.css');*/
