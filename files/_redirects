@@ -12,43 +12,45 @@
 /festival     /festivals/  301
 /festival/*   /festivals/  301
 
-# The 2005-2007 sites were PHP.  wget saved each page with an .html suffix
-# appended, so a link that used to end in .php now names a file ending in
-# .php.html.  Cloudflare Bulk Redirects cannot rewrite a suffix, so the old
-# per-page URLs are mapped here instead -- this is what lets deep links from
-# the retired festival-2005/2006/2007 subdomains survive rather than landing
-# on the year's front page.
+# The 2005-2007 sites were PHP.  wget's --adjust-extension saved each page
+# with .html appended, giving names like workshops.php.html; those have since
+# been renamed to plain .html, and the three index.php.html files were dropped
+# as byte-identical duplicates of index.html.
+#
+# These map the URLs the retired festival-2005/2006/2007 subdomains used to
+# serve, so deep links to them still resolve.  Cloudflare Bulk Redirects
+# cannot rewrite a suffix, which is why this is done here rather than there.
 
-/festivals/2005/berkeley.php                   /festivals/2005/berkeley.php.html               301
-/festivals/2005/contact.php                    /festivals/2005/contact.php.html                301
-/festivals/2005/distance_uni.php               /festivals/2005/distance_uni.php.html           301
-/festivals/2005/easy_muni.php                  /festivals/2005/easy_muni.php.html              301
-/festivals/2005/guestbook.php                  /festivals/2005/guestbook.php.html              301
-/festivals/2005/history.php                    /festivals/2005/history.php.html                301
-/festivals/2005/housing.php                    /festivals/2005/housing.php.html                301
-/festivals/2005/index.php                      /festivals/2005/index.php.html                  301
-/festivals/2005/map.php                        /festivals/2005/map.php.html                    301
-/festivals/2005/schedule.php                   /festivals/2005/schedule.php.html               301
-/festivals/2005/show.php                       /festivals/2005/show.php.html                   301
-/festivals/2005/technical_muni.php             /festivals/2005/technical_muni.php.html         301
-/festivals/2005/uni_basketball.php             /festivals/2005/uni_basketball.php.html         301
-/festivals/2005/workshops.php                  /festivals/2005/workshops.php.html              301
-/festivals/2006/berkeley.php                   /festivals/2006/berkeley.php.html               301
-/festivals/2006/contact.php                    /festivals/2006/contact.php.html                301
-/festivals/2006/housing.php                    /festivals/2006/housing.php.html                301
-/festivals/2006/index.php                      /festivals/2006/index.php.html                  301
-/festivals/2006/map.php                        /festivals/2006/map.php.html                    301
-/festivals/2006/schedule.php                   /festivals/2006/schedule.php.html               301
-/festivals/2006/show.php                       /festivals/2006/show.php.html                   301
-/festivals/2006/workshops.php                  /festivals/2006/workshops.php.html              301
-/festivals/2007/big-wheel.php                  /festivals/2007/big-wheel.php.html              301
-/festivals/2007/contact.php                    /festivals/2007/contact.php.html                301
-/festivals/2007/general.php                    /festivals/2007/general.php.html                301
-/festivals/2007/housing.php                    /festivals/2007/housing.php.html                301
-/festivals/2007/index.php                      /festivals/2007/index.php.html                  301
-/festivals/2007/map.php                        /festivals/2007/map.php.html                    301
-/festivals/2007/muni.php                       /festivals/2007/muni.php.html                   301
-/festivals/2007/my-first-muni.php              /festivals/2007/my-first-muni.php.html          301
-/festivals/2007/show.php                       /festivals/2007/show.php.html                   301
-/festivals/2007/vendors.php                    /festivals/2007/vendors.php.html                301
-/festivals/2007/workshops.php                  /festivals/2007/workshops.php.html              301
+/festivals/2005/berkeley.php               /festivals/2005/berkeley.html              301
+/festivals/2005/contact.php                /festivals/2005/contact.html               301
+/festivals/2005/distance_uni.php           /festivals/2005/distance_uni.html          301
+/festivals/2005/easy_muni.php              /festivals/2005/easy_muni.html             301
+/festivals/2005/guestbook.php              /festivals/2005/guestbook.html             301
+/festivals/2005/history.php                /festivals/2005/history.html               301
+/festivals/2005/housing.php                /festivals/2005/housing.html               301
+/festivals/2005/map.php                    /festivals/2005/map.html                   301
+/festivals/2005/schedule.php               /festivals/2005/schedule.html              301
+/festivals/2005/show.php                   /festivals/2005/show.html                  301
+/festivals/2005/technical_muni.php         /festivals/2005/technical_muni.html        301
+/festivals/2005/uni_basketball.php         /festivals/2005/uni_basketball.html        301
+/festivals/2005/workshops.php              /festivals/2005/workshops.html             301
+/festivals/2005/index.php                  /festivals/2005/                           301
+/festivals/2006/berkeley.php               /festivals/2006/berkeley.html              301
+/festivals/2006/contact.php                /festivals/2006/contact.html               301
+/festivals/2006/housing.php                /festivals/2006/housing.html               301
+/festivals/2006/map.php                    /festivals/2006/map.html                   301
+/festivals/2006/schedule.php               /festivals/2006/schedule.html              301
+/festivals/2006/show.php                   /festivals/2006/show.html                  301
+/festivals/2006/workshops.php              /festivals/2006/workshops.html             301
+/festivals/2006/index.php                  /festivals/2006/                           301
+/festivals/2007/big-wheel.php              /festivals/2007/big-wheel.html             301
+/festivals/2007/contact.php                /festivals/2007/contact.html               301
+/festivals/2007/general.php                /festivals/2007/general.html               301
+/festivals/2007/housing.php                /festivals/2007/housing.html               301
+/festivals/2007/map.php                    /festivals/2007/map.html                   301
+/festivals/2007/muni.php                   /festivals/2007/muni.html                  301
+/festivals/2007/my-first-muni.php          /festivals/2007/my-first-muni.html         301
+/festivals/2007/show.php                   /festivals/2007/show.html                  301
+/festivals/2007/vendors.php                /festivals/2007/vendors.html               301
+/festivals/2007/workshops.php              /festivals/2007/workshops.html             301
+/festivals/2007/index.php                  /festivals/2007/                           301
