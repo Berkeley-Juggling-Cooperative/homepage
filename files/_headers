@@ -14,7 +14,7 @@
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
-  Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data: https://*.openstreetmap.org https://media.berkeleyjuggling.org https://pub-835042b2da02413291ffc0d6cf813129.r2.dev; form-action 'self'; media-src 'self' https://media.berkeleyjuggling.org https://pub-835042b2da02413291ffc0d6cf813129.r2.dev; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; font-src 'self';
+  Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data: https://*.openstreetmap.org https://media.berkeleyjuggling.org; form-action 'self'; media-src 'self' https://media.berkeleyjuggling.org; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; font-src 'self';
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=(), usb=(), fullscreen=(self)
