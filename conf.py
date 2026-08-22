@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import pathlib
 import time
 
 # !! This is the configuration of Nikola. !! #
@@ -1449,7 +1450,47 @@ WARN_ABOUT_TAG_METADATA = False
 
 # Put in global_context things you want available on all your templates.
 # It can be anything, data, functions, modules, etc.
-GLOBAL_CONTEXT = {}
+
+
+def _scan_event_videos():
+    """Index videos/<event>/*.mp4 for gallery.tmpl.
+
+    A gallery opts in by naming its directory under videos/ in index.txt:
+
+        .. videos: Berkeley
+
+    and every .mp4 in videos/Berkeley/ is embedded below the photos, sorted by
+    name.  One line per gallery beats a shortcode per clip, and dropping a new
+    file into the directory is all it takes to publish it.
+
+    This is deliberately eager rather than a function called from the template.
+    Nikola's gallery tasks hash GLOBAL_CONTEXT into their `uptodate`
+    (nikola/plugins/task/galleries.py: self.kw['global_context'], hashed at
+    'nikola.plugins.task.galleries:gallery'), and a function always hashes the
+    same -- CustomEncoder strips the address from its repr -- so a lazy helper
+    would never trigger a rebuild.  Holding the file list itself means adding,
+    removing or renaming a clip changes the hash and the affected gallery
+    rebuilds on a plain `nikola build`.
+
+    Videos are served from R2, not the site: Cloudflare Pages caps a file at
+    25 MiB.  The host matches shortcodes/video.tmpl -- change both together.
+    """
+    root = pathlib.Path("videos")
+    if not root.is_dir():
+        return {}
+    return {
+        d.name: [
+            {"name": f.stem.replace("-", " ").replace("_", " "),
+             "url": "https://media.berkeleyjuggling.org/videos/"
+                    f"{d.name}/{f.name}"}
+            for f in sorted(d.glob("*.mp4"))
+        ]
+        for d in sorted(root.iterdir())
+        if d.is_dir() and any(d.glob("*.mp4"))
+    }
+
+
+GLOBAL_CONTEXT = {"event_videos": _scan_event_videos()}
 
 # Add functions here and they will be called with template
 # GLOBAL_CONTEXT as parameter when the template is about to be

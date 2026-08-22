@@ -9,7 +9,10 @@
     <header>
         <h1 class="title is-2">{{ title|title }}</h1>
     </header>
-    {% if post %}
+    {# On the galleries index the text is an intro, so it belongs above the
+       cards.  In a leaf gallery it is usually videos for that event, which
+       belong after the photos rather than in front of them. #}
+    {% if post and folders %}
     <div class="content">
         {{ post.text() }}
     </div>
@@ -52,6 +55,28 @@
     {% endif %}
 
 <div id="gallery_container" data-photo-array="{{ photo_array_json|e }}" data-thumbnail-size="{{ thumbnail_size }}"></div>
+{% if post and not folders %}
+<div class="content">
+    {{ post.text() }}
+</div>
+{% endif %}
+{% if post %}
+    {% set clips = event_videos.get(post.meta('videos')) %}
+    {% if clips %}
+    <section class="content">
+        <h2 class="title is-4">Video</h2>
+        <div class="columns is-multiline">
+        {% for v in clips %}
+            <div class="column is-half-desktop">
+                <video src="{{ v.url }}" controls preload="none"
+                       playsinline style="width: 100%"></video>
+                <p class="is-size-7 has-text-grey">{{ v.name }}</p>
+            </div>
+        {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+{% endif %}
 {% if photo_array %}
 <noscript>
 <ul class="thumbnails">
