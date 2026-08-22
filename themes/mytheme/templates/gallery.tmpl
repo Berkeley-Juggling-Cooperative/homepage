@@ -69,6 +69,7 @@
         {% for v in clips %}
             <div class="column is-half-desktop">
                 <video src="{{ v.url }}" controls preload="none"
+                       {% if v.poster %}poster="{{ v.poster }}"{% endif %}
                        playsinline style="width: 100%"></video>
                 <p class="is-size-7 has-text-grey">{{ v.name }}</p>
             </div>

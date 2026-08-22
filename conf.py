@@ -1484,16 +1484,27 @@ def _scan_event_videos():
     Videos are served from R2, not the site: Cloudflare Pages caps a file at
     25 MiB.  The host matches shortcodes/video.tmpl -- change both together.
     """
+    media = "https://media.berkeleyjuggling.org"
     root = pathlib.Path("videos")
     if not root.is_dir():
         return {}
+
+    def entry(folder, f):
+        # A still from each clip, made by tools/make_video_posters.sh.  Without
+        # one the player is a black rectangle until pressed, because the tag
+        # sets preload="none" and so fetches no frame.  The poster gives the
+        # first frame for the cost of a ~20 KB jpeg instead of a video range
+        # request per clip -- worth it on Berkeley, which shows 22 at once.
+        poster = pathlib.Path("images/posters") / folder / (f.stem + ".jpg")
+        return {
+            "name": f.stem.replace("-", " ").replace("_", " "),
+            "url": f"{media}/videos/{folder}/{f.name}",
+            "poster": f"{media}/images/posters/{folder}/{f.stem}.jpg"
+                      if poster.is_file() else None,
+        }
+
     return {
-        d.name: [
-            {"name": f.stem.replace("-", " ").replace("_", " "),
-             "url": "https://media.berkeleyjuggling.org/videos/"
-                    f"{d.name}/{f.name}"}
-            for f in sorted(d.glob("*.mp4"))
-        ]
+        d.name: [entry(d.name, f) for f in sorted(d.glob("*.mp4"))]
         for d in sorted(root.iterdir())
         if d.is_dir() and any(d.glob("*.mp4"))
     }
