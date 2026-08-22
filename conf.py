@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import hashlib
 import pathlib
 import time
 
@@ -1510,7 +1511,38 @@ def _scan_event_videos():
     }
 
 
-GLOBAL_CONTEXT = {"event_videos": _scan_event_videos()}
+def _asset_version():
+    """Short hash of the theme assets, appended to /assets/ URLs as ?v=...
+
+    files/_headers caches /assets/* for a year as `immutable`, which promises
+    the body at a URL never changes.  Nikola does not put a content hash in
+    asset filenames -- gallery-init.js keeps its name when its contents change
+    -- so that promise was false, and a fix to the gallery lightbox sat behind
+    a year-long cache entry after a successful deploy on 2026-08-22.  Purging
+    Cloudflare does not help: the stale copies are in visitors' own browsers,
+    which never revalidate before max-age expires.
+
+    Hashing the sources and putting the digest in the query string restores the
+    precondition: edit any theme asset and every /assets/ URL changes, so no
+    cache anywhere can serve the old body, and the long immutable lifetime
+    becomes correct rather than merely fast.
+
+    Hashes the *sources* under themes/, not the built bundles in output/, since
+    conf.py is imported before the build regenerates them -- reading output/
+    would version each deploy against the previous build's assets.
+    """
+    digest = hashlib.sha256()
+    for path in sorted(pathlib.Path("themes").glob("*/assets/**/*")):
+        if path.is_file():
+            digest.update(path.name.encode())
+            digest.update(path.read_bytes())
+    return digest.hexdigest()[:10]
+
+
+GLOBAL_CONTEXT = {
+    "event_videos": _scan_event_videos(),
+    "asset_version": _asset_version(),
+}
 
 # Add functions here and they will be called with template
 # GLOBAL_CONTEXT as parameter when the template is about to be
