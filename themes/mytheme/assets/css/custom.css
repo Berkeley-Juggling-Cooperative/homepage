@@ -147,6 +147,56 @@ a[href^="https://"]::after
   padding: 2rem;
 }
 
+/* Hero button with the event flyer as its icon: the portrait thumbnail is
+   taller than a normal button icon, so let the button grow around it */
+.flyer-button {
+  height: auto;
+  min-height: 0;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  align-items: center;
+}
+
+.flyer-button .flyer-icon-wrapper {
+  width: auto;
+  height: auto;
+  margin-right: 0.5em;
+}
+
+.flyer-icon {
+  display: block;
+  height: 3.8em;
+  width: auto;
+  border-radius: 3px;
+}
+
+/* Keep the wider flyer button inside narrow screens */
+@media (max-width: 768px) {
+  .flyer-button {
+    font-size: 1rem;
+  }
+
+  .flyer-icon {
+    height: 3em;
+  }
+}
+
+/* Event flyer / details block on the news page */
+.event-flyer {
+  max-width: 380px;
+  margin-left: auto;
+}
+
+.event-details p:last-child {
+  margin-bottom: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .event-details.box {
+    background-color: #1f1f1f;
+  }
+}
+
 /* Icon Cards */
 .icon-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;

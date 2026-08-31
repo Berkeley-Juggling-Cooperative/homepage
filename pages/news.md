@@ -11,9 +11,14 @@
 
 # Berkeley Jam Fall
 
+<div class="columns is-variable is-6" markdown="1">
+<div class="column is-7" markdown="1">
+
 The Berkeley Juggling Club warmly invites you to the second annual Berkeley Jam: a Joyful Day of Juggling & Circus Arts in Willard Park, Berkeley on Sunday, September 20th, 2026.
 
 Join us as we celebrate the last day of summer before the Autumn Equinox! Whether you're passing clubs, spinning props, riding a unicycle, sharing tricks, or learning to juggle for the first time, there' s no better way to welcome a new season than with friends, old and new, in the park.
+
+<div class="box event-details" markdown="1">
 
 **What**: Free Juggling & Circus Arts Jam
 
@@ -22,6 +27,17 @@ Join us as we celebrate the last day of summer before the Autumn Equinox! Whethe
 **Where**: Willard Park (2730 Hillegass Ave, Berkeley, CA 94705)
 
 **Who**: All ages and skill levels welcome
+
+</div>
+</div>
+<div class="column is-5">
+<a href="/images/2026-Fall-Jam-flyer.png">
+<figure class="image event-flyer">
+<img src="/images/2026-Fall-Jam-flyer.png" alt="Berkeley Jam Fall 2026 flyer">
+</figure>
+</a>
+</div>
+</div>
 
 {{% map map_id="jam" lat=37.861 lng=-122.2565 zoom=17 popup="Meeting location " height="400px" %}}
 
