@@ -6,6 +6,8 @@ cache
 .#*
 \#*#
 state_data.json
+.envrc
+
 
 # we don't want to commit large images and videos to git
 # (they live on the server in *_orig/, use 'nikola deploy download')
