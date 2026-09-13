@@ -687,7 +687,16 @@ REDIRECTIONS = []
 # copy in the source tree is a stale artefact.  Both were found in R2 in
 # August 2026 having travelled source -> R2 -> 'deploy download' -> source, so
 # the filters belong on both directions to break the loop.
-RCLONE_EXCLUDES = '--exclude ".DS_Store" --exclude "rss.xml"'
+#
+# *.txt joins them for the opposite reason: it is not junk but source.  The
+# only .txt under galleries/, images/ and videos/ are the twelve gallery
+# index.txt, and those are tracked in git as of d85e098.  Leaving them in the
+# round trip would give them two writers -- edit one in git, pull before you
+# push, and 'copy' silently restores R2's older copy over the commit, because
+# copy compares size and modtime and has no idea which is authoritative.
+# Excluding both directions makes git the single source for metadata and R2
+# the single source for media, with no overlap to disagree about.
+RCLONE_EXCLUDES = '--exclude ".DS_Store" --exclude "rss.xml" --exclude "*.txt"'
 
 DEPLOY_COMMANDS = {
     "default": [
