@@ -1,0 +1,8 @@
+Here are some of our photo galleries.
+
+{{% media url=https://www.youtube.com/watch?v=m42oE4yLAg4 %}}
+
+{{% video src=/videos/Bri-Lance-Arun-twelve-clubs-backdrop-line.mov %}}
+
+
+

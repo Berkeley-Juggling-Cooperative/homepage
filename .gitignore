@@ -11,7 +11,24 @@ state_data.json
 
 # we don't want to commit large images and videos to git
 # (they live on the server in *_orig/, use 'nikola deploy download')
-galleries
+#
+# The galleries/**/index.txt files are the exception: they are hand-written
+# source, not media.  Each one holds a gallery's previewimage and its
+# '.. videos:' opt-in, and galleries/index.txt carries the intro prose, so
+# they encode editorial decisions that belong in history.  All 12 together are
+# under 1 KB.  Without this they existed only in R2, where 'rclone copy' never
+# deletes -- so a renamed gallery left its old index.txt there forever with no
+# way to tell which was current, and no diff or blame for any of it.
+#
+# Git will not descend into an excluded *directory*, so a bare 'galleries'
+# plus a negation silently matches nothing.  Exclude the contents instead,
+# re-include the directories so git walks them, then re-exclude the media a
+# level down before re-including index.txt.  Drop the 'galleries/*/*' line and
+# every photo comes back with it.
+galleries/*
+!galleries/*/
+galleries/*/*
+!galleries/**/index.txt
 images
 videos
 # festival media lives in R2 (bjc-r2:bjc-media/festivals), never in git.

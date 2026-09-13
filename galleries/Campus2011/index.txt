@@ -1,0 +1,2 @@
+.. previewimage: /images/events/Campus2011-poster.jpg
+.. videos: Campus2011

@@ -1,0 +1,2 @@
+.. previewimage: /images/events/Lodi2002-poster.jpg
+.. videos: Lodi2002
